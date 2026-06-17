@@ -113,6 +113,24 @@
     </div>
   {% endif %}
 
+  {%- comment -%} Wishlist heart — visual to match SKIMS; needs a wishlist app/page to be functional {%- endcomment -%}
+  <a
+    href="#"
+    class="header-actions__action header-actions__wishlist"
+    aria-label="{{ 'accessibility.wishlist' | t | default: 'Wishlist' }}"
+  >
+    <span class="svg-wrapper" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 20.25S3.75 14.66 3.75 9.19a4.19 4.19 0 0 1 7.5-2.55l.75.96.75-.96a4.19 4.19 0 0 1 7.5 2.55C20.25 14.66 12 20.25 12 20.25Z"
+          stroke="currentColor"
+          stroke-width="var(--icon-stroke-width)"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </span>
+  </a>
+
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
     <script
       src="{{ 'cart-drawer.js' | asset_url }}"
