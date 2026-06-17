@@ -79,7 +79,7 @@
     .announcement-bar__logo-text {
       font-family: var(--font-heading--family);
       font-weight: 800;
-      font-size: 1.375rem;
+      font-size: 2.5rem;
       line-height: 1;
       letter-spacing: 0.04em;
       color: var(--color-foreground);
@@ -88,8 +88,10 @@
 
     .announcement-bar__logo img {
       display: block;
-      height: 42px;
-      width: auto;
+      height: 44px !important;
+      width: auto !important;
+      max-width: none !important;
+      max-height: none !important;
     }
 
     /* Logo now lives on the announcement row, so hide the one in the nav row on desktop */
