@@ -1,0 +1,15 @@
+# Shopify CLI local state
+.shopify/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.idea/
+.vscode/
+
+# Node
+node_modules/
+npm-debug.log*
