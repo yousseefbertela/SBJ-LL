@@ -112,22 +112,52 @@
       padding-inline: 0 !important;
     }
 
-    /* Right-side icons: thinner stroke + tighter spacing (SKIMS-style) */
+    /* Right-side icons: thinner stroke + even, slightly tighter spacing (SKIMS-style) */
     .header-section {
       --icon-stroke-width: 1px;
     }
 
+    /* Even spacing + vertical centering; remove the negative margin that overlapped search & account */
     .header-section .header__column--right {
-      gap: var(--gap-2xs) !important;
+      gap: 8px !important;
+      align-items: center !important;
     }
 
-    .header-section header-actions {
-      gap: 0 !important;
+    .header-section .header__column--right header-actions {
+      margin-inline-start: 0 !important;
+      gap: 8px !important;
+      align-items: center !important;
     }
 
-    .header-section .header-actions__action:not(.account-button) .svg-wrapper {
-      width: 34px;
-      height: 34px;
+    /* Uniform 34px footprint for every icon so they're evenly spaced and aligned */
+    .header-section .header__column--right .header-actions__action,
+    .header-section .header__column--right .account-button,
+    .header-section .header__column--right .search-action,
+    .header-section .header__column--right .header-actions__wishlist {
+      width: 34px !important;
+      min-width: 34px !important;
+      height: 34px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    .header-section .header__column--right .account-button shopify-account {
+      min-width: 34px !important;
+      height: 34px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .header-section .header__column--right .svg-wrapper {
+      width: 34px !important;
+      height: 34px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
   }
 
