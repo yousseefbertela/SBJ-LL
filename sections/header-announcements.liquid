@@ -179,6 +179,19 @@
     #header-component[data-sticky-state='active'] .header-logo {
       display: flex !important;
     }
+
+    /* Readability scrim behind the transparent header; disappears once scrolled (white bar takes over) */
+    body:has(#header-component[transparent][data-sticky-state='inactive'])::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 130px;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0));
+      z-index: 4;
+      pointer-events: none;
+    }
   }
 
   .announcement-bar__slider {
