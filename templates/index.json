@@ -1,95 +1,415 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */{
+{
   "sections": {
-    "hero_jVaWmY": {
+    "sbj_css": {
+      "type": "custom-liquid",
+      "name": "SKIMS homepage CSS",
+      "settings": {
+        "custom_liquid": "<span id=\"sbj-home\" hidden aria-hidden=\"true\" style=\"display:none\"></span>\n<script>document.body.classList.add('sbj-home');</script>\n<style>\n/* ============================================================\n   SKIMS-match homepage CSS - Horizon (native-first).\n   SCOPE: HOMEPAGE ONLY. Every rule is nested under\n   body:has(#sbj-home) with a body.sbj-home JS fallback for\n   browsers without :has(). The #sbj-home marker + class are\n   injected ONLY by this custom-liquid section, which lives\n   ONLY in templates/index.json -> zero global side effects.\n   Covers ONLY what native section settings cannot.\n   ============================================================ */\n\n/* Scoped tokens (no :root leakage) */\nbody:has(#sbj-home), body.sbj-home {\n  --sbj-overlay-text: #F6F6F6;\n  --sbj-ink: #2D2A26;\n  --sbj-cta: #F6F6F6;\n  --sbj-spacer: 16px;\n  --sbj-grid-gap: 24px;\n  --sbj-font-ui: \"Inter\", \"Helvetica Neue\", Helvetica, Arial, sans-serif;\n}\n\n/* 1. \"Shop Now\" CTA - underlined bold text, no button box (on dark media) */\nbody:has(#sbj-home) .hero .button,\nbody:has(#sbj-home) .hero .button-secondary,\nbody:has(#sbj-home) .hero .link,\nbody.sbj-home .hero .button,\nbody.sbj-home .hero .button-secondary,\nbody.sbj-home .hero .link {\n  display: inline-block;\n  background: none !important;\n  border: 0 !important;\n  box-shadow: none !important;\n  border-radius: 0 !important;\n  padding: 0 !important;\n  min-height: 0 !important;\n  font-family: var(--sbj-font-ui) !important;\n  font-size: 14px !important;\n  font-weight: 700 !important;\n  line-height: 20px !important;\n  letter-spacing: normal !important;\n  text-transform: none !important;\n  color: var(--sbj-cta) !important;\n  text-decoration: underline !important;\n  text-decoration-color: currentColor !important;\n  text-underline-offset: 2px;\n  width: auto !important;\n}\nbody:has(#sbj-home) .hero .button:hover,\nbody:has(#sbj-home) .hero .button-secondary:hover,\nbody:has(#sbj-home) .hero .link:hover,\nbody.sbj-home .hero .button:hover,\nbody.sbj-home .hero .button-secondary:hover,\nbody.sbj-home .hero .link:hover {\n  color: var(--sbj-cta) !important;\n  opacity: .85;\n  text-decoration: underline !important;\n  text-decoration-color: currentColor !important;\n}\n\n/* 2. Overlay heading/subhead - #F6F6F6, bottom-left anchored, ~24px inset */\nbody:has(#sbj-home) .hero .hero__content-wrapper,\nbody.sbj-home .hero .hero__content-wrapper {\n  justify-content: flex-end;\n  align-items: flex-start;\n  text-align: left;\n  padding: 24px;\n}\nbody:has(#sbj-home) .hero .hero__content-wrapper,\nbody:has(#sbj-home) .hero .hero__content-wrapper .group-block-content,\nbody:has(#sbj-home) .hero .hero__content-wrapper :is(h1,h2,h3,h4,h5,h6,p,span),\nbody.sbj-home .hero .hero__content-wrapper,\nbody.sbj-home .hero .hero__content-wrapper .group-block-content,\nbody.sbj-home .hero .hero__content-wrapper :is(h1,h2,h3,h4,h5,h6,p,span) {\n  color: var(--sbj-overlay-text) !important;\n  text-align: left;\n}\nbody:has(#sbj-home) .hero .hero__content-wrapper .group-block-content,\nbody.sbj-home .hero .hero__content-wrapper .group-block-content {\n  align-items: flex-start;\n}\n\n/* 3. Zero-gutter full-bleed rhythm - edge-to-edge banners, ~16px band gaps */\nbody:has(#sbj-home) .hero,\nbody:has(#sbj-home) .hero .hero__container,\nbody.sbj-home .hero,\nbody.sbj-home .hero .hero__container {\n  padding-inline: 0 !important;\n  margin-inline: 0 !important;\n  max-width: 100% !important;\n}\nbody:has(#sbj-home) .hero .hero__media,\nbody.sbj-home .hero .hero__media {\n  width: 100%;\n  object-fit: cover;\n}\nbody:has(#sbj-home) .shopify-section:has(> .hero),\nbody.sbj-home .shopify-section:has(> .hero) {\n  margin-block: 0;\n}\nbody:has(#sbj-home) .shopify-section:has(> .hero) + .shopify-section,\nbody.sbj-home .shopify-section:has(> .hero) + .shopify-section {\n  margin-top: var(--sbj-spacer);\n}\n\n/* 4. Brand statement - centered 36/48, #2D2A26, ls .9px, generous padding.\n   Add class \"sbj-brand-statement\" to the final text/rich-text band. */\nbody:has(#sbj-home) .sbj-brand-statement,\nbody.sbj-home .sbj-brand-statement {\n  text-align: center;\n  padding-block: 48px;\n  padding-inline: 24px;\n}\nbody:has(#sbj-home) .sbj-brand-statement :is(h1,h2,h3,h4,p),\nbody.sbj-home .sbj-brand-statement :is(h1,h2,h3,h4,p) {\n  font-size: 36px;\n  line-height: 48px;\n  letter-spacing: .9px;\n  color: var(--sbj-ink);\n  text-align: center;\n  margin: 0;\n}\n\n/* 5. Category 4-up - 4 cols, gap 24px, labels beneath, full-bleed.\n   Add class \"sbj-cat-4up\" to the grid wrapper. */\nbody:has(#sbj-home) .sbj-cat-4up,\nbody.sbj-home .sbj-cat-4up {\n  display: grid;\n  grid-template-columns: repeat(4, 1fr);\n  gap: var(--sbj-grid-gap);\n  padding-inline: 0;\n  margin-inline: 0;\n  max-width: 100%;\n}\nbody:has(#sbj-home) .sbj-cat-4up figcaption,\nbody:has(#sbj-home) .sbj-cat-4up .sbj-cat-label,\nbody.sbj-home .sbj-cat-4up figcaption,\nbody.sbj-home .sbj-cat-4up .sbj-cat-label {\n  margin-top: 12px;\n  font-family: var(--sbj-font-ui);\n  font-size: 14px;\n  font-weight: 700;\n  line-height: 20px;\n  color: var(--sbj-ink);\n  text-align: left;\n}\n@media (max-width: 749px) {\n  body:has(#sbj-home) .sbj-cat-4up,\n  body.sbj-home .sbj-cat-4up {\n    grid-template-columns: repeat(2, 1fr);\n    gap: 12px;\n  }\n}\n</style>",
+        "color_scheme": "scheme-1",
+        "section_width": "full-width",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "sbj_hero": {
       "type": "hero",
+      "settings": {
+        "media_type_1": "image",
+        "media_type_2": "image",
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "flex-end",
+        "gap": 6,
+        "section_width": "full-width",
+        "section_height": "full-screen",
+        "color_scheme": "scheme-5",
+        "toggle_overlay": true,
+        "overlay_color": "#00000040",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "blurred_reflection": false,
+        "padding-block-start": 0,
+        "padding-block-end": 24
+      },
       "blocks": {
-        "text_YLPk4p": {
+        "heading": {
           "type": "text",
-          "name": "t:names.heading",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
+            "text": "<p>PINK-OBSESSED</p>",
             "width": "fit-content",
-            "max_width": "normal",
+            "max_width": "none",
             "alignment": "left",
-            "type_preset": "h2",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "3rem",
+            "line_height": "tight",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "balance",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "subhead": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Everyone's favorite cotton layers, now in pink</p>",
+            "width": "fit-content",
+            "max_width": "none",
+            "alignment": "left",
+            "type_preset": "custom",
             "font": "var(--font-body--family)",
             "font_size": "1rem",
             "line_height": "normal",
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
-            "color": "var(--color-foreground-heading)",
+            "color": "var(--color-foreground)",
             "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
+            "padding-block-start": 4,
+            "padding-block-end": 12,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "shop_now": {
+          "type": "button",
+          "settings": {
+            "label": "Shop Now",
+            "link": "shopify://collections/all",
+            "open_in_new_tab": false,
+            "style_class": "link",
+            "width": "fit-content",
+            "width_mobile": "fit-content"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "subhead",
+        "shop_now"
+      ]
+    },
+    "sbj_category4": {
+      "type": "collection-list",
+      "settings": {
+        "collection_list": [],
+        "layout_type": "grid",
+        "carousel_on_mobile": false,
+        "columns": 4,
+        "mobile_columns": "2",
+        "columns_gap": 24,
+        "rows_gap": 24,
+        "section_width": "full-width",
+        "gap": 0,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      },
+      "blocks": {
+        "static-collection-card": {
+          "type": "_collection-card",
+          "static": true,
+          "settings": {
+            "placement": "below_image",
+            "horizontal_alignment": "flex-start",
+            "vertical_alignment": "center",
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0
+          },
+          "blocks": {
+            "collection-card-image": {
+              "type": "_collection-card-image",
+              "static": true,
+              "settings": {
+                "image_ratio": "portrait"
+              }
+            },
+            "collection-title": {
+              "type": "collection-title",
+              "settings": {
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "uppercase",
+                "wrap": "pretty",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "background": false,
+                "background_color": "#ffffff",
+                "padding-block-start": 8,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              }
+            }
+          },
+          "block_order": [
+            "collection-title"
+          ]
+        }
+      },
+      "block_order": []
+    },
+    "sbj_mens": {
+      "type": "hero",
+      "settings": {
+        "media_type_1": "video",
+        "media_type_2": "image",
+        "stack_media_on_mobile": false,
+        "custom_mobile_media": false,
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "flex-end",
+        "gap": 6,
+        "section_width": "page-width",
+        "section_height": "large",
+        "color_scheme": "scheme-5",
+        "toggle_overlay": true,
+        "overlay_color": "#00000040",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "blurred_reflection": false,
+        "padding-block-start": 0,
+        "padding-block-end": 40
+      },
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "settings": {
+            "text": "<p>MENS</p>",
+            "width": "fit-content",
+            "max_width": "none",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "3rem",
+            "line_height": "tight",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0
-          },
-          "blocks": {}
+          }
         },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
+        "subhead": {
+          "type": "text",
           "settings": {
-            "label": "Shop all",
+            "text": "<p>From classic lounge sets to the most comfortable underwear you'll ever own</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "background": false,
+            "padding-block-start": 0,
+            "padding-block-end": 8,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        },
+        "cta": {
+          "type": "button",
+          "settings": {
+            "label": "Shop Now",
             "link": "shopify://collections/all",
             "open_in_new_tab": false,
-            "style_class": "button-secondary",
+            "style_class": "link",
             "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "width_mobile": "fit-content"
+          }
         }
       },
       "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
-      ],
-      "name": "t:names.hero",
+        "heading",
+        "subhead",
+        "cta"
+      ]
+    },
+    "sbj_twoup": {
+      "type": "hero",
       "settings": {
         "media_type_1": "image",
-        "media_type_2": "image",
-        "stack_media_on_mobile": false,
-        "custom_mobile_media": false,
-        "media_type_1_mobile": "image",
-        "media_type_2_mobile": "image",
-        "open_in_new_tab": false,
         "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
+        "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "color_scheme": "scheme-6",
+        "gap": 8,
+        "section_width": "full-width",
+        "section_height": "custom",
+        "section_height_custom": 75,
+        "color_scheme": "scheme-1",
         "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
+        "overlay_color": "#00000026",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
         "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72
+        "padding-block-start": 24,
+        "padding-block-end": 24
+      },
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "settings": {
+            "text": "<p>COLOR SPOTLIGHT: PINK</p>",
+            "width": "fit-content",
+            "max_width": "normal",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "2rem",
+            "line_height": "tight",
+            "letter_spacing": "normal",
+            "case": "uppercase",
+            "color": "var(--color-foreground-heading)",
+            "padding-inline-start": 24
+          }
+        },
+        "subhead": {
+          "type": "text",
+          "settings": {
+            "text": "<p>The sweetest shade of summer—fresh, playful, and effortlessly feminine</p>",
+            "width": "fit-content",
+            "max_width": "narrow",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "color": "var(--color-foreground)",
+            "padding-inline-start": 24,
+            "padding-block-end": 8
+          }
+        },
+        "button": {
+          "type": "button",
+          "settings": {
+            "label": "Shop Now",
+            "link": "shopify://collections/all",
+            "style_class": "link",
+            "width": "fit-content"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "subhead",
+        "button"
+      ]
+    },
+    "sbj_studio": {
+      "type": "hero",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "settings": {
+            "text": "<p>STUDIO</p>",
+            "width": "fit-content",
+            "max_width": "none",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "3rem",
+            "line_height": "tight",
+            "letter_spacing": "loose",
+            "case": "uppercase",
+            "wrap": "pretty",
+            "color": "var(--color-foreground-heading)",
+            "padding-inline-start": 24
+          }
+        },
+        "subhead": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Made for the studio and beyond—shop new corset-inspired silhouettes, buttery soft Studio Stretch styles, and our latest Rift Mesh shade</p>",
+            "width": "fit-content",
+            "max_width": "narrow",
+            "type_preset": "custom",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "color": "var(--color-foreground)",
+            "padding-block-start": 8,
+            "padding-inline-start": 24
+          }
+        },
+        "cta": {
+          "type": "button",
+          "settings": {
+            "label": "Shop Now",
+            "link": "shopify://collections/all",
+            "style_class": "link",
+            "width": "fit-content",
+            "width_mobile": "fit-content"
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "subhead",
+        "cta"
+      ],
+      "settings": {
+        "media_type_1": "image",
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "flex-start",
+        "vertical_alignment_flex_direction_column": "flex-end",
+        "gap": 12,
+        "section_width": "full-width",
+        "section_height": "large",
+        "color_scheme": "scheme-5",
+        "toggle_overlay": true,
+        "overlay_color": "#00000026",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "padding-block-start": 0,
+        "padding-block-end": 24
       }
     },
-    "product_list_fa6P9H": {
+    "sbj_trending": {
       "type": "product-list",
+      "name": "TRENDING",
+      "settings": {
+        "collection": "all",
+        "layout_type": "carousel",
+        "carousel_on_mobile": false,
+        "max_products": 8,
+        "columns": 4,
+        "mobile_columns": "2",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 8,
+        "rows_gap": 24,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "section_width": "page-width",
+        "horizontal_alignment": "flex-start",
+        "gap": 28,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 24,
+        "padding-block-end": 48
+      },
       "blocks": {
         "static-header": {
           "type": "_product-list-content",
@@ -98,7 +418,7 @@
           "settings": {
             "content_direction": "row",
             "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
+            "horizontal_alignment": "flex-start",
             "vertical_alignment": "flex-end",
             "align_baseline": true,
             "horizontal_alignment_flex_direction_column": "flex-start",
@@ -125,17 +445,17 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "product_list_text_YFtzcL": {
+            "product_list_text_trending": {
               "type": "_product-list-text",
               "name": "t:names.collection_title",
               "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
+                "text": "<h2>TRENDING</h2>",
                 "width": "fit-content",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "h4",
+                "type_preset": "h5",
                 "font": "var(--font-body--family)",
-                "font_size": "",
+                "font_size": "1.25rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -150,25 +470,10 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "link",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
             }
           },
           "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
+            "product_list_text_trending"
           ]
         },
         "static-product-card": {
@@ -189,7 +494,7 @@
             "padding-inline-end": 0
           },
           "blocks": {
-            "product_card_gallery_677WP3": {
+            "product_card_gallery_trending": {
               "type": "_product-card-gallery",
               "name": "t:names.product_card_media",
               "settings": {
@@ -205,16 +510,16 @@
               },
               "blocks": {}
             },
-            "product_title_YXxMTj": {
+            "product_title_trending": {
               "type": "product-title",
               "name": "t:names.product_title",
               "settings": {
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
-                "type_preset": "rte",
+                "type_preset": "paragraph",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
+                "font_size": "0.875rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -230,7 +535,7 @@
               },
               "blocks": {}
             },
-            "price_JQzVV4": {
+            "price_trending": {
               "type": "price",
               "name": "t:names.product_price",
               "settings": {
@@ -241,7 +546,7 @@
                 "width": "100%",
                 "alignment": "left",
                 "font": "var(--font-body--family)",
-                "font_size": "1rem",
+                "font_size": "0.625rem",
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
@@ -255,36 +560,65 @@
             }
           },
           "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
+            "product_card_gallery_trending",
+            "product_title_trending",
+            "price_trending"
           ]
         }
-      },
-      "name": "Featured collection",
-      "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 48,
-        "padding-block-end": 48
       }
+    },
+    "sbj_brand": {
+      "type": "section",
+      "settings": {
+        "content_direction": "column",
+        "horizontal_alignment_flex_direction_column": "center",
+        "vertical_alignment_flex_direction_column": "center",
+        "gap": 16,
+        "section_width": "page-width",
+        "section_height": "",
+        "color_scheme": "scheme-1",
+        "background_media": "none",
+        "border": "none",
+        "padding-block-start": 80,
+        "padding-block-end": 80
+      },
+      "blocks": {
+        "statement": {
+          "type": "text",
+          "settings": {
+            "text": "<p>SBJ IS A SOLUTIONS ORIENTED BRAND CREATING THE NEXT GENERATION OF UNDERWEAR, CLOTHING AND SHAPEWEAR.</p>",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "center",
+            "type_preset": "custom",
+            "font": "var(--font-heading--family)",
+            "font_size": "2rem",
+            "line_height": "normal",
+            "letter_spacing": "normal",
+            "case": "uppercase",
+            "wrap": "balance",
+            "color": "var(--color-foreground-heading)",
+            "background": false,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          }
+        }
+      },
+      "block_order": [
+        "statement"
+      ]
     }
   },
   "order": [
-    "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "sbj_css",
+    "sbj_hero",
+    "sbj_category4",
+    "sbj_mens",
+    "sbj_twoup",
+    "sbj_studio",
+    "sbj_trending",
+    "sbj_brand"
   ]
 }
