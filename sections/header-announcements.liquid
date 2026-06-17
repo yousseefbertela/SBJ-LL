@@ -66,7 +66,7 @@
   @media screen and (min-width: 750px) {
     .announcement-bar__logo {
       position: absolute;
-      inset-inline-start: var(--page-margin);
+      inset-inline-start: 32px;
       top: 50%;
       transform: translateY(-50%);
       display: inline-flex;
@@ -95,6 +95,19 @@
     /* Logo now lives on the announcement row, so hide the one in the nav row on desktop */
     .header-section .header-logo {
       display: none !important;
+    }
+
+    /* SBJ: header + announcement span near full-width like SKIMS (override narrow page-width centering) */
+    .header-section .header__columns {
+      max-width: none !important;
+      margin-inline: 0 !important;
+      padding-inline: 32px !important;
+    }
+
+    .announcement-bar {
+      max-width: none !important;
+      margin-inline: 0 !important;
+      padding-inline: 32px !important;
     }
   }
 
