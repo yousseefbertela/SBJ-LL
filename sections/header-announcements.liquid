@@ -159,6 +159,26 @@
       align-items: center !important;
       justify-content: center !important;
     }
+
+    /* TRANSPARENT HERO STATE (homepage, at top): announcement text + logo go white over the hero */
+    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar p,
+    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar__text,
+    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar__logo-text {
+      color: #ffffff !important;
+    }
+
+    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar__logo img {
+      filter: brightness(0) invert(1);
+    }
+
+    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar {
+      --border-bottom-width: 0px;
+    }
+
+    /* Logo appears in the nav row once the header sticks on scroll */
+    #header-component[data-sticky-state='active'] .header-logo {
+      display: flex !important;
+    }
   }
 
   .announcement-bar__slider {
