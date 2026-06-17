@@ -88,7 +88,7 @@
 
     .announcement-bar__logo img {
       display: block;
-      height: 24px;
+      height: 42px;
       width: auto;
     }
 
@@ -108,6 +108,24 @@
       max-width: none !important;
       margin-inline: 0 !important;
       padding-inline: 0 !important;
+    }
+
+    /* Right-side icons: thinner stroke + tighter spacing (SKIMS-style) */
+    .header-section {
+      --icon-stroke-width: 1px;
+    }
+
+    .header-section .header__column--right {
+      gap: var(--gap-2xs) !important;
+    }
+
+    .header-section header-actions {
+      gap: 0 !important;
+    }
+
+    .header-section .header-actions__action:not(.account-button) .svg-wrapper {
+      width: 34px;
+      height: 34px;
     }
   }
 
