@@ -1,0 +1,166 @@
+{%- comment -%}
+  SBJ / SKIMS-match homepage CSS — Horizon (native-first).
+
+  WHY THIS IS A SNIPPET (read before moving it back):
+  This CSS used to live inside the `sbj_css` custom-liquid block in
+  templates/index.json. That meant every CSS tweak required pushing
+  index.json — which OVERWRITES the merchant's editor media (hero photo,
+  videos, section order). On 2026-06-18 a push wiped the uploaded hero photo.
+  Now the CSS lives here. The index.json block only renders this snippet, so
+  iterating on styles never touches index.json. NEVER push templates/index.json
+  to fix CSS again — edit THIS file and push only snippets/sbj-home-css.liquid.
+
+  SCOPE: HOMEPAGE ONLY. Every rule is nested under body:has(#sbj-home) with a
+  body.sbj-home JS fallback for browsers without :has(). The marker + class are
+  injected only here. Covers ONLY what native section settings cannot.
+{%- endcomment -%}
+<span id="sbj-home" hidden aria-hidden="true" style="display:none"></span>
+<script>document.body.classList.add('sbj-home');</script>
+<style>
+/* Scoped tokens (no :root leakage) */
+body:has(#sbj-home), body.sbj-home {
+  --sbj-overlay-text: #F6F6F6;
+  --sbj-ink: #2D2A26;
+  --sbj-cta: #F6F6F6;
+  --sbj-spacer: 16px;
+  --sbj-grid-gap: 24px;
+  --sbj-font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* 1. "Shop Now" CTA - underlined bold text, no button box (on dark media) */
+body:has(#sbj-home) .hero .button,
+body:has(#sbj-home) .hero .button-secondary,
+body:has(#sbj-home) .hero .link,
+body.sbj-home .hero .button,
+body.sbj-home .hero .button-secondary,
+body.sbj-home .hero .link {
+  display: inline-block;
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  font-family: var(--sbj-font-ui) !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 20px !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  color: var(--sbj-cta) !important;
+  text-decoration: underline !important;
+  text-decoration-color: currentColor !important;
+  text-underline-offset: 2px;
+  width: auto !important;
+}
+body:has(#sbj-home) .hero .button:hover,
+body:has(#sbj-home) .hero .button-secondary:hover,
+body:has(#sbj-home) .hero .link:hover,
+body.sbj-home .hero .button:hover,
+body.sbj-home .hero .button-secondary:hover,
+body.sbj-home .hero .link:hover {
+  color: var(--sbj-cta) !important;
+  opacity: .85;
+  text-decoration: underline !important;
+  text-decoration-color: currentColor !important;
+}
+
+/* 2. Overlay heading/subhead - #F6F6F6, bottom-left anchored.
+   Extra bottom padding lifts the block clear of the fold (the in-flow
+   announcement bar pushes the full-screen hero ~45px below the viewport). */
+body:has(#sbj-home) .hero .hero__content-wrapper,
+body.sbj-home .hero .hero__content-wrapper {
+  justify-content: flex-end !important;
+  align-items: flex-start !important;
+  text-align: left;
+  /* Big bottom inset lifts the heading/subhead/button clear of the fold — the in-flow
+     announcement bar pushes the full-screen hero ~43px below the viewport. !important so
+     it beats any stale inline 24px left in templates/index.json by the theme editor. */
+  padding: 24px 24px 150px 32px !important;
+}
+body:has(#sbj-home) .hero .hero__content-wrapper,
+body:has(#sbj-home) .hero .hero__content-wrapper .group-block-content,
+body:has(#sbj-home) .hero .hero__content-wrapper :is(h1,h2,h3,h4,h5,h6,p,span),
+body.sbj-home .hero .hero__content-wrapper,
+body.sbj-home .hero .hero__content-wrapper .group-block-content,
+body.sbj-home .hero .hero__content-wrapper :is(h1,h2,h3,h4,h5,h6,p,span) {
+  color: var(--sbj-overlay-text) !important;
+  text-align: left;
+}
+body:has(#sbj-home) .hero .hero__content-wrapper .group-block-content,
+body.sbj-home .hero .hero__content-wrapper .group-block-content {
+  align-items: flex-start;
+}
+
+/* 3. Zero-gutter full-bleed rhythm - edge-to-edge banners, ~16px band gaps */
+body:has(#sbj-home) .hero,
+body:has(#sbj-home) .hero .hero__container,
+body.sbj-home .hero,
+body.sbj-home .hero .hero__container {
+  padding-inline: 0 !important;
+  margin-inline: 0 !important;
+  max-width: 100% !important;
+}
+body:has(#sbj-home) .hero .hero__media,
+body.sbj-home .hero .hero__media {
+  width: 100%;
+  object-fit: cover;
+}
+body:has(#sbj-home) .shopify-section:has(> .hero),
+body.sbj-home .shopify-section:has(> .hero) {
+  margin-block: 0;
+}
+body:has(#sbj-home) .shopify-section:has(> .hero) + .shopify-section,
+body.sbj-home .shopify-section:has(> .hero) + .shopify-section {
+  margin-top: var(--sbj-spacer);
+}
+
+/* 4. Brand statement - centered 36/48, #2D2A26, ls .9px, generous padding.
+   Add class "sbj-brand-statement" to the final text/rich-text band. */
+body:has(#sbj-home) .sbj-brand-statement,
+body.sbj-home .sbj-brand-statement {
+  text-align: center;
+  padding-block: 48px;
+  padding-inline: 24px;
+}
+body:has(#sbj-home) .sbj-brand-statement :is(h1,h2,h3,h4,p),
+body.sbj-home .sbj-brand-statement :is(h1,h2,h3,h4,p) {
+  font-size: 36px;
+  line-height: 48px;
+  letter-spacing: .9px;
+  color: var(--sbj-ink);
+  text-align: center;
+  margin: 0;
+}
+
+/* 5. Category 4-up - 4 cols, gap 24px, labels beneath, full-bleed.
+   Add class "sbj-cat-4up" to the grid wrapper. */
+body:has(#sbj-home) .sbj-cat-4up,
+body.sbj-home .sbj-cat-4up {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--sbj-grid-gap);
+  padding-inline: 0;
+  margin-inline: 0;
+  max-width: 100%;
+}
+body:has(#sbj-home) .sbj-cat-4up figcaption,
+body:has(#sbj-home) .sbj-cat-4up .sbj-cat-label,
+body.sbj-home .sbj-cat-4up figcaption,
+body.sbj-home .sbj-cat-4up .sbj-cat-label {
+  margin-top: 12px;
+  font-family: var(--sbj-font-ui);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: var(--sbj-ink);
+  text-align: left;
+}
+@media (max-width: 749px) {
+  body:has(#sbj-home) .sbj-cat-4up,
+  body.sbj-home .sbj-cat-4up {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
+</style>
