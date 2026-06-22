@@ -1,0 +1,210 @@
+{%- comment -%}
+  SBJ Split-tout — SKIMS-style 2-up image panels, each with its own overlay
+  heading + subhead + "Shop Now" CTA. No native Horizon section produces two
+  media panels with independent overlays, so this is a small bespoke section.
+
+  Spec matched @1440 (from live skims.com/en-eg "split-tout"):
+    - 2 equal panels, 20px gap, full-bleed (710 + 20 + 710 = 1440)
+    - panel aspect 710 x 752, image object-fit: cover
+    - overlay text bottom-left, 24px inset
+    - heading: heading font (Archivo) 30px / lh 36 / ls 0.75px / #fff
+    - subhead: Inter 16 / lh 24 / #fff
+    - CTA:     Inter 14 / 700 / underline / #fff
+
+  Images are editor-owned (merchant sets each panel image in the theme editor).
+{%- endcomment -%}
+
+<div class="sbj-split-tout" style="--sbj-tout-gap: {{ section.settings.gap }}px;">
+  {%- for block in section.blocks -%}
+    {%- liquid
+      assign has_link = false
+      if block.settings.link != blank
+        assign has_link = true
+      endif
+    -%}
+    <{% if has_link %}a href="{{ block.settings.link }}"{% else %}div{% endif %}
+      class="sbj-tout"
+      {{ block.shopify_attributes }}>
+      <div class="sbj-tout__media">
+        {%- if block.settings.image != blank -%}
+          {{ block.settings.image
+            | image_url: width: 1420
+            | image_tag:
+              loading: 'lazy',
+              sizes: '(max-width: 749px) 100vw, 50vw',
+              widths: '430, 600, 710, 860, 1100, 1420',
+              class: 'sbj-tout__img',
+              alt: block.settings.heading | default: block.settings.image.alt }}
+        {%- else -%}
+          {{ 'lifestyle-1' | placeholder_svg_tag: 'sbj-tout__img sbj-tout__img--ph' }}
+        {%- endif -%}
+      </div>
+      <div class="sbj-tout__content">
+        {%- if block.settings.heading != blank -%}
+          <h2 class="sbj-tout__heading">{{ block.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if block.settings.subhead != blank -%}
+          <p class="sbj-tout__subhead">{{ block.settings.subhead }}</p>
+        {%- endif -%}
+        {%- if block.settings.cta_label != blank -%}
+          <span class="sbj-tout__cta">{{ block.settings.cta_label }}</span>
+        {%- endif -%}
+      </div>
+    </{% if has_link %}a{% else %}div{% endif %}>
+  {%- endfor -%}
+</div>
+
+{% stylesheet %}
+  .sbj-split-tout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--sbj-tout-gap, 20px);
+    width: 100%;
+  }
+
+  .sbj-tout {
+    position: relative;
+    display: block;
+    aspect-ratio: 710 / 752;
+    overflow: hidden;
+    text-decoration: none;
+    color: #ffffff;
+  }
+
+  .sbj-tout__media,
+  .sbj-tout__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .sbj-tout__img {
+    object-fit: cover;
+    display: block;
+  }
+
+  .sbj-tout__img--ph {
+    background: #e8e5df;
+  }
+
+  /* Bottom-up scrim so white text stays legible over bright media */
+  .sbj-tout::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.38), rgba(0, 0, 0, 0) 42%);
+    pointer-events: none;
+  }
+
+  .sbj-tout__content {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 24px;
+    z-index: 1;
+    text-align: left;
+  }
+
+  .sbj-tout__heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 36px;
+    letter-spacing: 0.75px;
+    text-transform: none;
+    color: #ffffff;
+  }
+
+  .sbj-tout__subhead {
+    margin: 4px 0 12px;
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    color: #ffffff;
+  }
+
+  .sbj-tout__cta {
+    display: inline-block;
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    color: #ffffff;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (max-width: 749px) {
+    .sbj-split-tout {
+      gap: 12px;
+    }
+    .sbj-tout__heading {
+      font-size: 22px;
+      line-height: 26px;
+    }
+    .sbj-tout__subhead {
+      font-size: 13px;
+      line-height: 18px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "SBJ Split-tout",
+  "tag": "section",
+  "class": "sbj-split-tout-section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between panels",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    }
+  ],
+  "blocks": [
+    {
+      "type": "tout",
+      "name": "Panel",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "HEADING" },
+        { "type": "text", "id": "subhead", "label": "Subhead" },
+        { "type": "text", "id": "cta_label", "label": "CTA label", "default": "Shop Now" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "SBJ Split-tout",
+      "blocks": [
+        {
+          "type": "tout",
+          "settings": {
+            "heading": "BRAS",
+            "subhead": "Everyone is switching to SBJ bras – you’re next",
+            "cta_label": "Shop Now"
+          }
+        },
+        {
+          "type": "tout",
+          "settings": {
+            "heading": "UNDERWEAR",
+            "subhead": "Our soft, breathable, and ultra-flattering panties!",
+            "cta_label": "Shop Now"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
