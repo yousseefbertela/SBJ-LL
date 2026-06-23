@@ -19,10 +19,10 @@
           "settings": {
             "content_direction": "column",
             "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
+            "horizontal_alignment": "center",
             "vertical_alignment": "center",
             "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
+            "horizontal_alignment_flex_direction_column": "center",
             "vertical_alignment_flex_direction_column": "center",
             "gap": 6,
             "width": "fill",
@@ -56,10 +56,10 @@
             "text_LWt8Pz": {
               "type": "text",
               "settings": {
-                "text": "<h2>Join our email list</h2>",
+                "text": "<h2>STAY IN THE KNOW</h2>",
                 "width": "100%",
                 "max_width": "normal",
-                "alignment": "left",
+                "alignment": "center",
                 "type_preset": "h4",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
@@ -81,10 +81,10 @@
             "text_f9CFLH": {
               "type": "text",
               "settings": {
-                "text": "<p>Get exclusive deals and early access to new products.</p>",
+                "text": "<p>Sign up for exclusive offers, first access to new drops, and more.</p>",
                 "width": "100%",
                 "max_width": "normal",
-                "alignment": "left",
+                "alignment": "center",
                 "type_preset": "rte",
                 "font": "var(--font-body--family)",
                 "font_size": "1rem",
@@ -133,9 +133,17 @@
             "padding-inline-end": 0
           },
           "blocks": {}
+        },
+        "menu_shop": {
+          "type": "menu",
+          "settings": {
+            "menu": "footer",
+            "heading": "SHOP"
+          }
         }
       },
       "block_order": [
+        "menu_shop",
         "group_H6VpwJ",
         "email_signup_crihX7"
       ],

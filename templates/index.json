@@ -482,10 +482,17 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
+            },
+            "eyebrow_trending": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "<span class=\"sbj-eyebrow\">{{ closest.product.type | default: closest.product.vendor }}</span>"
+              }
             }
           },
           "block_order": [
             "product_card_gallery_trending",
+            "eyebrow_trending",
             "product_title_trending",
             "price_trending"
           ]
