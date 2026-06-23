@@ -125,91 +125,6 @@
         "padding-block-end": 24
       }
     },
-    "sbj_category4": {
-      "type": "collection-list",
-      "blocks": {
-        "static-collection-card": {
-          "type": "_collection-card",
-          "static": true,
-          "settings": {
-            "placement": "below_image",
-            "horizontal_alignment": "center",
-            "vertical_alignment": "center",
-            "collection_card_gap": 8,
-            "inherit_color_scheme": true,
-            "color_scheme": "",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0
-          },
-          "blocks": {
-            "collection-title": {
-              "type": "collection-title",
-              "settings": {
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "center",
-                "type_preset": "rte",
-                "font": "var(--font-heading--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "uppercase",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#ffffff",
-                "corner_radius": 0,
-                "padding-block-start": 8,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "collection-card-image": {
-              "type": "_collection-card-image",
-              "static": true,
-              "settings": {
-                "image_ratio": "portrait",
-                "toggle_overlay": false,
-                "overlay_color": "#00000026",
-                "overlay_style": "solid",
-                "gradient_direction": "to top",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "collection-title"
-          ]
-        }
-      },
-      "settings": {
-        "collection_list": [],
-        "layout_type": "carousel",
-        "carousel_on_mobile": true,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 24,
-        "bento_gap": 8,
-        "rows_gap": 24,
-        "max_collections": 4,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "full-width",
-        "gap": 0,
-        "color_scheme": "scheme-1",
-        "padding-block-start": 0,
-        "padding-block-end": 0
-      }
-    },
     "sbj_mens": {
       "type": "hero",
       "blocks": {
@@ -666,7 +581,8 @@
             "heading": "BRAS",
             "subhead": "Everyone is switching to SBJ bras – you’re next",
             "cta_label": "Shop Now",
-            "link": "shopify://collections/all"
+            "link": "shopify://collections/all",
+            "image_asset": "sbj-bras.jpg"
           }
         },
         "underwear": {
@@ -675,7 +591,8 @@
             "heading": "UNDERWEAR",
             "subhead": "Our soft, breathable, and ultra-flattering panties!",
             "cta_label": "Shop Now",
-            "link": "shopify://collections/all"
+            "link": "shopify://collections/all",
+            "image_asset": "sbj-underwear.jpg"
           }
         }
       },
@@ -686,6 +603,50 @@
       "settings": {
         "gap": 20
       }
+    },
+    "sbj_catcar": {
+      "type": "sbj-cat-carousel",
+      "blocks": {
+        "bras": {
+          "type": "cat",
+          "settings": {
+            "label": "BRAS",
+            "image_asset": "cat-bras.jpg",
+            "link": "shopify://collections/bras"
+          }
+        },
+        "sleep": {
+          "type": "cat",
+          "settings": {
+            "label": "SLEEP",
+            "image_asset": "cat-sleep.jpg",
+            "link": "shopify://collections/sleep"
+          }
+        },
+        "shapewear": {
+          "type": "cat",
+          "settings": {
+            "label": "SHAPEWEAR",
+            "image_asset": "cat-shapewear.jpg",
+            "link": "shopify://collections/shapewear"
+          }
+        },
+        "best": {
+          "type": "cat",
+          "settings": {
+            "label": "BEST SELLERS",
+            "image_asset": "cat-best.jpg",
+            "link": "shopify://collections/best-sellers"
+          }
+        }
+      },
+      "block_order": [
+        "bras",
+        "sleep",
+        "shapewear",
+        "best"
+      ],
+      "settings": {}
     }
   },
   "order": [
@@ -693,7 +654,7 @@
     "sbj_hero",
     "sbj_split",
     "sbj_mens",
-    "sbj_category4",
+    "sbj_catcar",
     "sbj_studio",
     "sbj_trending",
     "sbj_brand"

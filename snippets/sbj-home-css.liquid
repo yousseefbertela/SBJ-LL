@@ -19,9 +19,9 @@
 <style>
 /* Scoped tokens (no :root leakage) */
 body:has(#sbj-home), body.sbj-home {
-  --sbj-overlay-text: #FFFFFF;
-  --sbj-ink: #FFFFFF;
-  --sbj-cta: #FFFFFF;
+  --sbj-overlay-text: #F6F6F6;
+  --sbj-ink: #2D2A26;
+  --sbj-cta: #F6F6F6;
   --sbj-spacer: 16px;
   --sbj-grid-gap: 24px;
   --sbj-font-ui: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -162,5 +162,26 @@ body.sbj-home .sbj-cat-4up .sbj-cat-label {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
+}
+
+/* 6. Best Sellers + Studio bands: real image fallback via theme asset. The native
+   hero image/video set in the theme editor OVERRIDES this (a real <img>/<video> covers
+   the background); this only shows while the band has no media. Merchant adds the Best
+   Sellers video + Studio photo in the editor. Scoped to each band by section key. */
+body:has(#sbj-home) [id*="sbj_mens"] .hero,
+body:has(#sbj-home) [id*="sbj_studio"] .hero {
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+body:has(#sbj-home) [id*="sbj_mens"] .hero {
+  background-image: url('{{ "bs-fallback.jpg" | asset_url }}');
+}
+body:has(#sbj-home) [id*="sbj_studio"] .hero {
+  background-image: url('{{ "sbj-studio.jpg" | asset_url }}');
+}
+body:has(#sbj-home) [id*="sbj_mens"] svg.hero__media,
+body:has(#sbj-home) [id*="sbj_studio"] svg.hero__media {
+  opacity: 0 !important;
 }
 </style>
