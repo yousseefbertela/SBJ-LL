@@ -73,10 +73,14 @@ body.sbj-home .hero .hero__content-wrapper {
   justify-content: flex-end !important;
   align-items: flex-start !important;
   text-align: left;
-  /* Big bottom inset lifts the heading/subhead/button clear of the fold — the in-flow
-     announcement bar pushes the full-screen hero ~43px below the viewport. !important so
-     it beats any stale inline 24px left in templates/index.json by the theme editor. */
-  padding: 24px 24px 150px 32px !important;
+  /* Default overlay inset: text sits near the bottom-left (SKIMS) for mid-page bands. */
+  padding: 24px 24px 48px 32px !important;
+}
+/* Only the FIRST hero (under the transparent header, full-screen) needs the big lift to
+   clear the fold; mid-page bands (Best Sellers / Studio) keep text at the bottom. */
+body:has(#sbj-home) [id*="sbj_hero"] .hero .hero__content-wrapper,
+body.sbj-home [id*="sbj_hero"] .hero .hero__content-wrapper {
+  padding-bottom: 150px !important;
 }
 body:has(#sbj-home) .hero .hero__content-wrapper,
 body:has(#sbj-home) .hero .hero__content-wrapper .group-block-content,
@@ -197,5 +201,27 @@ body.sbj-home .sbj-eyebrow {
   text-transform: uppercase;
   color: var(--color-foreground);
   margin: 4px 0 0;
+}
+
+/* 8. Consistent SKIMS-style spacers between ALL homepage bands (~16px white gaps).
+   The native rule already spaces sections after heroes; these add the gap after the
+   custom full-bleed sections (split-tout + category carousel) too — e.g. the gap above
+   the Best Sellers video, and above Studio. */
+body:has(#sbj-home) .shopify-section.sbj-split-tout-section + .shopify-section,
+body:has(#sbj-home) .shopify-section.sbj-catcar-section + .shopify-section,
+body:has(#sbj-home) .shopify-section:has(.sbj-split-tout) + .shopify-section,
+body:has(#sbj-home) .shopify-section:has(.sbj-catcar-wrap) + .shopify-section {
+  margin-top: var(--sbj-spacer) !important;
+}
+
+/* 9. Trending section title -> heavy heading font at SKIMS size (was rendering Inter 14px).
+   Scoped to the section header h2 only (product names are not h2). */
+body:has(#sbj-home) [id*="sbj_trending"] h2 {
+  font-family: var(--font-heading--family) !important;
+  font-weight: var(--font-heading--weight, 900) !important;
+  font-size: 20px !important;
+  line-height: 24px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
 }
 </style>
