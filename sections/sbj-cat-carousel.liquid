@@ -1,12 +1,28 @@
 {%- comment -%}
   SBJ Category carousel — SKIMS-style portrait category cards in a horizontal,
-  scroll-snapping carousel (not a static grid). Each card: image + label below,
-  links to a collection. Bespoke because Horizon's native collection-list did not
-  resolve collection images in carousel mode. Images are editor-overridable
-  (image_picker) with a theme-asset fallback.
+  scroll-snapping carousel with prev/next arrows (peeking next card on desktop).
+  Each card: image + label below, links to a collection. Bespoke because Horizon's
+  native collection-list did not resolve collection images in carousel mode. Images
+  are editor-overridable (image_picker) with a theme-asset fallback. Cards-per-view,
+  gap and the peek are editor settings so the merchant can tune the carousel.
 {%- endcomment -%}
 
-<div class="sbj-catcar-wrap">
+{%- liquid
+  assign per_view = section.settings.cards_per_view | default: 3.5
+  assign per_view_tablet = section.settings.cards_per_view_tablet | default: 2.2
+  assign per_view_mobile = section.settings.cards_per_view_mobile | default: 1.3
+  assign gap = section.settings.card_gap | default: 24
+-%}
+
+<div
+  class="sbj-catcar-wrap"
+  data-sbj-catcar="{{ section.id }}"
+  style="--sbj-cc-gap: {{ gap }}px; --sbj-cc-per-view: {{ per_view }}; --sbj-cc-per-view-tablet: {{ per_view_tablet }}; --sbj-cc-per-view-mobile: {{ per_view_mobile }};"
+>
+  <button type="button" class="sbj-catcar__nav sbj-catcar__nav--prev" aria-label="Previous">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 4.5 7.5 12l7.5 7.5"/></svg>
+  </button>
+
   <ul class="sbj-catcar" role="list">
     {%- for block in section.blocks -%}
       <li class="sbj-catcar__card" {{ block.shopify_attributes }}>
@@ -30,27 +46,46 @@
       </li>
     {%- endfor -%}
   </ul>
+
+  <button type="button" class="sbj-catcar__nav sbj-catcar__nav--next" aria-label="Next">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 4.5 16.5 12 9 19.5"/></svg>
+  </button>
 </div>
 
 {% stylesheet %}
-  .sbj-catcar-wrap { width: 100%; }
+  .sbj-catcar-wrap {
+    position: relative;
+    width: 100%;
+  }
   .sbj-catcar {
     list-style: none;
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 24px;
+    gap: var(--sbj-cc-gap, 24px);
     overflow-x: auto;
     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
   .sbj-catcar::-webkit-scrollbar { display: none; }
+
   .sbj-catcar__card {
-    flex: 0 0 auto;
-    width: calc((100% - 72px) / 4);
+    flex: 0 0 calc((100% - (var(--sbj-cc-per-view-mobile, 1.3) - 1) * var(--sbj-cc-gap, 24px)) / var(--sbj-cc-per-view-mobile, 1.3));
     scroll-snap-align: start;
   }
+  @media (min-width: 750px) {
+    .sbj-catcar__card {
+      flex-basis: calc((100% - (var(--sbj-cc-per-view-tablet, 2.2) - 1) * var(--sbj-cc-gap, 24px)) / var(--sbj-cc-per-view-tablet, 2.2));
+    }
+  }
+  @media (min-width: 990px) {
+    .sbj-catcar__card {
+      flex-basis: calc((100% - (var(--sbj-cc-per-view, 3.5) - 1) * var(--sbj-cc-gap, 24px)) / var(--sbj-cc-per-view, 3.5));
+    }
+  }
+
   .sbj-catcar__link { display: block; text-decoration: none; color: var(--color-foreground); }
   .sbj-catcar__media {
     position: relative;
@@ -65,7 +100,10 @@
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.5s var(--ease-out-cubic, ease);
   }
+  .sbj-catcar__card:hover .sbj-catcar__img { transform: scale(1.03); }
+
   .sbj-catcar__label {
     display: block;
     margin-top: 12px;
@@ -78,18 +116,130 @@
     text-transform: uppercase;
     color: var(--color-foreground);
   }
-  @media (max-width: 749px) {
-    .sbj-catcar__card { width: 62vw; }
-    .sbj-catcar { gap: 12px; }
+
+  /* Prev/next arrows — circular, vertically centred on the media row. */
+  .sbj-catcar__nav {
+    position: absolute;
+    top: calc((100% - 32px) * 0.42);
+    transform: translateY(-50%);
+    z-index: 2;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(45, 42, 38, 0.12);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    color: var(--color-foreground, #2D2A26);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s ease, background 0.2s ease;
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+  .sbj-catcar__nav svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .sbj-catcar__nav--prev { left: 10px; }
+  .sbj-catcar__nav--next { right: 10px; }
+  .sbj-catcar__nav:hover { background: #fff; }
+  .sbj-catcar__nav[disabled] { opacity: 0 !important; pointer-events: none; }
+
+  /* Show arrows on hover (desktop) only when the track can actually scroll. */
+  @media (hover: hover) and (min-width: 750px) {
+    .sbj-catcar-wrap[data-scrollable]:hover .sbj-catcar__nav:not([disabled]) { opacity: 1; }
+  }
+  /* Touch devices rely on swiping — hide the buttons. */
+  @media (hover: none) {
+    .sbj-catcar__nav { display: none; }
   }
 {% endstylesheet %}
+
+<script>
+  (function () {
+    var root = document.querySelector('[data-sbj-catcar="{{ section.id }}"]');
+    if (!root || root.dataset.sbjCatcarInit === '1') return;
+    root.dataset.sbjCatcarInit = '1';
+
+    var track = root.querySelector('.sbj-catcar');
+    var prev = root.querySelector('.sbj-catcar__nav--prev');
+    var next = root.querySelector('.sbj-catcar__nav--next');
+    if (!track) return;
+
+    function step() {
+      var card = track.querySelector('.sbj-catcar__card');
+      var styles = getComputedStyle(track);
+      var gap = parseFloat(styles.columnGap || styles.gap || '0') || 0;
+      return card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.8;
+    }
+
+    function update() {
+      var max = track.scrollWidth - track.clientWidth - 1;
+      if (max > 2) {
+        root.setAttribute('data-scrollable', '');
+      } else {
+        root.removeAttribute('data-scrollable');
+      }
+      if (prev) prev.disabled = track.scrollLeft <= 1;
+      if (next) next.disabled = track.scrollLeft >= max;
+    }
+
+    if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    track.addEventListener('scroll', function () { window.requestAnimationFrame(update); }, { passive: true });
+    window.addEventListener('resize', function () { window.requestAnimationFrame(update); });
+    update();
+  })();
+</script>
 
 {% schema %}
 {
   "name": "SBJ Category carousel",
   "tag": "section",
   "class": "sbj-catcar-section",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Carousel"
+    },
+    {
+      "type": "range",
+      "id": "cards_per_view",
+      "label": "Cards per view (desktop)",
+      "min": 2,
+      "max": 6,
+      "step": 0.5,
+      "default": 3.5
+    },
+    {
+      "type": "range",
+      "id": "cards_per_view_tablet",
+      "label": "Cards per view (tablet)",
+      "min": 1.5,
+      "max": 4,
+      "step": 0.1,
+      "default": 2.2
+    },
+    {
+      "type": "range",
+      "id": "cards_per_view_mobile",
+      "label": "Cards per view (mobile)",
+      "min": 1,
+      "max": 2.5,
+      "step": 0.1,
+      "default": 1.3
+    },
+    {
+      "type": "range",
+      "id": "card_gap",
+      "label": "Gap between cards",
+      "min": 0,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    }
+  ],
   "blocks": [
     {
       "type": "cat",

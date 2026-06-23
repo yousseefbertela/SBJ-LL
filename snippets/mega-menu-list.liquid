@@ -35,10 +35,10 @@
   #
   # At the moment, we check if the Section Rendering API is being used by
   # checking if section.index is blank.
-  assign eager_loading = false
-  if section.index == blank
-    assign eager_loading = true
-  endif
+  # SBJ: force eager loading so featured-product images always render in the
+  # mega menu (Horizon otherwise suppresses them on the hydrated/SRA re-render,
+  # leaving the panel text-only). The menu is small, so the TTFB cost is trivial.
+  assign eager_loading = true
 
   if menu_content_type == 'collection_images'
     assign collection_links = parent_link.links | where: 'type', 'collection_link'
@@ -67,7 +67,14 @@
     elsif parent_link.type == 'catalog_link' or parent_link.type == 'collections_link'
       assign collection_object = collections.all
     else
-      assign menu_content_type = 'text'
+      # SBJ: nav items are often plain URL links (/collections/<handle>) rather
+      # than typed collection links. Resolve the collection from the URL so the
+      # featured-product images still render (SKIMS-style picture + text panel).
+      assign sbj_handle = parent_link.url | split: '/collections/' | last | split: '/' | first | split: '?' | first
+      assign collection_object = collections[sbj_handle]
+      if collection_object == empty or collection_object.products_count == 0
+        assign menu_content_type = 'text'
+      endif
     endif
   endif
 %}

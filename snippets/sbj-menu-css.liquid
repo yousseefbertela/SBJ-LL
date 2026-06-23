@@ -1,0 +1,69 @@
+{%- comment -%}
+  SBJ / SKIMS-match MEGA-MENU CSS — global (all pages, header lives on every page).
+
+  WHY A SNIPPET (read before moving it):
+  Loaded once from layout/theme.liquid near </body> so it wins source-order over
+  base.css :root tokens and the header block's own <style>, and so theme-editor
+  saves never revert it (same pattern as sbj-footer-css / sbj-home-css).
+
+  WHAT IT DOES (matches the SKIMS mega menu the user filmed):
+   1. Makes the dropdown open/close FAST + smooth (base.css ships 360ms — too slow).
+   2. Adds the "small brown animation": an animated sienna (#986B58) underline that
+      slides in under the hovered / open top-level nav link (SKIMS nav-hover accent).
+   3. Tightens the panel so it's "properly sized" (less cavernous vertical padding).
+  Covers ONLY what native settings cannot. No HTML changes.
+{%- endcomment -%}
+<style>
+/* ---- 1. Snappy open/close (SKIMS feel) ----------------------------------- */
+/* base.css sets --submenu-animation-speed:360ms in :root; this later :root wins. */
+:root {
+  --submenu-animation-speed: 190ms;
+}
+/* A crisper ease-out so the reveal "snaps" open instead of drifting. */
+#header-component .menu-list__list-item:not([slot='overflow']) > .menu-list__submenu,
+#header-component .overflow-menu::part(overflow),
+#header-component .header__underlay-open {
+  transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+}
+
+/* ---- 2. Brown sienna underline under top-level links ---------------------- */
+#header-component {
+  --sbj-nav-accent: #986B58; /* SKIMS "sienna / secondary" nav-hover underline */
+}
+/* The text span inside each top-level link. We anchor an underline bar to it. */
+#header-component .menu-list__list-item:not([slot='overflow']) .menu-list__link-title {
+  position: relative;
+}
+#header-component .menu-list__list-item:not([slot='overflow']) .menu-list__link-title::after {
+  content: "";
+  position: absolute;
+  left: calc(var(--gap-xl) / 2);
+  right: calc(var(--gap-xl) / 2);
+  bottom: -5px;
+  height: 2px;
+  background: var(--sbj-nav-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 180ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  pointer-events: none;
+}
+/* Slide it in on hover, keyboard focus, and while the mega panel is open. */
+#header-component .menu-list__list-item:not([slot='overflow']):hover .menu-list__link-title::after,
+#header-component .menu-list__list-item:not([slot='overflow']):focus-within .menu-list__link-title::after,
+#header-component .menu-list__list-item:not([slot='overflow']) .menu-list__link[aria-expanded='true'] .menu-list__link-title::after {
+  transform: scaleX(1);
+}
+
+/* ---- 3. Properly-sized panel + faster content fade ----------------------- */
+/* base.css uses --padding-3xl top & bottom — cavernous. Trim to SKIMS proportions. */
+#header-component .menu-list__submenu,
+#header-component .overflow-menu::part(overflow) {
+  --submenu-padding-block-start: var(--padding-lg);
+  --submenu-padding-block-end: var(--padding-xl);
+}
+/* Content fades a touch quicker than the clip reveal so it never lags behind. */
+#header-component .menu-list__list-item:not([slot='overflow']) > .menu-list__submenu,
+#header-component .overflow-menu::part(overflow) {
+  --submenu-content-animation: opacity calc(var(--submenu-animation-speed) * 0.6) ease-out;
+}
+</style>
