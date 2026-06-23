@@ -85,7 +85,8 @@
   }
 
   .sbj-tout__img--ph {
-    background: #e8e5df;
+    background: #111111;
+    filter: invert(1) brightness(0.85);
   }
 
   /* Bottom-up scrim so white text stays legible over bright media */
@@ -109,7 +110,7 @@
   .sbj-tout__heading {
     margin: 0;
     font-family: var(--font-heading--family);
-    font-weight: 700;
+    font-weight: var(--font-heading--weight, 800);
     font-size: 30px;
     line-height: 36px;
     letter-spacing: 0.75px;
