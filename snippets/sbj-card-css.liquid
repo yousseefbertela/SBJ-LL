@@ -6,6 +6,15 @@
   custom-liquid blocks in templates/collection*.json and product.json.
 {%- endcomment -%}
 <style>
+/* SKIMS product cards have no quick-add button — just the wishlist heart.
+   Hide Horizon's quick-add overlay on every product card (all pages). */
+.product-card .quick-add,
+.product-card quick-add-component,
+.product-card .quick-add-modal,
+.product-card [class*="quick-add"] {
+  display: none !important;
+}
+
 :is([data-template^="collection"], [data-template^="product"]) .product-card__content {
   position: relative;
 }
