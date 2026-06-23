@@ -226,7 +226,8 @@
         "blurred_reflection": false,
         "reflection_opacity": 75,
         "padding-block-start": 0,
-        "padding-block-end": 40
+        "padding-block-end": 40,
+        "video_1": "shopify://shop_videos/5233469-uhd_3840_2160_25fps.mp4"
       }
     },
     "sbj_studio": {

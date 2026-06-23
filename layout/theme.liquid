@@ -140,6 +140,7 @@
       saves can't revert it. Renders last in <body>, so it wins source order over any
       inline CSS still left in the sbj_css block. See snippets/sbj-home-css.liquid.
     {%- endcomment -%}
+    {%- render 'sbj-footer-css' -%}
     {%- if template.name == 'index' -%}
       {%- render 'sbj-home-css' -%}
     {%- endif -%}

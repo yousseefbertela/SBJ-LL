@@ -1,0 +1,96 @@
+<style>
+/* === SBJ Footer — SKIMS-match styles, all pages === */
+
+/* 1. Three-column layout: narrow | wide | narrow (HELP | Newsletter | MORE)
+   4 total blocks in the grid (3 groups + social). The 4th item wraps to its own row. */
+@media screen and (min-width: 990px) {
+  .footer-content {
+    grid-template-columns: 1fr 2fr 1fr !important;
+    align-items: start;
+  }
+  /* Social block (4th child) wraps to second row and spans all 3 columns, centered */
+  .footer-content > *:nth-child(4) {
+    grid-column: 1 / -1;
+    display: flex !important;
+    justify-content: center !important;
+    padding-top: 36px;
+  }
+}
+
+/* 2. HELP / MORE column headings (h3 inside group text blocks) */
+.footer-content h3 {
+  margin: 0 0 18px;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight, 900);
+  font-size: 13px;
+  line-height: 1.4;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-foreground);
+}
+
+/* 3. Footer link lists — target ul/li inside footer groups (no class allowed by Shopify) */
+.footer-content ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.footer-content ul li { margin: 0; }
+.footer-content ul li a {
+  display: inline-block;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 28px;
+  color: var(--color-foreground);
+  text-decoration: none;
+}
+.footer-content ul li a:hover { text-decoration: underline; }
+
+/* 4. Newsletter heading (h2) — large Archivo, centered */
+.footer-content h2 {
+  margin: 0 0 12px;
+  font-family: var(--font-heading--family);
+  font-weight: var(--font-heading--weight, 900);
+  font-size: 26px;
+  line-height: 1.15;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--color-foreground);
+}
+
+/* 5. Newsletter subtext paragraph */
+.footer-content .group-block-content p {
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  margin: 0 auto 4px;
+  max-width: 360px;
+  color: var(--color-foreground);
+}
+
+/* 6. Email signup: sharp rectangular border (match SKIMS, no pill) */
+.footer-content .email-signup {
+  width: 100%;
+  max-width: 400px;
+  margin-inline: auto;
+}
+
+/* 7. Mobile: center everything */
+@media screen and (max-width: 989px) {
+  .footer-content { text-align: center; }
+  .footer-content > *:nth-child(4) {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+  }
+}
+
+/* 8. Utilities bottom bar */
+[data-testid="footer-utilities"] {
+  font-size: 0.75rem !important;
+}
+</style>
