@@ -104,6 +104,12 @@
                 "padding-inline-end": 0
               },
               "blocks": {
+                "eyebrow_pdp": {
+                  "type": "custom-liquid",
+                  "settings": {
+                    "custom_liquid": "<span class=\"sbj-eyebrow sbj-eyebrow--pdp\">{{ closest.product.type | default: closest.product.vendor }}</span>"
+                  }
+                },
                 "text_xrnftG": {
                   "type": "text",
                   "name": "Product title",
@@ -154,6 +160,7 @@
                 }
               },
               "block_order": [
+                "eyebrow_pdp",
                 "text_xrnftG",
                 "price_tVjtKg"
               ]

@@ -1,0 +1,108 @@
+{%- comment -%}
+  SBJ sub-category tiles — the SKIMS row of small portrait category tiles
+  (image + label) shown at the top of a collection page, under the title.
+  Editable blocks: each tile takes an image (picker or URL fallback), a label,
+  and a link (e.g. a tag-filtered collection URL like /collections/clothing/dresses).
+{%- endcomment -%}
+
+<div class="sbj-subcat page-width">
+  <ul class="sbj-subcat__row" role="list">
+    {%- for block in section.blocks -%}
+      <li class="sbj-subcat__tile" {{ block.shopify_attributes }}>
+        <a class="sbj-subcat__link" href="{{ block.settings.link | default: '#' }}">
+          <div class="sbj-subcat__media">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', class: 'sbj-subcat__img', widths: '200,300,400,500', alt: block.settings.label }}
+            {%- elsif block.settings.image_url != blank -%}
+              <img class="sbj-subcat__img" src="{{ block.settings.image_url }}" alt="{{ block.settings.label | escape }}" loading="lazy">
+            {%- else -%}
+              {{ 'collection-1' | placeholder_svg_tag: 'sbj-subcat__img' }}
+            {%- endif -%}
+          </div>
+          {%- if block.settings.label != blank -%}
+            <span class="sbj-subcat__label">{{ block.settings.label }}</span>
+          {%- endif -%}
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .sbj-subcat {
+    width: 100%;
+    margin-inline: auto;
+    padding-block: 8px 24px;
+  }
+  .sbj-subcat__row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+  }
+  .sbj-subcat__row::-webkit-scrollbar { display: none; }
+  .sbj-subcat__tile {
+    flex: 1 0 0;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+  .sbj-subcat__link { display: block; text-decoration: none; color: var(--color-foreground); }
+  .sbj-subcat__media {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background: #f3f3f3;
+  }
+  .sbj-subcat__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s var(--ease-out-cubic, ease);
+  }
+  .sbj-subcat__tile:hover .sbj-subcat__img { transform: scale(1.03); }
+  .sbj-subcat__label {
+    display: block;
+    margin-top: 10px;
+    text-align: center;
+    font-family: var(--font-heading--family);
+    font-weight: 800;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: 0.3px;
+    color: var(--color-foreground);
+  }
+  @media (max-width: 749px) {
+    .sbj-subcat__tile { flex: 0 0 38%; }
+    .sbj-subcat__label { font-size: 12px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "SBJ Subcategory tiles",
+  "tag": "section",
+  "class": "sbj-subcat-section",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_url", "label": "Image URL (fallback)" },
+        { "type": "text", "id": "label", "label": "Label", "default": "CATEGORY" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "SBJ Subcategory tiles" }]
+}
+{% endschema %}

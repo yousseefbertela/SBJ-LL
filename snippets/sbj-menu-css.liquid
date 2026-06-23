@@ -17,13 +17,25 @@
 /* ---- 1. Snappy open/close (SKIMS feel) ----------------------------------- */
 /* base.css sets --submenu-animation-speed:360ms in :root; this later :root wins. */
 :root {
-  --submenu-animation-speed: 190ms;
+  --submenu-animation-speed: 140ms;
 }
 /* A crisper ease-out so the reveal "snaps" open instead of drifting. */
 #header-component .menu-list__list-item:not([slot='overflow']) > .menu-list__submenu,
 #header-component .overflow-menu::part(overflow),
 #header-component .header__underlay-open {
   transition-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+}
+
+/* ---- 1b. INSTANT hover switching (the real speed fix) -------------------- *
+ * Horizon paints an invisible "safety box" (.menu-list__link[data-safety-box]
+ * ::after) that overlays the area under the active link WHILE the pointer is
+ * moving, so sweeping across the nav does nothing until you STOP — the freeze.
+ * Killing it lets each item fire pointerenter the instant the cursor crosses
+ * it, so the panel follows the cursor live in both directions (like SKIMS).
+ * The small link->submenu bridge (.menu-list__list-item::after) is untouched,
+ * so moving down into the open panel still keeps it open. */
+#header-component .menu-list__link[data-safety-box='true']::after {
+  display: none !important;
 }
 
 /* ---- 2. Brown sienna underline under top-level links ---------------------- */

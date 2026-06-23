@@ -1,12 +1,4 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */{
+{
   "sections": {
     "section": {
       "type": "section",
@@ -64,10 +56,7 @@
           "blocks": {}
         }
       },
-      "block_order": [
-        "text_tqQTNE",
-        "text_twGGkJ"
-      ],
+      "block_order": ["text_tqQTNE", "text_twGGkJ"],
       "name": "Collection heading",
       "settings": {
         "content_direction": "column",
@@ -93,9 +82,57 @@
         "overlay_color": "#00000026",
         "overlay_style": "solid",
         "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-start": 40,
+        "padding-block-end": 12
       }
+    },
+    "subcats": {
+      "type": "sbj-subcat-tiles",
+      "blocks": {
+        "t_tees": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/AP-TSH-0638-SOT-MA-SKIMS-LOUNGEWEAR_0102-FR.webp?fm=jpg&w=500",
+            "label": "Tees & Tanks",
+            "link": "/collections/clothing/tees-tanks"
+          }
+        },
+        "t_tops": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/TP-LSL-12347W-COA-SC-SKIMS-LOUNGEWEAR_0032-FR.webp?fm=jpg&w=500",
+            "label": "Tops & Bodysuits",
+            "link": "/collections/clothing/tops-bodysuits"
+          }
+        },
+        "t_dresses": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/OP-DRS-12296W-CBM-SA-SKIMS-LOUNGEWEAR_0006-FR.webp?fm=jpg&w=500",
+            "label": "Dresses",
+            "link": "/collections/clothing/dresses"
+          }
+        },
+        "t_sweaters": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/TP-LSL-11712W-BFF-RD-SKIMS-LOUNGEWEAR_0002-FR.webp?fm=jpg&w=500",
+            "label": "Sweaters",
+            "link": "/collections/clothing/sweaters"
+          }
+        },
+        "t_shorts": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/SH-SHO-7787W-CBM-SB-SKIMS-LOUNGEWEAR_0076-FR.webp?fm=jpg&w=500",
+            "label": "Shorts",
+            "link": "/collections/clothing/shorts"
+          }
+        }
+      },
+      "block_order": ["t_tees", "t_tops", "t_dresses", "t_sweaters", "t_shorts"],
+      "name": "SBJ Subcategory tiles",
+      "settings": {}
     },
     "main": {
       "type": "main-collection",
@@ -215,13 +252,7 @@
               "blocks": {}
             }
           },
-          "block_order": [
-            "card-gallery",
-            "badge_sbj",
-            "eyebrow_sbj",
-            "product_title_4nY4eT",
-            "price_EzJzMm"
-          ]
+          "block_order": ["card-gallery", "badge_sbj", "eyebrow_sbj", "product_title_4nY4eT", "price_EzJzMm"]
         }
       },
       "settings": {
@@ -240,8 +271,5 @@
       }
     }
   },
-  "order": [
-    "section",
-    "main"
-  ]
+  "order": ["section", "subcats", "main"]
 }
