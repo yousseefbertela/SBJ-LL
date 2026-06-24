@@ -150,9 +150,19 @@
   }
 }
 
-/* Taller card image to match SKIMS (~2:3 / 0.69, taller than Horizon's 4:5 portrait) */
-#MainContent[data-template^="collection"] .card-gallery {
+/* Taller card image to match SKIMS (~2:3 / 0.69, taller than Horizon's 4:5 portrait).
+   Scoped to the MAIN product grid so the "We think you'd like" carousel keeps its own ratio. */
+#MainContent[data-template^="collection"] .product-grid .card-gallery {
   --gallery-aspect-ratio: 0.69 !important;
+}
+
+/* Push the filter bar flush-left (full-bleed) like the product grid + SKIMS.
+   The filters sit in an inset grid column; span all columns and drop the inset. */
+#MainContent[data-template^="collection"] .facets-block-wrapper {
+  grid-column: 1 / -1 !important;
+  margin-inline: 0 !important;
+  padding-inline: 0 !important;
+  max-width: none !important;
 }
 
 /* Collection title — heavy heading like SKIMS "CLOTHING" */
