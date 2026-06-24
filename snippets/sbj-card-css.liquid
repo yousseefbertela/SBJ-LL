@@ -15,10 +15,6 @@
   display: none !important;
 }
 
-:is([data-template^="collection"], [data-template^="product"]) .product-card__content {
-  position: relative;
-}
-
 /* Eyebrow — product type / fabric family, muted grey uppercase (SKIMS) */
 :is([data-template^="collection"], [data-template^="product"]) .sbj-eyebrow {
   display: block;
@@ -53,10 +49,19 @@
   color: #2D2A26 !important;
 }
 
-/* Best Seller / New badge — small dark label, top-left over the image */
+/* Badge wrapper: zero-height positioned div placed right after the gallery in DOM.
+   bottom: Xpx on the badge is measured from the wrapper's top edge, which sits exactly
+   at the bottom of the gallery — so the badge floats inside the image at bottom-left. */
+:is([data-template^="collection"]) .sbj-badge-pos {
+  position: relative;
+  height: 0;
+  overflow: visible;
+  z-index: 2;
+}
+/* Best Seller / New badge — small dark label, bottom-left over the image (SKIMS position) */
 :is([data-template^="collection"], [data-template^="product"]) .sbj-badge {
   position: absolute;
-  top: 10px;
+  bottom: 10px;
   left: 10px;
   z-index: 2;
   background: #2D2A26;
@@ -69,29 +74,79 @@
   padding: 6px 8px;
 }
 
-/* Wishlist heart — outline, top-right over the image */
-:is([data-template^="collection"], [data-template^="product"]) .product-card__content::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 2;
-  width: 20px;
-  height: 20px;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232D2A26' stroke-width='1.7'%3E%3Cpath d='M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z'/%3E%3C/svg%3E");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.9;
-  pointer-events: none;
+/* Swatches row — color circles left, heart right (SKIMS layout) */
+:is([data-template^="collection"]) .sbj-swatches-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 8px 0 0;
+  min-height: 22px;
+}
+:is([data-template^="collection"]) .sbj-swatches {
+  display: flex;
+  gap: 4px;
+  flex-wrap: nowrap;
+  overflow: hidden;
+  max-width: calc(100% - 28px);
+}
+:is([data-template^="collection"]) .sbj-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+  display: inline-block;
+  flex-shrink: 0;
+  background: #ccc;
+}
+:is([data-template^="collection"]) .sbj-swatch--black { background: #1a1a1a; }
+:is([data-template^="collection"]) .sbj-swatch--white { background: #fff; border-color: rgba(0,0,0,0.3); }
+:is([data-template^="collection"]) .sbj-swatch--sand { background: #c2a98a; }
+:is([data-template^="collection"]) .sbj-swatch--pink { background: #f5a8be; }
+:is([data-template^="collection"]) .sbj-swatch--beige { background: #e0cdb8; border-color: rgba(0,0,0,0.2); }
+:is([data-template^="collection"]) .sbj-swatch--grey,
+:is([data-template^="collection"]) .sbj-swatch--gray { background: #9a9a9a; }
+:is([data-template^="collection"]) .sbj-swatch--heather-grey { background: #b4b4b4; }
+:is([data-template^="collection"]) .sbj-swatch--navy { background: #1a2a5a; }
+:is([data-template^="collection"]) .sbj-swatch--brown { background: #5c3d2e; }
+:is([data-template^="collection"]) .sbj-swatch--dark-brown { background: #3d1f0f; }
+:is([data-template^="collection"]) .sbj-swatch--oatmeal { background: #ddd4c4; border-color: rgba(0,0,0,0.2); }
+:is([data-template^="collection"]) .sbj-swatch--mauve { background: #c4a0b0; }
+:is([data-template^="collection"]) .sbj-swatch--cocoa { background: #5c3a28; }
+:is([data-template^="collection"]) .sbj-swatch--onyx { background: #2a2a2a; }
+:is([data-template^="collection"]) .sbj-swatch--marble { background: #d0c8c0; border-color: rgba(0,0,0,0.2); }
+:is([data-template^="collection"]) .sbj-swatch--mineral-blue { background: #5a7a8a; }
+:is([data-template^="collection"]) .sbj-swatch--slate { background: #607a8a; }
+/* Heart button in swatches row */
+:is([data-template^="collection"]) .sbj-heart {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #2D2A26;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+:is([data-template^="collection"]) .sbj-heart svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+/* Force exactly 4 product columns on collection pages (SKIMS is 4-col) */
+@media screen and (min-width: 750px) {
+  [data-template^="collection"] .product-grid {
+    --product-grid-columns-desktop: repeat(4, 1fr) !important;
+  }
 }
 
 /* Collection title — heavy heading like SKIMS "CLOTHING" */
-[data-template^="collection"] #MainContent .section h1 {
-  font-family: var(--font-heading--family);
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
+#MainContent[data-template^="collection"] h1 {
+  font-family: var(--font-heading--family) !important;
+  font-weight: 900 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.4px !important;
 }
 
 /* ----- Product page (PDP) ------------------------------------------------- */
