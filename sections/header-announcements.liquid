@@ -160,85 +160,16 @@
       justify-content: center !important;
     }
 
-    /* TRANSPARENT HERO STATE (homepage, at top): DARK text over the hero to match SKIMS.
-       The hero top is bright grass, so near-black reads cleanly (same as the logo). */
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar p,
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar__text,
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar__logo-text {
-      color: #2d2a26 !important;
-    }
-
-    /* Logo over the hero: the uploaded PNG has a WHITE background, so inverting it made a
-       white box. mix-blend-mode: multiply drops the white and leaves the crisp dark SBJ mark
-       on the (bright) top of the hero. On scroll the announcement row leaves and the native
-       logo takes over on the white bar. */
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar__logo img {
-      filter: none;
-      mix-blend-mode: multiply;
-    }
-
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar {
-      --border-bottom-width: 0px;
-    }
-
-    /* Keep the announcement-row logo visible at the top over the hero */
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .announcement-bar__logo {
-      display: inline-flex !important;
-    }
-
-    /* Nav links + icons: explicitly WHITE over the hero (matches SKIMS — only the
-       announcement + logo are dark). Set explicitly because the native transparent scheme
-       renders them dark here. Soft dark shadow keeps white legible over the grass. */
-    /* Nav links + icons: DARK (matches the logo + announcement, which are reliably readable).
-       White kept washing out — the hero top is bright grass AND a white .section-background
-       haze sits behind the nav after scroll, so white had no contrast either way. Dark reads
-       on both. Subtle white halo (invisible on white, helps on grass). !important so it holds
-       through the scroll state change. */
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .header-section .menu-list__link-title,
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .header-section .menu-list__link,
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .header-section .header__column--right a,
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .header-section .header__column--right button {
-      color: #2d2a26 !important;
-      text-shadow: 0 0 4px rgba(255, 255, 255, 0.6), 0 1px 2px rgba(255, 255, 255, 0.5) !important;
-    }
-
-    body:has(#header-component[transparent][data-sticky-state='inactive']) .header-section .header__column--right svg {
-      color: #2d2a26 !important;
-      filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.7)) !important;
-    }
+    /* Transparent-over-hero coloring (nav/icons white, announcement dark, logo multiply,
+       no dividers) + the hover-to-solid reveal now live in ONE owner:
+       snippets/sbj-header-css.liquid — gated on :not([data-sticky-state='active']) with
+       zero JS, which fixes the "header disappears on scroll up/down" bug. */
 
     /* Logo appears in the nav row once the header sticks on scroll */
     #header-component[data-sticky-state='active'] .header-logo {
       display: flex !important;
     }
 
-    /* HOVER REVEAL: hovering anywhere over the transparent header (nav row OR announcement
-       row) turns the whole header solid white with dark text/icons, like the scrolled state.
-       Reverts on mouse-out. The announcement row is already white, so only the nav row needs
-       the white fill. */
-    #header-component[transparent][data-sticky-state='inactive'] {
-      transition: background-color 0.15s ease;
-    }
-    #header-component[transparent][data-sticky-state='inactive']:hover,
-    body:has(.announcement-bar:hover) #header-component[transparent][data-sticky-state='inactive'] {
-      background-color: #ffffff !important;
-    }
-    #header-component[transparent][data-sticky-state='inactive']:hover .menu-list__link,
-    #header-component[transparent][data-sticky-state='inactive']:hover .menu-list__link-title,
-    #header-component[transparent][data-sticky-state='inactive']:hover .header__column--right a,
-    #header-component[transparent][data-sticky-state='inactive']:hover .header__column--right button,
-    body:has(.announcement-bar:hover) #header-component[transparent][data-sticky-state='inactive'] .menu-list__link,
-    body:has(.announcement-bar:hover) #header-component[transparent][data-sticky-state='inactive'] .menu-list__link-title,
-    body:has(.announcement-bar:hover) #header-component[transparent][data-sticky-state='inactive'] .header__column--right a,
-    body:has(.announcement-bar:hover) #header-component[transparent][data-sticky-state='inactive'] .header__column--right button {
-      color: #2d2a26 !important;
-      text-shadow: none !important;
-    }
-    #header-component[transparent][data-sticky-state='inactive']:hover .header__column--right svg,
-    body:has(.announcement-bar:hover) #header-component[transparent][data-sticky-state='inactive'] .header__column--right svg {
-      color: #2d2a26 !important;
-      filter: none !important;
-    }
   }
 
   .announcement-bar__slider {
