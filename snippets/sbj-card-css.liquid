@@ -28,14 +28,17 @@
   margin: 10px 0 0;
 }
 
-/* Product name — heavy uppercase heading (SKIMS card name line) */
+/* Product name — clean regular-weight uppercase (SKIMS card name line is 14px/400).
+   The title renders as a .text-block div whose weight comes from --font-weight
+   (= --font-heading--weight, ~900); override the variable, not just font-weight. */
 :is([data-template^="collection"], [data-template^="product"]) .product-card__content .user-select-text,
-:is([data-template^="collection"], [data-template^="product"]) .product-card__content .user-select-text :is(p, h1, h2, h3, h4, h5, h6) {
+:is([data-template^="collection"], [data-template^="product"]) .product-card__content [class*="product_title"] {
+  --font-weight: 400 !important;
   font-family: var(--font-heading--family) !important;
-  font-weight: 800 !important;
+  font-weight: 400 !important;
   font-size: 14px !important;
   line-height: 18px !important;
-  letter-spacing: 0.3px !important;
+  letter-spacing: 0.35px !important;
   text-transform: uppercase !important;
   color: #2D2A26 !important;
 }
@@ -145,6 +148,11 @@
   [data-template^="collection"] .product-grid {
     --product-grid-columns-desktop: repeat(4, 1fr) !important;
   }
+}
+
+/* Taller card image to match SKIMS (~2:3 / 0.69, taller than Horizon's 4:5 portrait) */
+#MainContent[data-template^="collection"] .card-gallery {
+  --gallery-aspect-ratio: 0.69 !important;
 }
 
 /* Collection title — heavy heading like SKIMS "CLOTHING" */
