@@ -33,6 +33,28 @@
   sections/header-announcements.liquid.
 {%- endcomment -%}
 <style>
+/* ============================================================
+   TRANSPARENT OVERLAY PERSISTENCE — the real "header disappears /
+   white band when I scroll up and down" fix.
+
+   Horizon makes the transparent header overlay the hero by pulling the
+   FIRST homepage section UP under the header (negative margin-top =
+   -header-height). On this store the first section is the empty `sbj_css`
+   CSS-holder section, and Horizon's pull-up on it is LOST after you scroll
+   down and back up — the hero then drops BELOW the header, exposing a white
+   page band where the white nav text becomes invisible (only hover, which
+   fills the bar white + darkens text, made it reappear).
+
+   We force the pull-up persistently so the hero ALWAYS sits behind the
+   header — fresh load AND after any scroll cycle. Homepage only (the
+   [transparent] attribute exists only there); all viewports, to match
+   Horizon's native (non-media-gated) overlay. Verified: heroTop + "hero
+   behind nav" stay identical before and after scrolling.
+   ============================================================ */
+  body:has(#header-component[transparent]) main > .shopify-section:first-child {
+    margin-top: calc(var(--header-height) * -1) !important;
+  }
+
 @media screen and (min-width: 750px) {
   /* ============================================================
      TRANSPARENT OVER HERO  —  home, header not yet stuck
