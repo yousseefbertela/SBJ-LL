@@ -1,0 +1,118 @@
+{%- comment -%}
+  SBJ "Clothing Essentials" split band — the SKIMS image-left / text-right block near
+  the bottom of a collection page: a lifestyle image beside a heading, a paragraph of
+  copy, and a dark CTA button. All fields editable from the theme editor.
+{%- endcomment -%}
+
+<div class="sbj-essentials page-width">
+  <div class="sbj-essentials__grid">
+    <div class="sbj-essentials__media">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', class: 'sbj-essentials__img', widths: '600,900,1200', alt: section.settings.heading }}
+      {%- elsif section.settings.image_url != blank -%}
+        <img class="sbj-essentials__img" src="{{ section.settings.image_url }}" alt="{{ section.settings.heading | escape }}" loading="lazy">
+      {%- else -%}
+        {{ 'lifestyle-2' | placeholder_svg_tag: 'sbj-essentials__img' }}
+      {%- endif -%}
+    </div>
+    <div class="sbj-essentials__content">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="sbj-essentials__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <div class="sbj-essentials__body">{{ section.settings.body }}</div>
+      {%- endif -%}
+      {%- if section.settings.button_label != blank -%}
+        <a class="sbj-essentials__btn" href="{{ section.settings.button_link | default: '#' }}">{{ section.settings.button_label }}</a>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  .sbj-essentials {
+    width: 100%;
+    margin-inline: auto;
+    padding-block: 40px 48px;
+  }
+  .sbj-essentials__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 56px;
+  }
+  .sbj-essentials__media {
+    position: relative;
+    aspect-ratio: 800 / 470;
+    overflow: hidden;
+    background: #ece9e4;
+  }
+  .sbj-essentials__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .sbj-essentials__content { max-width: 460px; }
+  .sbj-essentials__heading {
+    font-family: var(--font-heading--family);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 32px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    margin: 0 0 16px;
+  }
+  .sbj-essentials__body {
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 22px;
+    color: #4a4744;
+    margin: 0 0 24px;
+  }
+  .sbj-essentials__body p { margin: 0 0 12px; }
+  .sbj-essentials__body p:last-child { margin-bottom: 0; }
+  .sbj-essentials__btn {
+    display: inline-block;
+    background: #1a1a1a;
+    color: #fff;
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 15px 38px;
+    transition: opacity 0.2s ease;
+  }
+  .sbj-essentials__btn:hover { opacity: 0.85; }
+  @media (max-width: 749px) {
+    .sbj-essentials__grid {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .sbj-essentials__content { max-width: none; }
+    .sbj-essentials__heading { font-size: 22px; }
+    .sbj-essentials__btn { display: block; text-align: center; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "SBJ Essentials split",
+  "tag": "section",
+  "class": "sbj-essentials-section",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "image_url", "label": "Image URL (fallback)" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Clothing Essentials" },
+    { "type": "richtext", "id": "body", "label": "Body", "default": "<p>Fill your wardrobe with outfits that have both comfort and style with the full line of SBJ clothing. Our collection spans everything from tees, tanks, and bodysuits to leggings, shorts, hoodies, and more, each crafted from innovative fabrics and designed for versatile wear. Build eye-catching outfits with everything from everyday essentials to statement pieces. Each SBJ garment blends functionality and fashion.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop Essentials" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "presets": [{ "name": "SBJ Essentials split" }]
+}
+{% endschema %}

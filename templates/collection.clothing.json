@@ -113,12 +113,20 @@
             "link": "/collections/clothing/dresses"
           }
         },
-        "t_sweaters": {
+        "t_hoodies": {
           "type": "tile",
           "settings": {
             "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/TP-LSL-11712W-BFF-RD-SKIMS-LOUNGEWEAR_0002-FR.webp?fm=jpg&w=500",
-            "label": "Sweaters",
-            "link": "/collections/clothing/sweaters"
+            "label": "Hoodies & Sweatshirts",
+            "link": "/collections/clothing/hoodies-sweatshirts"
+          }
+        },
+        "t_pants": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/TP-LSL-12347W-COA-SC-SKIMS-LOUNGEWEAR_0032-FR.webp?fm=jpg&w=500",
+            "label": "Pants",
+            "link": "/collections/clothing/pants"
           }
         },
         "t_shorts": {
@@ -130,7 +138,7 @@
           }
         }
       },
-      "block_order": ["t_tees", "t_tops", "t_dresses", "t_sweaters", "t_shorts"],
+      "block_order": ["t_tees", "t_tops", "t_dresses", "t_hoodies", "t_pants", "t_shorts"],
       "name": "SBJ Subcategory tiles",
       "settings": {}
     },
@@ -195,7 +203,13 @@
             "badge_sbj": {
               "type": "custom-liquid",
               "settings": {
-                "custom_liquid": "{% if closest.product.tags contains 'best-sellers' %}<span class=\"sbj-badge\">Best Seller</span>{% elsif closest.product.tags contains 'new' %}<span class=\"sbj-badge\">New</span>{% endif %}"
+                "custom_liquid": "{% if closest.product.tags contains 'best-sellers' %}<div class=\"sbj-badge-pos\"><span class=\"sbj-badge\">Best Seller</span></div>{% elsif closest.product.tags contains 'new' %}<div class=\"sbj-badge-pos\"><span class=\"sbj-badge\">New</span></div>{% endif %}"
+              }
+            },
+            "swatches_sbj": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "{%- assign co = closest.product.options_with_values | where: 'name', 'Color' | first -%}<div class=\"sbj-swatches-row\">{%- if co and co.values.size > 0 -%}<div class=\"sbj-swatches\">{%- for v in co.values -%}<span class=\"sbj-swatch sbj-swatch--{{ v | downcase | replace: ' ', '-' }}\" title=\"{{ v }}\"></span>{%- endfor -%}</div>{%- endif -%}<button class=\"sbj-heart\" aria-label=\"Add to wishlist\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z\"/></svg></button></div>"
               }
             },
             "eyebrow_sbj": {
@@ -252,7 +266,7 @@
               "blocks": {}
             }
           },
-          "block_order": ["card-gallery", "badge_sbj", "eyebrow_sbj", "product_title_4nY4eT", "price_EzJzMm"]
+          "block_order": ["card-gallery", "badge_sbj", "swatches_sbj", "eyebrow_sbj", "product_title_4nY4eT", "price_EzJzMm"]
         }
       },
       "settings": {
@@ -269,7 +283,50 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "promo": {
+      "type": "sbj-promo-tiles",
+      "blocks": {
+        "p_solutions": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/4c55984c5f449b45139a24d020236135e9c311ad-616x540.jpg?auto=format&q=70&w=800",
+            "label": "The Solutions Shop",
+            "link": "/collections/shapewear"
+          }
+        },
+        "p_bundle": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/a4ba20163255b64422b089871ec7f92a117d9161-616x540.jpg?auto=format&q=70&w=800",
+            "label": "Bundle and Save",
+            "link": "/collections/underwear"
+          }
+        },
+        "p_bras": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/f34302a969659dfaf1749a89396db97ad498d1ff-616x540.jpg?auto=format&q=70&w=800",
+            "label": "Bras",
+            "link": "/collections/bras"
+          }
+        }
+      },
+      "block_order": ["p_solutions", "p_bundle", "p_bras"],
+      "name": "SBJ Promo tiles",
+      "settings": {
+        "heading": "Looking for more?"
+      }
+    },
+    "essentials": {
+      "type": "sbj-essentials-split",
+      "settings": {
+        "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/cd35d091adc34353f1b47f5dc1ade2cda893703e-800x470.jpg?auto=format&q=70&w=1200",
+        "heading": "Clothing Essentials",
+        "button_label": "Shop Essentials",
+        "button_link": "/collections/best-sellers"
+      }
     }
   },
-  "order": ["section", "subcats", "main"]
+  "order": ["section", "subcats", "main", "promo", "essentials"]
 }

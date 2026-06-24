@@ -1,0 +1,142 @@
+{%- comment -%}
+  SBJ "Looking for more?" promo tiles — the SKIMS row of 3 large image tiles with
+  a bold white label centered over each (THE SOLUTIONS SHOP / BUNDLE AND SAVE / BRAS).
+  Shown near the bottom of a collection page. Each tile: image (picker or URL fallback),
+  label, link. Editable from the theme editor.
+{%- endcomment -%}
+
+<div class="sbj-promo page-width">
+  {%- if section.settings.heading != blank -%}
+    <h2 class="sbj-promo__heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+  <ul class="sbj-promo__row" role="list">
+    {%- for block in section.blocks -%}
+      <li class="sbj-promo__tile" {{ block.shopify_attributes }}>
+        <a class="sbj-promo__link" href="{{ block.settings.link | default: '#' }}">
+          <div class="sbj-promo__media">
+            {%- if block.settings.image != blank -%}
+              {{ block.settings.image | image_url: width: 800 | image_tag: loading: 'lazy', class: 'sbj-promo__img', widths: '400,600,800', alt: block.settings.label }}
+            {%- elsif block.settings.image_url != blank -%}
+              <img class="sbj-promo__img" src="{{ block.settings.image_url }}" alt="{{ block.settings.label | escape }}" loading="lazy">
+            {%- else -%}
+              {{ 'lifestyle-1' | placeholder_svg_tag: 'sbj-promo__img' }}
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="sbj-promo__label">{{ block.settings.label }}</span>
+            {%- endif -%}
+          </div>
+        </a>
+      </li>
+    {%- endfor -%}
+  </ul>
+</div>
+
+{% stylesheet %}
+  .sbj-promo {
+    width: 100%;
+    margin-inline: auto;
+    padding-block: 48px 8px;
+  }
+  .sbj-promo__heading {
+    text-align: center;
+    font-family: var(--font-heading--family);
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 34px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--color-foreground);
+    margin: 0 0 28px;
+  }
+  .sbj-promo__row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .sbj-promo__tile { min-width: 0; }
+  .sbj-promo__link { display: block; text-decoration: none; }
+  .sbj-promo__media {
+    position: relative;
+    aspect-ratio: 616 / 540;
+    overflow: hidden;
+    background: #ece9e4;
+  }
+  .sbj-promo__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s var(--ease-out-cubic, ease);
+  }
+  .sbj-promo__tile:hover .sbj-promo__img { transform: scale(1.04); }
+  .sbj-promo__label {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 16px;
+    font-family: var(--font-heading--family);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.1;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 1px 12px rgba(0,0,0,0.25);
+  }
+  @media (max-width: 749px) {
+    .sbj-promo__row {
+      grid-auto-flow: column;
+      grid-template-columns: none;
+      grid-auto-columns: 78%;
+      overflow-x: auto;
+      scrollbar-width: none;
+      scroll-snap-type: x proximity;
+    }
+    .sbj-promo__row::-webkit-scrollbar { display: none; }
+    .sbj-promo__tile { scroll-snap-align: start; }
+    .sbj-promo__heading { font-size: 22px; }
+    .sbj-promo__label { font-size: 22px; }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "SBJ Promo tiles",
+  "tag": "section",
+  "class": "sbj-promo-section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Looking for more?" }
+  ],
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Image" },
+        { "type": "text", "id": "image_url", "label": "Image URL (fallback)" },
+        { "type": "text", "id": "label", "label": "Label", "default": "SHOP NOW" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "max_blocks": 4,
+  "presets": [
+    {
+      "name": "SBJ Promo tiles",
+      "blocks": [
+        { "type": "tile", "settings": { "label": "The Solutions Shop" } },
+        { "type": "tile", "settings": { "label": "Bundle and Save" } },
+        { "type": "tile", "settings": { "label": "Bras" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -158,7 +158,13 @@
             "badge_sbj": {
               "type": "custom-liquid",
               "settings": {
-                "custom_liquid": "{% if closest.product.tags contains 'best-sellers' %}<span class=\"sbj-badge\">Best Seller</span>{% elsif closest.product.tags contains 'new' %}<span class=\"sbj-badge\">New</span>{% endif %}"
+                "custom_liquid": "{% if closest.product.tags contains 'best-sellers' %}<div class=\"sbj-badge-pos\"><span class=\"sbj-badge\">Best Seller</span></div>{% elsif closest.product.tags contains 'new' %}<div class=\"sbj-badge-pos\"><span class=\"sbj-badge\">New</span></div>{% endif %}"
+              }
+            },
+            "swatches_sbj": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "{%- assign co = closest.product.options_with_values | where: 'name', 'Color' | first -%}<div class=\"sbj-swatches-row\">{%- if co and co.values.size > 0 -%}<div class=\"sbj-swatches\">{%- for v in co.values -%}<span class=\"sbj-swatch sbj-swatch--{{ v | downcase | replace: ' ', '-' }}\" title=\"{{ v }}\"></span>{%- endfor -%}</div>{%- endif -%}<button class=\"sbj-heart\" aria-label=\"Add to wishlist\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z\"/></svg></button></div>"
               }
             },
             "eyebrow_sbj": {
@@ -218,6 +224,7 @@
           "block_order": [
             "card-gallery",
             "badge_sbj",
+            "swatches_sbj",
             "eyebrow_sbj",
             "product_title_4nY4eT",
             "price_EzJzMm"

@@ -92,11 +92,17 @@
 :is([data-template^="collection"]) .sbj-swatch {
   width: 14px;
   height: 14px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,0,0,0.15);
+  border-radius: 2px;
+  border: 1px solid rgba(0,0,0,0.12);
   display: inline-block;
   flex-shrink: 0;
   background: #ccc;
+  box-sizing: border-box;
+}
+/* First (active) swatch gets the SKIMS selection ring */
+:is([data-template^="collection"]) .sbj-swatch:first-child {
+  outline: 1px solid #2D2A26;
+  outline-offset: 1px;
 }
 :is([data-template^="collection"]) .sbj-swatch--black { background: #1a1a1a; }
 :is([data-template^="collection"]) .sbj-swatch--white { background: #fff; border-color: rgba(0,0,0,0.3); }
