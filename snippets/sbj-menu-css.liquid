@@ -78,4 +78,59 @@
 #header-component .overflow-menu::part(overflow) {
   --submenu-content-animation: opacity calc(var(--submenu-animation-speed) * 0.6) ease-out;
 }
+
+/* ---- 4. Mega-menu content typography + featured tiles (SKIMS pic 4 look) -------
+ * SKIMS panel: bold Title-Case column headings, regular Inter sub-links with roomy
+ * line-height, and featured tiles that are image + title (NO price). This styles the
+ * existing content to SKIMS proportions; the multi-column sub-heading structure fills
+ * in once the navigation has nested groups. */
+
+/* Column heading / standalone bold links (the L2 nav items) */
+#header-component .mega-menu__link--parent,
+#header-component .mega-menu__column > div > .mega-menu__link {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 20px !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  color: #2D2A26 !important;
+  margin-bottom: 10px;
+}
+
+/* Sub-links under a heading (the L3 nav items) — regular Inter, roomy */
+#header-component .mega-menu__column ul .mega-menu__link {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  line-height: 30px !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  color: #2D2A26 !important;
+  padding: 0 !important;
+}
+#header-component .mega-menu__column ul .mega-menu__link:hover {
+  color: #986B58 !important; /* SKIMS sienna hover */
+}
+
+/* Featured tiles: SKIMS shows image + title only (no price). */
+#header-component .mega-menu__content .price,
+#header-component .mega-menu__content [class*="price"] {
+  display: none !important;
+}
+#header-component .mega-menu__content .product-card__content .user-select-text,
+#header-component .mega-menu__content .product-card__content .user-select-text :is(p, h1, h2, h3, h4, h5, h6) {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  line-height: 18px !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  color: #2D2A26 !important;
+}
+/* Show two featured tiles like SKIMS (hide the 3rd) and give them room. */
+#header-component .mega-menu__content-list--products { gap: 18px !important; }
+#header-component .mega-menu__content-list--products .mega-menu__content-list-item:nth-child(n+3) {
+  display: none !important;
+}
 </style>

@@ -1,0 +1,70 @@
+{%- comment -%}
+  SBJ Trending carousel: SKIMS "NEW ARRIVALS  < 1 / 2 >" controls. Homepage only.
+  - Inserts a page counter between the native prev/next arrows.
+  - Aligns the arrows+counter to the title's row (top-right), since the native arrows
+    live in slideshow-container which sits below the title.
+  Page count is derived from cards-per-view; current page is driven off the arrow
+  clicks and re-synced from the buttons' disabled state (the carousel is transform-based).
+{%- endcomment -%}
+<script>
+(function () {
+  function init() {
+    var sec = document.querySelector('[id*="sbj_trending"]');
+    if (!sec) return false;
+    var arrows = sec.querySelector('slideshow-arrows');
+    if (!arrows) return false;
+    if (arrows.querySelector('.sbj-carousel-counter')) return true;
+    var prev = arrows.querySelector('.slideshow-control--previous');
+    var next = arrows.querySelector('.slideshow-control--next');
+    if (!prev || !next) return false;
+
+    var counter = document.createElement('span');
+    counter.className = 'sbj-carousel-counter';
+    next.parentNode.insertBefore(counter, next);
+
+    function cardCount() { return sec.querySelectorAll('.product-card').length; }
+    function perView() {
+      var slides = sec.querySelector('slideshow-slides');
+      var card = sec.querySelector('.product-card');
+      if (!slides || !card) return 1;
+      var cw = card.getBoundingClientRect().width || 1;
+      return Math.max(1, Math.round(slides.getBoundingClientRect().width / cw));
+    }
+    var pages = 1, page = 1;
+    function render() { counter.textContent = page + ' / ' + pages; }
+    function sync() {
+      pages = Math.max(1, Math.ceil(cardCount() / perView()));
+      if (prev.disabled) page = 1;
+      else if (next.disabled) page = pages;
+      page = Math.min(Math.max(page, 1), pages);
+      render();
+    }
+
+    // Align the arrows row vertically with the section title (they live lower in the DOM).
+    function placeArrows() {
+      var title = sec.querySelector('h2');
+      var op = arrows.offsetParent;
+      if (!title || !op) return;
+      var t = title.getBoundingClientRect();
+      var o = op.getBoundingClientRect();
+      var ah = arrows.getBoundingClientRect().height || 22;
+      arrows.style.top = Math.round(t.top - o.top + t.height / 2 - ah / 2) + 'px';
+    }
+
+    prev.addEventListener('click', function () { page = Math.max(1, page - 1); render(); setTimeout(sync, 450); });
+    next.addEventListener('click', function () { page = Math.min(pages, page + 1); render(); setTimeout(sync, 450); });
+    window.addEventListener('resize', function () { setTimeout(function () { sync(); placeArrows(); }, 200); });
+    sync();
+    placeArrows();
+    setTimeout(placeArrows, 300);
+    return true;
+  }
+  function boot() {
+    if (init()) return;
+    var tries = 0;
+    var t = setInterval(function () { if (init() || ++tries > 25) clearInterval(t); }, 300);
+  }
+  if (document.readyState !== 'loading') boot();
+  else document.addEventListener('DOMContentLoaded', boot);
+})();
+</script>

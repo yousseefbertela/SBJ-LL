@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "theme-dev",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [".claude/theme-dev.cjs"],
+      "port": 9292,
+      "autoPort": false
+    }
+  ]
+}

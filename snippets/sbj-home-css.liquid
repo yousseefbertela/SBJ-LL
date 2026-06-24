@@ -119,22 +119,29 @@ body.sbj-home .shopify-section:has(> .hero) + .shopify-section {
   margin-top: var(--sbj-spacer);
 }
 
-/* 4. Brand statement - centered 36/48, #2D2A26, ls .9px, generous padding.
-   Add class "sbj-brand-statement" to the final text/rich-text band. */
-body:has(#sbj-home) .sbj-brand-statement,
-body.sbj-home .sbj-brand-statement {
-  text-align: center;
-  padding-block: 48px;
-  padding-inline: 24px;
+/* 4. Brand statement -> SKIMS: centered, 36px heavy UPPERCASE, controlled width.
+   Targets the sbj_brand section directly (Horizon positions the text block left by
+   default, and the copy ships sentence-case; SKIMS centers it full-width + uppercase). */
+body:has(#sbj-home) [id*="sbj_brand"] .group-block-content,
+body:has(#sbj-home) [id*="sbj_brand"] [class*="content-wrapper"],
+body:has(#sbj-home) [id*="sbj_brand"] .spacing-style,
+body.sbj-home [id*="sbj_brand"] .group-block-content,
+body.sbj-home [id*="sbj_brand"] .spacing-style {
+  width: 100% !important;
+  max-width: 100% !important;
+  align-items: center !important;
+  text-align: center !important;
 }
-body:has(#sbj-home) .sbj-brand-statement :is(h1,h2,h3,h4,p),
-body.sbj-home .sbj-brand-statement :is(h1,h2,h3,h4,p) {
-  font-size: 36px;
-  line-height: 48px;
-  letter-spacing: .9px;
-  color: var(--sbj-ink);
-  text-align: center;
-  margin: 0;
+body:has(#sbj-home) [id*="sbj_brand"] :is(h1,h2,h3,h4,p),
+body.sbj-home [id*="sbj_brand"] :is(h1,h2,h3,h4,p) {
+  font-size: 36px !important;
+  line-height: 44px !important;
+  letter-spacing: .4px !important;
+  color: var(--sbj-ink) !important;
+  text-align: center !important;
+  text-transform: uppercase !important;
+  max-width: 840px;
+  margin: 0 auto !important;
 }
 
 /* 5. Category 4-up - 4 cols, gap 24px, labels beneath, full-bleed.
@@ -229,11 +236,50 @@ body:has(#sbj-home) [id*="sbj_trending"] h2 {
    Grey uppercase eyebrow · heavy uppercase name · small price · wishlist heart
    bottom-right · thin vertical dividers between cards. CSS-only (no DOM edits). */
 
-/* Card body: anchor for the heart + keep text clear of it. */
+/* Card body: anchor for the heart. */
 body:has(#sbj-home) [id*="sbj_trending"] .product-card__content,
 body.sbj-home [id*="sbj_trending"] .product-card__content {
   position: relative;
-  padding-right: 24px;
+  padding-right: 0;
+}
+
+/* SKIMS "New Arrivals" image area: a fixed-square light-grey box behind EVERY card,
+   identical size. The image is absolutely positioned to fill the square (so the inner
+   slideshow markup can't make heights vary), and mix-blend-mode:multiply blends any
+   white product-shot background (e.g. BOYSHORT) into the grey box — so all cards read
+   as one uniform SKIMS grey tile instead of a white card floating on the page. */
+body:has(#sbj-home) [id*="sbj_trending"] .card-gallery,
+body.sbj-home [id*="sbj_trending"] .card-gallery {
+  aspect-ratio: 1 / 1 !important;
+  position: relative;
+  background: #f3f1ed !important;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+/* The slideshow wrappers ship an opaque WHITE background that sits between the image
+   and the grey gallery — multiply would blend against that white (no effect). Make
+   them transparent so the image's white backdrop blends into the grey box instead. */
+body:has(#sbj-home) [id*="sbj_trending"] .card-gallery :is(slideshow-component, slideshow-container, slideshow-slides, slideshow-slide),
+body.sbj-home [id*="sbj_trending"] .card-gallery :is(slideshow-component, slideshow-container, slideshow-slides, slideshow-slide) {
+  background: transparent !important;
+}
+body:has(#sbj-home) [id*="sbj_trending"] .card-gallery img,
+body.sbj-home [id*="sbj_trending"] .card-gallery img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  mix-blend-mode: multiply;
+}
+/* Leave room on the right of the text rows for the wishlist heart. */
+body:has(#sbj-home) [id*="sbj_trending"] .sbj-eyebrow,
+body:has(#sbj-home) [id*="sbj_trending"] .product-card__content .user-select-text,
+body:has(#sbj-home) [id*="sbj_trending"] .product-card__content .price,
+body.sbj-home [id*="sbj_trending"] .sbj-eyebrow,
+body.sbj-home [id*="sbj_trending"] .product-card__content .user-select-text,
+body.sbj-home [id*="sbj_trending"] .product-card__content .price {
+  padding-right: 28px;
 }
 
 /* Eyebrow -> SKIMS muted grey (gray-500), uppercase 10px (already sized in rule 7). */
@@ -267,13 +313,13 @@ body.sbj-home [id*="sbj_trending"] .product-card__content .price {
   color: var(--sbj-ink) !important;
 }
 
-/* Wishlist heart -> outline heart, bottom-right of the text block. */
+/* Wishlist heart -> outline heart, right side aligned with the name line (SKIMS). */
 body:has(#sbj-home) [id*="sbj_trending"] .product-card__content::after,
 body.sbj-home [id*="sbj_trending"] .product-card__content::after {
   content: "";
   position: absolute;
   right: 0;
-  bottom: 6px;
+  bottom: 18px;
   width: 18px;
   height: 18px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232D2A26' stroke-width='1.7'%3E%3Cpath d='M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z'/%3E%3C/svg%3E");
@@ -290,11 +336,56 @@ body.sbj-home [id*="sbj_trending"] .resource-list__slide:not(:first-child) .prod
   border-left: 1px solid #E8E5DF;
 }
 
-/* Carousel arrows -> dark, legible glyphs (SKIMS uses plain dark chevrons). */
+/* Carousel arrows + counter -> pinned top-right of the section, on the title row
+   (SKIMS "NEW ARRIVALS  < 1 / 2 >"). The native arrows render "position=center"
+   (floating mid-carousel); re-anchor them to the section's top-right corner. */
+body:has(#sbj-home) [id*="sbj_trending"] .shopify-section,
+body:has(#sbj-home) [id*="sbj_trending"].shopify-section,
+body:has(#sbj-home) [id*="sbj_trending"] {
+  position: relative;
+}
 body:has(#sbj-home) [id*="sbj_trending"] slideshow-arrows {
+  position: absolute !important;
+  top: 22px;
+  right: 40px;
+  bottom: auto !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 14px;
   mix-blend-mode: normal;
+  z-index: 4;
+  pointer-events: none; /* re-enabled on the buttons below */
 }
 body:has(#sbj-home) [id*="sbj_trending"] slideshow-arrows .slideshow-control {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  border: 0 !important;
   color: var(--sbj-ink) !important;
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+body:has(#sbj-home) [id*="sbj_trending"] slideshow-arrows .slideshow-control[disabled] {
+  opacity: 0.3 !important;
+}
+/* The JS counter pill that sits between the two chevrons. */
+body:has(#sbj-home) [id*="sbj_trending"] .sbj-carousel-counter {
+  font-family: var(--sbj-font-ui);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: var(--sbj-ink);
+  min-width: 38px;
+  text-align: center;
+  pointer-events: none;
 }
 </style>

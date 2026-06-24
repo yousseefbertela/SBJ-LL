@@ -1,0 +1,129 @@
+{%- comment -%}
+  SBJ / SKIMS-match HEADER CSS — global, loaded from layout/theme.liquid.
+
+  WHY A SNIPPET: same reason as the other sbj-*-css files — loaded last in <body>
+  so it wins source order over base.css / the header block <style>, and theme-editor
+  saves never revert it.
+
+  WHAT IT DOES (Task 1, the transparent home-page header over the hero):
+   1a. WHITE nav text + icons + logo while the header is transparent (at the top
+       over the hero). Horizon leaves them dark (#2D2A26) because the nav row is a
+       color-scheme-1 context and the link colour comes from --menu-top-level-font-color,
+       not --color-foreground, so the scheme-6 (white) inherit never reaches the text.
+   1b. NO divider line under the header while transparent (Horizon draws a 1px
+       border-bottom on .header__row--top).
+   1c. Belt-and-suspenders: also key the transparent look on data-scroll-direction='none'
+       (set by header.js only when scrollTop is at the very top in 'always' sticky mode),
+       so the header reliably returns to transparent after you scroll back up.
+
+  SCROLLED STATE IS UNTOUCHED: every rule is gated on the transparent, not-sticky-active,
+  not-hovered state. Once the sticky header activates (scroll down) or a menu is hovered,
+  Horizon's solid white-bg / dark-text header renders exactly as before.
+{%- endcomment -%}
+<style>
+/* The transparent "at the top of the home hero" state:
+   header is transparent, NOT stuck (scrolled), and no top-level menu is open/hovered. */
+#header-component[transparent='not-sticky']:not([data-sticky-state='active']):not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))),
+#header-component[transparent='not-sticky'][data-scroll-direction='none']:not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) {
+  --menu-top-level-font-color: #ffffff;
+  --color-foreground: #ffffff;
+  --color-foreground-rgb: 255 255 255;
+  --color-foreground-heading: #ffffff;
+  --color-account-icon: #ffffff;
+  --color-border: rgba(255, 255, 255, 0);
+}
+
+/* Hard override on the actual text + icon nodes (the link colour is set directly,
+   not via --color-foreground, so the variable alone isn't enough). */
+#header-component[transparent='not-sticky']:not([data-sticky-state='active']):not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) :is(
+  .menu-list__link,
+  .menu-list__link-title,
+  .header-actions__action,
+  .header-actions a,
+  .header-actions button
+) {
+  color: #ffffff !important;
+}
+#header-component[transparent='not-sticky']:not([data-sticky-state='active']):not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) :is(
+  .header-actions svg,
+  .header-actions__action svg,
+  .svg-wrapper svg,
+  .menu-list__link svg
+) {
+  color: #ffffff !important;
+  stroke: #ffffff;
+}
+
+/* 1b. Kill the divider line under the header rows while transparent. */
+#header-component[transparent='not-sticky']:not([data-sticky-state='active']) .header__row--top,
+#header-component[transparent='not-sticky']:not([data-sticky-state='active']) .header__row--top .header__columns,
+#header-component[transparent='not-sticky']:not([data-sticky-state='active']) .header__row--bottom,
+#header-component[transparent='not-sticky'][data-scroll-direction='none'] .header__row--top,
+#header-component[transparent='not-sticky'][data-scroll-direction='none'] .header__row--top .header__columns {
+  border-bottom: 0 !important;
+}
+
+/* 1c ROBUST: when JS marks the page at the very top (html.sbj-hdr-top), FORCE the
+   transparent overlay look — drop the solid underlay, whiten text/icons, kill the
+   border — overriding any stuck data-sticky-state='active'. Excluded while a menu is
+   hovered (then the solid panel is intended). */
+html.sbj-hdr-top #header-component[transparent]:not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) {
+  --closed-underlay-height: 0px !important;
+  --menu-top-level-font-color: #ffffff !important;
+  --color-foreground: #ffffff !important;
+  --color-foreground-rgb: 255 255 255 !important;
+  --color-account-icon: #ffffff !important;
+}
+html.sbj-hdr-top #header-component[transparent]:not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) .header__underlay-closed {
+  height: 0 !important;
+}
+html.sbj-hdr-top #header-component[transparent]:not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) :is(
+  .menu-list__link, .menu-list__link-title, .header-actions__action, .header-actions a, .header-actions button
+) {
+  color: #ffffff !important;
+}
+html.sbj-hdr-top #header-component[transparent]:not(:has(.menu-list__link:is(:hover, [aria-expanded='true']))) :is(
+  .header-actions svg, .header-actions__action svg, .svg-wrapper svg, .menu-list__link svg
+) {
+  color: #ffffff !important;
+  stroke: #ffffff;
+}
+html.sbj-hdr-top #header-component[transparent] .header__row--top,
+html.sbj-hdr-top #header-component[transparent] .header__row--top .header__columns {
+  border-bottom: 0 !important;
+}
+</style>
+<script>
+/* 1c FIX: Horizon's "always sticky" header sets data-sticky-state via an
+   IntersectionObserver (threshold 1). On real browsers that observer is unreliable
+   at scrollTop 0 after scrolling down+up, so the header can stay stuck SOLID at the
+   very top instead of returning to the transparent overlay. We force the transparent
+   state whenever the page is at the top. Only runs where a transparent header exists
+   (home). Harmless everywhere else (early return). */
+(function () {
+  function run() {
+    var h = document.querySelector('header-component[transparent]');
+    if (!h) return;
+    var ticking = false;
+    function atTopCheck() {
+      var y = window.scrollY || document.documentElement.scrollTop || window.pageYOffset || 0;
+      var atTop = y <= 4;
+      // Class drives a CSS override that wins regardless of the theme's sticky-state
+      // (the IntersectionObserver can leave sticky-state='active' stuck at the top).
+      document.documentElement.classList.toggle('sbj-hdr-top', atTop);
+      if (atTop) {
+        h.dataset.stickyState = 'inactive';
+        h.dataset.scrollDirection = 'none';
+      }
+    }
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { atTopCheck(); ticking = false; });
+    }, { passive: true });
+    atTopCheck();
+  }
+  if (document.readyState !== 'loading') run();
+  else document.addEventListener('DOMContentLoaded', run);
+})();
+</script>
