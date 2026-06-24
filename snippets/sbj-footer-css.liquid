@@ -1,4 +1,9 @@
 <style>
+{%- comment -%} SKIMS' bold type is Tstar Pro Headline @400 (a medium look). Our heading
+   font ships only Archivo 900, so load a medium Archivo weight to match (global = footer
+   renders on every page, so the home category labels + brand statement can use it too). {%- endcomment -%}
+{{ settings.type_heading_font | font_modify: 'weight', '500' | font_face: font_display: 'swap' }}
+
 /* === SBJ Footer — SKIMS-match styles, all pages === */
 
 /* 1. Three-column layout: narrow | wide | narrow (HELP | Newsletter | MORE)
@@ -23,7 +28,7 @@
 .footer-content h3 {
   margin: 0 0 18px;
   font-family: var(--font-heading--family) !important;
-  font-weight: 800 !important; /* SKIMS heading face renders heavy */
+  font-weight: 500 !important; /* SKIMS Tstar Pro Headline @400 reads medium, not black */
   font-size: 16px !important;
   line-height: 20px !important;
   letter-spacing: 0.4px !important;
@@ -59,7 +64,7 @@
 .footer-content h2 {
   margin: 0 0 12px !important;
   font-family: var(--font-heading--family) !important;
-  font-weight: 800 !important; /* SKIMS "STAY IN THE KNOW" renders heavy/bold */
+  font-weight: 500 !important; /* SKIMS "STAY IN THE KNOW" = Tstar Headline @400, medium */
   font-size: 24px !important;
   line-height: 30px !important;
   letter-spacing: 0.6px !important;
