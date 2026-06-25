@@ -19,14 +19,14 @@
             "media_columns": "two",
             "image_gap": 4,
             "large_first_image": false,
-            "icons_style": "arrow",
+            "icons_style": "arrows_large",
             "slideshow_controls_style": "counter",
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "right",
             "thumbnail_width": 44,
-            "aspect_ratio": "adapt",
+            "aspect_ratio": "1/1.25",
             "constrain_to_viewport": true,
-            "media_fit": "contain",
+            "media_fit": "cover",
             "media_radius": 0,
             "extend_media": true,
             "zoom": true,
@@ -193,120 +193,27 @@
               },
               "block_order": []
             },
-            "accordion_pdp": {
-              "type": "accordion",
+            "tabs_pdp": {
+              "type": "custom-liquid",
               "name": "Product tabs",
               "settings": {
-                "icon": "caret",
-                "dividers": true,
-                "type_preset": "h6",
-                "inherit_color_scheme": true,
-                "color_scheme": "scheme-1",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 8,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {
-                "row_details": {
-                  "type": "_accordion-row",
-                  "settings": {
-                    "open_by_default": true,
-                    "heading": "Details"
-                  },
-                  "blocks": {
-                    "text_details": {
-                      "type": "text",
-                      "settings": {
-                        "text": "{{ closest.product.description }}",
-                        "width": "100%",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-primary--family)",
-                        "font_size": "",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty"
-                      }
-                    }
-                  },
-                  "block_order": ["text_details"]
-                },
-                "row_fit": {
-                  "type": "_accordion-row",
-                  "settings": {
-                    "open_by_default": false,
-                    "heading": "Fit & Fabric"
-                  },
-                  "blocks": {
-                    "text_fit": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p>Designed for a smooth, second-skin fit with a soft, breathable hand-feel. True to size; if you are between sizes, size down for a snugger fit.</p>",
-                        "width": "100%",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-primary--family)",
-                        "font_size": "",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty"
-                      }
-                    }
-                  },
-                  "block_order": ["text_fit"]
-                },
-                "row_shipping": {
-                  "type": "_accordion-row",
-                  "settings": {
-                    "open_by_default": false,
-                    "heading": "Shipping & Returns"
-                  },
-                  "blocks": {
-                    "text_shipping": {
-                      "type": "text",
-                      "settings": {
-                        "text": "<p>Free standard shipping on orders over LE 3,000. Orders ship within 1-2 business days. Enjoy easy returns within 14 days of delivery.</p>",
-                        "width": "100%",
-                        "max_width": "normal",
-                        "alignment": "left",
-                        "type_preset": "rte",
-                        "font": "var(--font-primary--family)",
-                        "font_size": "",
-                        "line_height": "normal",
-                        "letter_spacing": "normal",
-                        "case": "none",
-                        "wrap": "pretty"
-                      }
-                    }
-                  },
-                  "block_order": ["text_shipping"]
-                }
-              },
-              "block_order": ["row_details", "row_fit", "row_shipping"]
+                "custom_liquid": "<div class=\"sbj-tabs\"><div class=\"sbj-tabs__nav\" role=\"tablist\"><button type=\"button\" class=\"sbj-tab is-active\" data-sbj-tab=\"details\">Details</button><button type=\"button\" class=\"sbj-tab\" data-sbj-tab=\"fit\">Fit &amp; Fabric</button><button type=\"button\" class=\"sbj-tab\" data-sbj-tab=\"shipping\">Shipping &amp; Returns</button></div><div class=\"sbj-tabs__panels\"><div class=\"sbj-tab-panel is-active\" data-sbj-panel=\"details\">{{ closest.product.description }}</div><div class=\"sbj-tab-panel\" data-sbj-panel=\"fit\"><p>Designed for a smooth, second-skin fit with a soft, breathable hand-feel. True to size; if you are between sizes, size down for a snugger fit.</p></div><div class=\"sbj-tab-panel\" data-sbj-panel=\"shipping\"><p>Free standard shipping on orders over LE 3,000. Orders ship within 1-2 business days. Enjoy easy returns within 14 days of delivery.</p></div></div></div>"
+              }
             }
           },
           "block_order": [
             "group_icgrde",
             "variant_picker_R3rGDr",
             "buy_buttons_eYQEYi",
-            "accordion_pdp"
+            "tabs_pdp"
           ]
         }
       },
       "settings": {
-        "content_width": "content-center-aligned",
+        "content_width": "content-full-width",
         "desktop_media_position": "left",
-        "equal_columns": false,
-        "limit_details_width": false,
+        "equal_columns": true,
+        "limit_details_width": true,
         "gap": 48,
         "color_scheme": "",
         "padding-block-start": 0,

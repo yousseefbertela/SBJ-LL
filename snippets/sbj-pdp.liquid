@@ -44,16 +44,27 @@
     });
   }
 
-  /* open + scroll to the "Fit & Fabric" accordion row */
-  function openFitTab() {
-    var target = null;
-    document.querySelectorAll('[data-template^="product"] .accordion summary, [data-template^="product"] .accordion .details__header').forEach(function (h) {
-      if (/fit\s*&?\s*fabric/i.test(h.textContent)) target = h;
+  /* horizontal tabs (Details / Fit & Fabric / Shipping & Returns) */
+  function switchTab(key) {
+    document.querySelectorAll('[data-template^="product"] .sbj-tab').forEach(function (t) {
+      t.classList.toggle('is-active', t.getAttribute('data-sbj-tab') === key);
     });
-    if (!target) return;
-    var det = target.closest('details');
-    if (det && !det.open) det.open = true;
-    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    document.querySelectorAll('[data-template^="product"] .sbj-tab-panel').forEach(function (p) {
+      p.classList.toggle('is-active', p.getAttribute('data-sbj-panel') === key);
+    });
+  }
+  function tabsInit() {
+    document.querySelectorAll('[data-template^="product"] .sbj-tab').forEach(function (t) {
+      if (t.__sbjBound) return;
+      t.__sbjBound = true;
+      t.addEventListener('click', function () { switchTab(t.getAttribute('data-sbj-tab')); });
+    });
+  }
+  /* open the Fit & Fabric tab (used by Size Guide + Model Sizing) */
+  function openFitTab() {
+    switchTab('fit');
+    var tabs = document.querySelector('[data-template^="product"] .sbj-tabs');
+    if (tabs) tabs.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 
   /* #9 — append a "Size Guide" link to the size legend */
@@ -131,6 +142,7 @@
     try { sizeGuide(); } catch (e) {}
     try { gate(); } catch (e) {}
     try { overlays(); } catch (e) {}
+    try { tabsInit(); } catch (e) {}
   }
 
   document.addEventListener('change', onChange, true);
