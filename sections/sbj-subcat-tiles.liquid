@@ -1,39 +1,70 @@
 {%- comment -%}
-  SBJ sub-category tiles — the SKIMS row of small portrait category tiles
-  (image + label) shown at the top of a collection page, under the title.
-  Editable blocks: each tile takes an image (picker or URL fallback), a label,
-  and a link (e.g. a tag-filtered collection URL like /collections/clothing/dresses).
+  SBJ sub-category tiles — SKIMS "shop by category" row at the top of a collection.
+  Auto-renders the right subcats per collection from the handle-keyed map below, so
+  ONE instance on the default template serves every collection. Images are SKIMS's
+  own category-tile assets (skims-sanity CDN); links are tag-filtered collection URLs.
 {%- endcomment -%}
 
-<div class="sbj-subcat">
-  <ul class="sbj-subcat__row" role="list">
-    {%- for block in section.blocks -%}
-      <li class="sbj-subcat__tile" {{ block.shopify_attributes }}>
-        <a class="sbj-subcat__link" href="{{ block.settings.link | default: '#' }}">
-          <div class="sbj-subcat__media">
-            {%- if block.settings.image != blank -%}
-              {{ block.settings.image | image_url: width: 500 | image_tag: loading: 'lazy', class: 'sbj-subcat__img', widths: '200,300,400,500', alt: block.settings.label }}
-            {%- elsif block.settings.image_url != blank -%}
-              <img class="sbj-subcat__img" src="{{ block.settings.image_url }}" alt="{{ block.settings.label | escape }}" loading="lazy">
-            {%- else -%}
-              {{ 'collection-1' | placeholder_svg_tag: 'sbj-subcat__img' }}
-            {%- endif -%}
-          </div>
-          {%- if block.settings.label != blank -%}
-            <span class="sbj-subcat__label">{{ block.settings.label }}</span>
-          {%- endif -%}
-        </a>
-      </li>
-    {%- endfor -%}
-  </ul>
-</div>
+{%- liquid
+  assign h = collection.handle
+  assign sc_labels = ''
+  assign sc_slugs = ''
+  assign sc_imgs = ''
+  assign base = 'https://skims-sanity.imgix.net/images/hfqi0zm0/production/'
+  case h
+    when 'clothing'
+      assign sc_labels = 'Tees & Tanks|Tops & Bodysuits|Dresses|Hoodies & Sweatshirts|Pants|Shorts'
+      assign sc_slugs = 'tees-tanks|tops-bodysuits|dresses|hoodies-sweatshirts|pants|shorts'
+      assign sc_imgs = 'e4f7eafaca293091c2aa1b720f135b9476c778b9-960x1200.webp|5f66f9695d1b2558dd871c39d02d09b58cc69d0c-1478x1848.webp|07f68d0c41dd9f65c5b30347db5e417f592f3e4d-960x1200.webp|a766819a779c7150c79e1ed0dc91cdec2d4ad0d9-960x1200.webp|7fc24e16ead5dfe7c83d2707b830dcfa794a54e3-960x1200.webp|74e39cc1a2dadf7dda8da25173c8b8071f3bce5b-960x1200.webp'
+    when 'bras'
+      assign sc_labels = 'T-Shirt Bras|Push-Up Bras|Strapless Bras|Scoop Bras|Plunge Bras|Balconette Bras'
+      assign sc_slugs = 't-shirt-bras|push-up|strapless|scoop|plunge|balconette'
+      assign sc_imgs = 'bc84b2a0053ee961ff72659bdab693725e95a6ef-1799x2250.webp|edf5bee18861d8ca72740d5f1115af18518ff232-1799x2250.webp|6f8d018b5c1d6c98f8d32b321eac14d74744420d-1799x2250.webp|3886ff5008e3926c47c011911dd87a0d95f53e61-1799x2250.webp|46f27df880f9be3fb30e83586f61ef357c62e435-1799x2250.webp|06568e7f740b114639826d6c4cf62e88b9b961a5-1799x2250.webp'
+    when 'underwear'
+      assign sc_labels = 'Thongs|Bikini|Hipsters|Briefs|Boy Shorts|Boxers'
+      assign sc_slugs = 'thongs|bikini|hipsters|briefs|boyshorts|boxers'
+      assign sc_imgs = 'f739164fb8994fac53d7556e11b2058cf863e938-320x400.jpg|78b4c42f2e5a6b48453a72ce35cb455e9f5a99ad-960x1200.webp|09c4a4a57f882cad34a81651604e5951aada3a5e-960x1200.webp|8b55472befcf26397d69279b5b42473bf2fdf063-320x400.jpg|99296abd5b82b318581c6e9646a9cb2e16a1a2bc-320x400.jpg|d2abeb354f89b6fb3fb4141c302892ffb5af65d5-320x400.jpg'
+    when 'swim'
+      assign sc_labels = 'Bikinis|One Piece|Cover-Ups|Accessories'
+      assign sc_slugs = 'bikinis|one-piece|cover-ups|accessories'
+      assign sc_imgs = '220a4c8219cfc987885d2f2deedf1c0354f38740-960x1200.webp|8e828df448264dbbb4fb4ced0d5e513558fb158c-960x1200.webp|ccdaa5fc509b7f599950d0e6d185cab3bf8fc769-960x1200.webp|d96df8684d5b2a2f1023612e83d59aa8b8159149-960x1200.webp'
+    when 'mens'
+      assign sc_labels = 'Underwear|Tees & Tanks|Hoodies & Sweatshirts|Bottoms|Loungewear|Packs'
+      assign sc_slugs = 'boxers|tees-tanks|hoodies|pants|loungewear|packs'
+      assign sc_imgs = '4b4e0b0a3902c3fc1ea9c40b334a2389666c0d70-960x1200.webp|5be597f4578939b0812ab9a2592590307869276d-960x1200.webp|2d81b6502b418dda2c6f54fb0510e3ba3609053a-960x1200.webp|c7e838abd5b73e7d60640d0cc3affe1a552f4bb1-960x1200.webp|f8d4c64ec6e3c93454b2eef7c647282d5d25f250-960x1200.webp|8c1142d1e757950affc14caae0fb3dbb6e17ff3b-960x1200.webp'
+    when 'sleep'
+      assign sc_labels = 'Tees & Tanks|Bottoms|Shorts|Robes|Sets|Loungewear'
+      assign sc_slugs = 'tees-tanks|pants|shorts|robes|sets|loungewear'
+      assign sc_imgs = '7dcbb3255dcee535f4d7914e3c07b2788d622b5b-960x1200.webp|7cc3dfdd9ba7102395c8a3c807af4d88e1e295b9-960x1200.webp|a4eeee677680b264c653b63d8cca31f57ac7aa23-960x1200.webp|c3c56ad339bc6abec54644951603f5ab76d4afd9-960x1200.webp|71b161f1280042992c2908823d08f22530869264-960x1200.webp|35a860ea8a516ff4bd5aee6248570fa69b1d2483-1479x1848.webp'
+  endcase
+-%}
 
-{%- if collection -%}
-<nav class="sbj-breadcrumb" aria-label="Breadcrumb">
-  <a href="/">Home</a>
-  <span class="sbj-breadcrumb__sep"> / </span>
-  <span>{{ collection.title }}</span>
-</nav>
+{%- if sc_labels != '' -%}
+  {%- assign labels = sc_labels | split: '|' -%}
+  {%- assign slugs = sc_slugs | split: '|' -%}
+  {%- assign imgs = sc_imgs | split: '|' -%}
+  <div class="sbj-subcat">
+    <ul class="sbj-subcat__row" role="list">
+      {%- for label in labels -%}
+        <li class="sbj-subcat__tile">
+          <a class="sbj-subcat__link" href="/collections/{{ h }}/{{ slugs[forloop.index0] }}">
+            <div class="sbj-subcat__media">
+              <img class="sbj-subcat__img" src="{{ base }}{{ imgs[forloop.index0] }}?auto=format&q=75&w=400" alt="{{ label | escape }}" loading="lazy">
+            </div>
+            <span class="sbj-subcat__label">{{ label }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+
+  {%- if collection -%}
+    <nav class="sbj-breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="sbj-breadcrumb__sep"> / </span>
+      <span>{{ collection.title }}</span>
+    </nav>
+  {%- endif -%}
 {%- endif -%}
 
 {% stylesheet %}
@@ -47,17 +78,17 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    max-width: none;        /* fill the full width like SKIMS (was capped 1100) */
+    max-width: none;
     display: flex;
-    gap: 16px;
+    gap: 12px;              /* SKIMS tile gap */
     overflow-x: auto;
     scrollbar-width: none;
     scroll-snap-type: x proximity;
   }
   .sbj-subcat__row::-webkit-scrollbar { display: none; }
   .sbj-subcat__tile {
-    flex: 1 0 0;
-    min-width: 0;
+    flex: 0 0 160px;        /* SKIMS: fixed small tiles, left-aligned (don't stretch to fill) */
+    width: 160px;
     scroll-snap-align: start;
   }
   .sbj-subcat__link { display: block; text-decoration: none; color: var(--color-foreground); }

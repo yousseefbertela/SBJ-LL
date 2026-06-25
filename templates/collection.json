@@ -97,6 +97,10 @@
         "padding-block-end": 48
       }
     },
+    "subcats": {
+      "type": "sbj-subcat-tiles",
+      "settings": {}
+    },
     "main": {
       "type": "main-collection",
       "blocks": {
@@ -298,6 +302,7 @@
   },
   "order": [
     "section",
+    "subcats",
     "main",
     "we_think",
     "promo",
