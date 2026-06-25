@@ -106,6 +106,8 @@
     var btn = ctaButton();
     if (!sizeFs || !btn) return;
     sizeFs.querySelectorAll('input[type="radio"]').forEach(function (r) { if (r.checked) r.checked = false; });
+    var nameSpan = sizeFs.querySelector('.sbj-size-name');
+    if (nameSpan && nameSpan.textContent) nameSpan.textContent = '';
     btn.classList.add('sbj-cta--pending');
     btn.setAttribute('disabled', 'disabled');
     setCtaText(btn, 'Select a size');
@@ -159,8 +161,8 @@
   function enhance() {
     try { colorName(); } catch (e) {}
     try { sizeGuide(); } catch (e) {}
-    try { sizeName(); } catch (e) {}
     try { gate(); } catch (e) {}
+    try { sizeName(); } catch (e) {}
     try { overlays(); } catch (e) {}
     try { tabsInit(); } catch (e) {}
   }
