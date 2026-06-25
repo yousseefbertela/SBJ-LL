@@ -107,6 +107,12 @@ https://skims.imgix.net/s/files/1/0259/5448/4284/files/SKIMS-LOUNGEWEAR-AP-TSH-0
   @media (max-width: 990px) {
     #sbj-rec-{{ section.id }} .sbj-rec__card { flex-basis: calc(100% / 3); max-width: calc(100% / 3); }
   }
+  @media (max-width: 749px) {
+    /* Mobile: heading is centered and the carousel is swipeable — hide the
+       arrows/counter so they don't overlap the heading (SKIMS mobile). */
+    #sbj-rec-{{ section.id }} .sbj-rec__head { padding: 0 16px; }
+    #sbj-rec-{{ section.id }} .sbj-rec__nav { display: none; }
+  }
   @media (max-width: 600px) {
     #sbj-rec-{{ section.id }} .sbj-rec__card { flex-basis: calc(100% / 2); max-width: calc(100% / 2); }
   }
