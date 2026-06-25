@@ -181,21 +181,39 @@
   --gallery-aspect-ratio: 0.69 !important;
 }
 
-/* Push the filter bar flush-left (full-bleed) like the product grid + SKIMS.
-   The filters sit in an inset grid column; span all columns and drop the inset. */
+/* ===== SKIMS page gutter — 24px each side on the collection content ===== */
+/* SKIMS wraps heading + tiles + filters + grid in a full-width container with a
+   flat 24px inline padding (no max-width). Match that. The "We think you'd like"
+   carousel deliberately stays full-bleed (its own section). */
+
+/* Filter bar: align to the 24px gutter (span all columns, drop the inset). */
 #MainContent[data-template^="collection"] .facets-block-wrapper {
   grid-column: 1 / -1 !important;
   margin-inline: 0 !important;
-  padding-inline: 0 !important;
+  padding-inline: 24px !important;
   max-width: none !important;
 }
+/* Product grid: 24px gutter (was full-bleed). */
+#MainContent[data-template^="collection"] .product-grid {
+  padding-inline: 24px !important;
+}
+/* Collection heading: section is now full-width (template) — pad its content to the
+   flat 24px gutter so the title/description align with the tiles + grid (SKIMS). */
+#MainContent[data-template^="collection"] [id*="__section"] .custom-section-content {
+  max-width: none !important;
+  width: 100% !important;
+  margin-inline: 0 !important;
+  padding-inline: 24px !important;
+}
 
-/* Collection title — heavy heading like SKIMS "CLOTHING" */
+/* Collection title — SKIMS "CLOTHING": 30px heavy uppercase (was ~48px). */
 #MainContent[data-template^="collection"] h1 {
   font-family: var(--font-heading--family) !important;
-  font-weight: 900 !important;
+  font-size: 30px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
   text-transform: uppercase !important;
-  letter-spacing: 0.4px !important;
+  letter-spacing: 0.75px !important;
 }
 
 /* ----- Product page (PDP) — SKIMS match ------------------------------------ */

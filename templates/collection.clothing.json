@@ -67,7 +67,7 @@
         "horizontal_alignment_flex_direction_column": "flex-start",
         "vertical_alignment_flex_direction_column": "center",
         "gap": 12,
-        "section_width": "page-width",
+        "section_width": "full-width",
         "section_height": "",
         "section_height_custom": 50,
         "color_scheme": "scheme-1",
@@ -92,7 +92,7 @@
         "t_tees": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/AP-TSH-0638-SOT-MA-SKIMS-LOUNGEWEAR_0102-FR.webp?fm=jpg&w=500",
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/e4f7eafaca293091c2aa1b720f135b9476c778b9-960x1200.webp?auto=format&q=75&w=500",
             "label": "Tees & Tanks",
             "link": "/collections/clothing/tees-tanks"
           }
@@ -100,7 +100,7 @@
         "t_tops": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/TP-LSL-12347W-COA-SC-SKIMS-LOUNGEWEAR_0032-FR.webp?fm=jpg&w=500",
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/5f66f9695d1b2558dd871c39d02d09b58cc69d0c-1478x1848.webp?auto=format&q=75&w=500",
             "label": "Tops & Bodysuits",
             "link": "/collections/clothing/tops-bodysuits"
           }
@@ -108,7 +108,7 @@
         "t_dresses": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/OP-DRS-12296W-CBM-SA-SKIMS-LOUNGEWEAR_0006-FR.webp?fm=jpg&w=500",
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/07f68d0c41dd9f65c5b30347db5e417f592f3e4d-960x1200.webp?auto=format&q=75&w=500",
             "label": "Dresses",
             "link": "/collections/clothing/dresses"
           }
@@ -116,7 +116,7 @@
         "t_hoodies": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/TP-LSL-11712W-BFF-RD-SKIMS-LOUNGEWEAR_0002-FR.webp?fm=jpg&w=500",
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/a766819a779c7150c79e1ed0dc91cdec2d4ad0d9-960x1200.webp?auto=format&q=75&w=500",
             "label": "Hoodies & Sweatshirts",
             "link": "/collections/clothing/hoodies-sweatshirts"
           }
@@ -124,7 +124,7 @@
         "t_pants": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/TP-LSL-12347W-COA-SC-SKIMS-LOUNGEWEAR_0032-FR.webp?fm=jpg&w=500",
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/7fc24e16ead5dfe7c83d2707b830dcfa794a54e3-960x1200.webp?auto=format&q=75&w=500",
             "label": "Pants",
             "link": "/collections/clothing/pants"
           }
@@ -132,7 +132,7 @@
         "t_shorts": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims.imgix.net/s/files/1/0259/5448/4284/files/SH-SHO-7787W-CBM-SB-SKIMS-LOUNGEWEAR_0076-FR.webp?fm=jpg&w=500",
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/74e39cc1a2dadf7dda8da25173c8b8071f3bce5b-960x1200.webp?auto=format&q=75&w=500",
             "label": "Shorts",
             "link": "/collections/clothing/shorts"
           }

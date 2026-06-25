@@ -5,7 +5,7 @@
   and a link (e.g. a tag-filtered collection URL like /collections/clothing/dresses).
 {%- endcomment -%}
 
-<div class="sbj-subcat page-width">
+<div class="sbj-subcat">
   <ul class="sbj-subcat__row" role="list">
     {%- for block in section.blocks -%}
       <li class="sbj-subcat__tile" {{ block.shopify_attributes }}>
@@ -29,7 +29,7 @@
 </div>
 
 {%- if collection -%}
-<nav class="sbj-breadcrumb page-width" aria-label="Breadcrumb">
+<nav class="sbj-breadcrumb" aria-label="Breadcrumb">
   <a href="/">Home</a>
   <span class="sbj-breadcrumb__sep"> / </span>
   <span>{{ collection.title }}</span>
@@ -41,12 +41,13 @@
     width: 100%;
     margin-inline: auto;
     padding-block: 8px 24px;
+    padding-inline: 24px;   /* SKIMS page gutter */
   }
   .sbj-subcat__row {
     list-style: none;
     margin: 0;
     padding: 0;
-    max-width: 1100px;
+    max-width: none;        /* fill the full width like SKIMS (was capped 1100) */
     display: flex;
     gap: 16px;
     overflow-x: auto;
@@ -62,16 +63,16 @@
   .sbj-subcat__link { display: block; text-decoration: none; color: var(--color-foreground); }
   .sbj-subcat__media {
     position: relative;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 4 / 5;    /* SKIMS portrait packshot tile */
     overflow: hidden;
-    background: #f3f3f3;
+    background: #f3f1ee;
   }
   .sbj-subcat__img {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    object-fit: cover;      /* SKIMS packshots fill the tile */
     display: block;
     transition: transform 0.5s var(--ease-out-cubic, ease);
   }
@@ -79,12 +80,12 @@
   .sbj-subcat__label {
     display: block;
     margin-top: 10px;
-    text-align: center;
+    text-align: left;       /* SKIMS labels are left-aligned, bold */
     font-family: var(--font-heading--family);
-    font-weight: 500;
-    font-size: 13px;
+    font-weight: 700;
+    font-size: 14px;
     line-height: 18px;
-    letter-spacing: 0;
+    letter-spacing: 0.2px;
     text-transform: none;
     color: var(--color-foreground);
   }
@@ -96,7 +97,7 @@
     display: flex;
     align-items: center;
     gap: 0;
-    padding: 16px 0 8px;
+    padding: 16px 24px 8px;   /* align breadcrumb to the 24px gutter */
     font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
     font-weight: 400;
