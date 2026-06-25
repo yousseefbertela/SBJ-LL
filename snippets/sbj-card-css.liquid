@@ -6,6 +6,13 @@
   custom-liquid blocks in templates/collection*.json and product.json.
 {%- endcomment -%}
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+/* SKIMS title font — free "T-Star Pro Headline" lookalike (Space Grotesk).
+   Overrides the heading family site-wide; eyebrow/price stay Inter like SKIMS. */
+:root, body {
+  --font-heading--family: "Space Grotesk", "Archivo", system-ui, sans-serif !important;
+}
+
 /* SKIMS product cards have no quick-add button — just the wishlist heart.
    Hide Horizon's quick-add overlay on every product card (all pages). */
 .product-card .quick-add,
@@ -84,6 +91,7 @@
   justify-content: space-between;
   margin: 8px 0 0;
   min-height: 22px;
+  padding-right: 16px;   /* pull the wishlist heart in from the card edge (SKIMS) */
 }
 :is([data-template^="collection"]) .sbj-swatches {
   display: flex;
