@@ -146,7 +146,9 @@
     {%- render 'sbj-footer-css' -%}
     {%- if template.name == 'index' -%}
       {%- render 'sbj-home-css' -%}
-      {%- render 'sbj-trending' -%}
     {%- endif -%}
+    {%- comment -%} Carousel counter/arrows JS drives both the homepage trending and the
+      collection/product "we_think" carousel, so it loads site-wide (no-ops if absent). {%- endcomment -%}
+    {%- render 'sbj-trending' -%}
   </body>
 </html>

@@ -8,8 +8,8 @@
 {%- endcomment -%}
 <script>
 (function () {
-  function init() {
-    var sec = document.querySelector('[id*="sbj_trending"]');
+  function init(marker) {
+    var sec = document.querySelector('[id*="' + marker + '"]');
     if (!sec) return false;
     var arrows = sec.querySelector('slideshow-arrows');
     if (!arrows) return false;
@@ -60,9 +60,11 @@
     return true;
   }
   function boot() {
-    if (init()) return;
-    var tries = 0;
-    var t = setInterval(function () { if (init() || ++tries > 25) clearInterval(t); }, 300);
+    ['sbj_trending', 'we_think'].forEach(function (marker) {
+      if (init(marker)) return;
+      var tries = 0;
+      var t = setInterval(function () { if (init(marker) || ++tries > 25) clearInterval(t); }, 300);
+    });
   }
   if (document.readyState !== 'loading') boot();
   else document.addEventListener('DOMContentLoaded', boot);

@@ -245,10 +245,62 @@
         "padding-block-start": 0,
         "padding-block-end": 32
       }
+    },
+    "we_think": {
+      "type": "sbj-recommend-carousel",
+      "settings": {
+        "heading": "We think you'd like"
+      }
+    },
+    "promo": {
+      "type": "sbj-promo-tiles",
+      "blocks": {
+        "p_solutions": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/4c55984c5f449b45139a24d020236135e9c311ad-616x540.jpg?auto=format&q=70&w=800",
+            "label": "The Solutions Shop",
+            "link": "/collections/shapewear"
+          }
+        },
+        "p_bundle": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/a4ba20163255b64422b089871ec7f92a117d9161-616x540.jpg?auto=format&q=70&w=800",
+            "label": "Bundle and Save",
+            "link": "/collections/underwear"
+          }
+        },
+        "p_bras": {
+          "type": "tile",
+          "settings": {
+            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/f34302a969659dfaf1749a89396db97ad498d1ff-616x540.jpg?auto=format&q=70&w=800",
+            "label": "Bras",
+            "link": "/collections/bras"
+          }
+        }
+      },
+      "block_order": ["p_solutions", "p_bundle", "p_bras"],
+      "name": "SBJ Promo tiles",
+      "settings": {
+        "heading": "Looking for more?"
+      }
+    },
+    "essentials": {
+      "type": "sbj-essentials-split",
+      "settings": {
+        "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/cd35d091adc34353f1b47f5dc1ade2cda893703e-800x470.jpg?auto=format&q=70&w=1200",
+        "heading": "The Essentials",
+        "button_label": "Shop Best Sellers",
+        "button_link": "/collections/best-sellers"
+      }
     }
   },
   "order": [
     "section",
-    "main"
+    "main",
+    "we_think",
+    "promo",
+    "essentials"
   ]
 }

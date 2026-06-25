@@ -125,6 +125,31 @@
 :is([data-template^="collection"]) .sbj-swatch--marble { background: #d0c8c0; border-color: rgba(0,0,0,0.2); }
 :is([data-template^="collection"]) .sbj-swatch--mineral-blue { background: #5a7a8a; }
 :is([data-template^="collection"]) .sbj-swatch--slate { background: #607a8a; }
+/* Extended SKIMS palette (catalog colors) */
+:is([data-template^="collection"]) .sbj-swatch--clay { background: #cdab92; }
+:is([data-template^="collection"]) .sbj-swatch--clay-heather { background: #c2a994; }
+:is([data-template^="collection"]) .sbj-swatch--sienna { background: #9e6b52; }
+:is([data-template^="collection"]) .sbj-swatch--sienna-heather { background: #ab7d68; }
+:is([data-template^="collection"]) .sbj-swatch--cocoa-heather { background: #6f4d3c; }
+:is([data-template^="collection"]) .sbj-swatch--mineral { background: #6c8893; }
+:is([data-template^="collection"]) .sbj-swatch--bronze { background: #8a6a3f; }
+:is([data-template^="collection"]) .sbj-swatch--snow { background: #f6f4f0; border-color: rgba(0,0,0,0.2); }
+:is([data-template^="collection"]) .sbj-swatch--chalk { background: #ece7df; border-color: rgba(0,0,0,0.2); }
+:is([data-template^="collection"]) .sbj-swatch--paper { background: #e9e3d6; border-color: rgba(0,0,0,0.2); }
+:is([data-template^="collection"]) .sbj-swatch--oyster { background: #d7cfc2; border-color: rgba(0,0,0,0.2); }
+:is([data-template^="collection"]) .sbj-swatch--peony { background: #e7a3b3; }
+:is([data-template^="collection"]) .sbj-swatch--bubble-gum { background: #f4a6c0; }
+:is([data-template^="collection"]) .sbj-swatch--cherry-blossom { background: #f1cdd8; }
+:is([data-template^="collection"]) .sbj-swatch--lilac { background: #c7b6d9; }
+:is([data-template^="collection"]) .sbj-swatch--poppy { background: #d6492f; }
+:is([data-template^="collection"]) .sbj-swatch--phoenix { background: #c0473a; }
+:is([data-template^="collection"]) .sbj-swatch--espresso { background: #3a2a22; }
+:is([data-template^="collection"]) .sbj-swatch--umber-leopard { background: #7c5c3c; }
+:is([data-template^="collection"]) .sbj-swatch--kyanite { background: #38597a; }
+:is([data-template^="collection"]) .sbj-swatch--ivy { background: #495a39; }
+:is([data-template^="collection"]) .sbj-swatch--cumin { background: #b08842; }
+:is([data-template^="collection"]) .sbj-swatch--poppy { background: #d6492f; }
+:is([data-template^="collection"]) .sbj-swatch--chalk { background: #ece7df; border-color: rgba(0,0,0,0.2); }
 /* Heart button in swatches row */
 :is([data-template^="collection"]) .sbj-heart {
   background: none;
@@ -173,38 +198,343 @@
   letter-spacing: 0.4px !important;
 }
 
-/* ----- Product page (PDP) ------------------------------------------------- */
-/* Eyebrow above the product title */
-.sbj-eyebrow--pdp {
+/* ----- Product page (PDP) — SKIMS match ------------------------------------ */
+/* Eyebrow (fabric) — bold dark uppercase, sits above the name (SKIMS).
+   Scoped with [data-template] so it beats the general .sbj-eyebrow rule. */
+[data-template^="product"] .sbj-eyebrow--pdp {
   display: block;
-  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 14px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: #6F6C69;
-  margin: 0 0 -4px;
-}
-/* PDP title — heavy heading, title case (not uppercased) */
-[data-template^="product"] .product-details h1 {
-  font-family: var(--font-heading--family) !important;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 12px !important;
   font-weight: 700 !important;
-  font-size: 26px !important;
-  line-height: 1.15 !important;
+  line-height: 16px !important;
   letter-spacing: 0.2px !important;
+  text-transform: uppercase !important;
+  color: #2D2A26 !important;
+  margin: 0 0 -6px !important;
 }
-/* PDP price — Inter */
+/* PDP name — light regular uppercase, 24px / ls 0.6 (SKIMS) */
+[data-template^="product"] .product-details h1,
+[data-template^="product"] .product-details h1 * {
+  font-family: var(--font-heading--family) !important;
+  font-weight: 400 !important;
+  font-size: 24px !important;
+  line-height: 1.15 !important;
+  letter-spacing: 0.6px !important;
+  text-transform: uppercase !important;
+  color: #2D2A26 !important;
+}
+/* PDP price — Inter, 16px medium */
 [data-template^="product"] .product-details .price {
   font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 16px !important;
+  font-weight: 500 !important;
   letter-spacing: 0.2px !important;
   color: #2D2A26 !important;
 }
-/* Full-width black add-to-cart (SKIMS "Add to Bag") */
-[data-template^="product"] .product-details add-to-cart-component,
-[data-template^="product"] .product-details .add-to-cart,
+/* Tight stacked header (eyebrow/name/price) */
+[data-template^="product"] .product-details .group-block-content { gap: 6px !important; }
+
+/* Variant legends — small uppercase label (SKIMS "Size") */
+[data-template^="product"] .product-details .variant-option legend {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  text-transform: uppercase !important;
+  color: #2D2A26 !important;
+  margin-bottom: 8px !important;
+}
+/* Tight flex row of option buttons (override Horizon's equal-width grid) */
+[data-template^="product"] .product-details .variant-option {
+  margin-bottom: 18px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+[data-template^="product"] .product-details .variant-option legend { flex: 0 0 100% !important; }
+/* Don't let Horizon's equal-width buttons stretch — keep swatches/boxes their own size */
+[data-template^="product"] .product-details .variant-option__button-label { margin: 0 !important; flex: 0 0 auto !important; }
+/* Hide quantity stepper + express checkout so the CTA is full-width (SKIMS) */
+[data-template^="product"] .product-details .quantity-selector-wrapper,
+[data-template^="product"] .product-details .accelerated-checkout-block { display: none !important; }
+
+/* SIZE → bordered square boxes (SKIMS) */
+[data-template^="product"] fieldset[data-option-id$="size"] .variant-option__button-label {
+  min-width: 46px !important;
+  height: 44px !important;
+  padding: 0 10px !important;
+  border: 1px solid rgba(0,0,0,0.28) !important;
+  border-radius: 0 !important;
+  background: #fff !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 13px !important;
+  letter-spacing: 0.3px !important;
+  color: #2D2A26 !important;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+[data-template^="product"] fieldset[data-option-id$="size"] .variant-option__button-label__pill { display: none !important; }
+[data-template^="product"] fieldset[data-option-id$="size"] .variant-option__button-label:hover { border-color: #2D2A26 !important; }
+[data-template^="product"] fieldset[data-option-id$="size"] .variant-option__button-label:has(input:checked) {
+  border-color: #2D2A26 !important;
+  background: #2D2A26 !important;
+  color: #fff !important;
+}
+[data-template^="product"] fieldset[data-option-id$="size"] .variant-option__button-label:has(input[data-option-available="false"]) {
+  color: #b3b0ac !important;
+  border-color: rgba(0,0,0,0.10) !important;
+}
+
+/* COLOR → square color swatches (the LABEL itself is the swatch; Horizon's
+   pill + ::before are neutralized so nothing overlays the color). */
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label {
+  position: relative !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  width: 26px !important;
+  min-width: 26px !important;
+  max-width: 26px !important;
+  height: 26px !important;
+  border-radius: 2px !important;
+  border: 1px solid rgba(0,0,0,0.15) !important;
+  background: #ccc;
+  overflow: hidden !important;
+  display: inline-block !important;
+  box-sizing: border-box !important;
+  cursor: pointer;
+}
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label::before,
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label::after { content: none !important; display: none !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label__pill,
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label__text { display: none !important; }
+/* Suppress default focus ring (selection shown by the checked ring/fill) */
+[data-template^="product"] .product-details .variant-option__button-label,
+[data-template^="product"] .product-details .variant-option__button-label:focus,
+[data-template^="product"] .product-details .variant-option__button-label:focus-within,
+[data-template^="product"] .product-details .variant-option__button-label input {
+  outline: none !important;
+  box-shadow: none !important;
+}
+/* Checked swatch → SKIMS selection ring */
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input:checked) {
+  outline: 1px solid #2D2A26 !important;
+  outline-offset: 2px !important;
+}
+/* Color name → hex on the label (matches card palette; case-insensitive) */
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="black" i]) { background:#1a1a1a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="onyx" i]) { background:#2a2a2a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="white" i]) { background:#fff !important; border-color:rgba(0,0,0,0.3) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="snow" i]) { background:#f6f4f0 !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="chalk" i]) { background:#ece7df !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="paper" i]) { background:#e9e3d6 !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="oyster" i]) { background:#d7cfc2 !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="bone" i]) { background:#ece5d8 !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="sand" i]) { background:#c2a98a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="beige" i]) { background:#e0cdb8 !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="oatmeal" i]) { background:#ddd4c4 !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="marble" i]) { background:#d0c8c0 !important; border-color:rgba(0,0,0,0.2) !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="pink" i]) { background:#f5a8be !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="peony" i]) { background:#e7a3b3 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="bubble gum" i]) { background:#f4a6c0 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cherry blossom" i]) { background:#f1cdd8 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="lilac" i]) { background:#c7b6d9 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="mauve" i]) { background:#c4a0b0 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="navy" i]) { background:#1a2a5a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="kyanite" i]) { background:#38597a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="mineral blue" i]) { background:#5a7a8a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="mineral" i]) { background:#6c8893 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="slate" i]) { background:#607a8a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="grey" i]) { background:#9a9a9a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="gray" i]) { background:#9a9a9a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="heather grey" i]) { background:#b4b4b4 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="clay" i]) { background:#cdab92 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="clay heather" i]) { background:#c2a994 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="sienna" i]) { background:#9e6b52 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="sienna heather" i]) { background:#ab7d68 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="bronze" i]) { background:#8a6a3f !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cumin" i]) { background:#b08842 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cocoa" i]) { background:#5c3a28 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cocoa heather" i]) { background:#6f4d3c !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="brown" i]) { background:#5c3d2e !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="dark brown" i]) { background:#3d1f0f !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="espresso" i]) { background:#3a2a22 !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="umber leopard" i]) { background:#7c5c3c !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="poppy" i]) { background:#d6492f !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="phoenix" i]) { background:#c0473a !important; }
+[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="ivy" i]) { background:#495a39 !important; }
+
+/* CTA — full-width dark "Add to Bag" (SKIMS) */
+[data-template^="product"] .product-details add-to-cart-component { width: 100% !important; display: block !important; }
 [data-template^="product"] .product-details .add-to-cart-button {
-  width: 100%;
+  width: 100% !important;
+  background: #2D2A26 !important;
+  color: #fff !important;
+  border: 1px solid #2D2A26 !important;
+  border-radius: 0 !important;
+  min-height: 52px !important;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+}
+
+/* ====== "WE THINK YOU'D LIKE" carousel → SKIMS "New Arrivals" match ======
+   Mirrors the homepage sbj_trending mechanic but scoped to the we_think section
+   (collection + product pages): white card / product floats (contain), bordered
+   grid with thin dividers, grey eyebrow · heavy name · small price · wishlist
+   heart on the right, full-bleed, and arrows+counter pinned top-right. */
+
+/* Section is the anchor for the absolutely-placed arrows */
+[id*="we_think"] { position: relative; }
+
+/* Title — heavy heading at SKIMS size (was rendering as light Inter) */
+[id*="we_think"] h2 {
+  font-family: var(--font-heading--family) !important;
+  font-weight: 600 !important;
+  font-size: 20px !important;
+  line-height: 24px !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+/* Card body: heart anchor + SKIMS text insets */
+[id*="we_think"] .product-card__content {
+  position: relative;
+  padding-left: 24px;
+  padding-right: 44px;
+}
+
+/* Image area: white box, product floats (contain) at a uniform square size */
+[id*="we_think"] .card-gallery {
+  aspect-ratio: 1 / 1 !important;
+  position: relative;
+  background: #ffffff !important;
+  overflow: hidden;
+  margin-bottom: 14px;
+}
+[id*="we_think"] .card-gallery :is(slideshow-component, slideshow-container, slideshow-slides, slideshow-slide) {
+  background: transparent !important;
+}
+[id*="we_think"] .card-gallery img {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  padding: 9% !important;
+}
+
+/* Eyebrow — muted grey uppercase 10px */
+[id*="we_think"] .sbj-eyebrow {
+  color: #6F6C69 !important;
+  font-size: 10px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.4px !important;
+  margin-top: 2px;
+}
+/* Name — heavy heading 14px uppercase */
+[id*="we_think"] .product-card__content .user-select-text,
+[id*="we_think"] .product-card__content .user-select-text :is(p,h1,h2,h3,h4,h5,h6) {
+  font-family: var(--font-heading--family) !important;
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  line-height: 20px !important;
+  letter-spacing: 0.35px !important;
+  text-transform: uppercase !important;
+  color: #2D2A26 !important;
+}
+/* Price — Inter 10px */
+[id*="we_think"] .product-card__content .price {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 10px !important;
+  line-height: 14px !important;
+  letter-spacing: 0.25px !important;
+  color: #2D2A26 !important;
+}
+
+/* Wishlist heart — outline, right side aligned with the name line (SKIMS) */
+[id*="we_think"] .product-card__content::after {
+  content: "";
+  position: absolute;
+  right: 24px;
+  bottom: 22px;
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232D2A26' stroke-width='1.7'%3E%3Cpath d='M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z'/%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Thin vertical dividers between cards (SKIMS bordered grid) */
+[id*="we_think"] slideshow-slide {
+  border-left: 1px solid #E8E5DF !important;
+  border-top: 1px solid #E8E5DF !important;
+  border-bottom: 1px solid #E8E5DF !important;
+}
+
+/* Full-bleed: cards start at the left edge, no gap (grid borders separate them) */
+[id*="we_think"] slideshow-slides {
+  padding-inline-start: 0 !important;
+  gap: 0 !important;
+}
+/* Exactly 6 equal-width cards per view, filling the full viewport (SKIMS) */
+[id*="we_think"] slideshow-slide {
+  flex: 0 0 calc(100% / 6) !important;
+  width: calc(100% / 6) !important;
+  min-width: calc(100% / 6) !important;
+  max-width: calc(100% / 6) !important;
+  box-sizing: border-box !important;
+}
+[id*="we_think"] slideshow-slide:first-child { border-left: none !important; }
+
+/* Arrows + counter pinned to the title row, top-right (SKIMS "‹ 1 / 3 ›") */
+[id*="we_think"] slideshow-arrows {
+  position: absolute !important;
+  top: 22px;
+  right: 40px;
+  bottom: auto !important;
+  left: auto !important;
+  width: auto !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center;
+  gap: 14px;
+  z-index: 4;
+  pointer-events: none;
+}
+[id*="we_think"] slideshow-arrows .slideshow-control {
+  position: static !important;
+  inset: auto !important;
+  transform: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: none !important;
+  border: 0 !important;
+  color: #2D2A26 !important;
+  opacity: 1 !important;
+  pointer-events: auto;
+}
+[id*="we_think"] slideshow-arrows .slideshow-control[disabled] { opacity: 0.3 !important; }
+[id*="we_think"] .slideshow-control--previous { display: flex !important; }
+[id*="we_think"] .sbj-carousel-counter {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  color: #2D2A26;
+  min-width: 38px;
+  text-align: center;
+  pointer-events: none;
 }
 </style>

@@ -14,3 +14,6 @@ desktop.ini
 node_modules/
 npm-debug.log*
 .gstack/
+
+# Local scratch (browser screenshots, etc.)
+tmp/
