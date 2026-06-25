@@ -228,7 +228,7 @@
 /* Eyebrow (fabric) — bold dark uppercase, sits above the name (SKIMS).
    Scoped with [data-template] so it beats the general .sbj-eyebrow rule. */
 [data-template^="product"] .sbj-eyebrow--pdp {
-  display: block;
+  display: inline-block;
   font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 12px !important;
   font-weight: 700 !important;
@@ -237,6 +237,9 @@
   text-transform: uppercase !important;
   color: #2D2A26 !important;
   margin: 0 0 -6px !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1px !important;
+  text-underline-offset: 4px !important;
 }
 /* PDP name — light regular uppercase, 24px / ls 0.6 (SKIMS) */
 [data-template^="product"] .product-details h1,
@@ -260,15 +263,44 @@
 /* Tight stacked header (eyebrow/name/price) */
 [data-template^="product"] .product-details .group-block-content { gap: 6px !important; }
 
-/* Variant legends — small uppercase label (SKIMS "Size") */
+/* Variant legends — small title-case label (SKIMS "Size" / color name) */
 [data-template^="product"] .product-details .variant-option legend {
   font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 12px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.3px !important;
-  text-transform: uppercase !important;
+  letter-spacing: 0.2px !important;
+  text-transform: none !important;
   color: #2D2A26 !important;
   margin-bottom: 8px !important;
+}
+/* Size legend → label left, "Size Guide" link right (SKIMS) */
+[data-template^="product"] fieldset[data-option-id$="size"] legend {
+  display: flex !important;
+  align-items: baseline !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+}
+[data-template^="product"] .sbj-size-guide {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.2px !important;
+  text-transform: none !important;
+  color: #6F6C69 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 3px !important;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+/* Color legend → shows the selected color name (SKIMS), normal weight */
+[data-template^="product"] fieldset[data-option-id$="color"] legend {
+  font-weight: 500 !important;
+  color: #2D2A26 !important;
+}
+[data-template^="product"] fieldset[data-option-id$="color"] legend .sbj-color-name {
+  font-weight: 500 !important;
 }
 /* Tight flex row of option buttons (override Horizon's equal-width grid) */
 [data-template^="product"] .product-details .variant-option {
@@ -321,16 +353,19 @@
   position: relative !important;
   padding: 0 !important;
   margin: 0 !important;
-  width: 26px !important;
-  min-width: 26px !important;
-  max-width: 26px !important;
-  height: 26px !important;
-  border-radius: 2px !important;
-  border: 1px solid rgba(0,0,0,0.15) !important;
+  width: 20px !important;
+  min-width: 20px !important;
+  max-width: 20px !important;
+  height: 20px !important;
+  min-height: 20px !important;
+  max-height: 20px !important;
+  border-radius: 4px !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
   background: #ccc;
   overflow: hidden !important;
   display: inline-block !important;
   box-sizing: border-box !important;
+  line-height: 0 !important;
   cursor: pointer;
 }
 [data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label::before,
@@ -407,6 +442,133 @@
   font-weight: 500 !important;
   letter-spacing: 0.4px !important;
   text-transform: uppercase !important;
+}
+/* #12 — no cart/bag icon in the CTA (SKIMS is text-only) */
+[data-template^="product"] .add-to-cart-button .add-to-cart-icon { display: none !important; }
+/* #11 — gated "SELECT A SIZE" state: light/outlined until a size is chosen */
+[data-template^="product"] .add-to-cart-button.sbj-cta--pending {
+  background: #fff !important;
+  color: #8A8784 !important;
+  border: 1px solid #CFCCC8 !important;
+  cursor: not-allowed !important;
+}
+
+/* ====== PDP MEDIA GALLERY → SKIMS single-image carousel (#1, #2, #3) ======
+   Carousel mode shows one tall image with side arrows. Full-bleed to the left
+   edge; overlay controls (zoom top-left, heart top-right, model-sizing
+   bottom-left) layered over the active slide like SKIMS. */
+[data-template^="product"] .product-media-container { position: relative; }
+/* Tall image area, constrained to the viewport like SKIMS */
+[data-template^="product"] .media-gallery--carousel .product-media-container,
+[data-template^="product"] .media-gallery--carousel .slideshow-slide {
+  background: #f4f2ef;
+}
+/* Side arrows — SKIMS thin chevrons centred on the image edges */
+[data-template^="product"] .media-gallery--carousel .slideshow-control,
+[data-template^="product"] .media-gallery--carousel [ref="previous"],
+[data-template^="product"] .media-gallery--carousel [ref="next"] {
+  background: transparent !important;
+  border: none !important;
+  color: #2D2A26 !important;
+  width: 44px !important;
+  height: 44px !important;
+}
+/* Zoom button → magnifier pinned top-left (SKIMS) */
+[data-template^="product"] .product-media-container__zoom-button {
+  position: absolute !important;
+  top: 16px !important;
+  left: 16px !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 3;
+  width: 36px !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: transparent !important;
+  border: none !important;
+  color: #2D2A26 !important;
+  opacity: 1 !important;
+}
+/* Decorative overlay controls injected by sbj-pdp.liquid */
+[data-template^="product"] .sbj-media-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+}
+[data-template^="product"] .sbj-media-overlay > * { pointer-events: auto; }
+[data-template^="product"] .sbj-pdp-zoom {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #2D2A26;
+  cursor: pointer;
+}
+[data-template^="product"] .sbj-pdp-heart {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 38px;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: #2D2A26;
+  cursor: pointer;
+}
+[data-template^="product"] .sbj-pdp-heart svg { width: 22px; height: 22px; }
+[data-template^="product"] .sbj-pdp-heart.is-on svg { fill: #2D2A26; }
+[data-template^="product"] .sbj-pdp-modelsize {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.92);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 2px;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: #2D2A26;
+  cursor: pointer;
+}
+@media (max-width: 749px) {
+  [data-template^="product"] .sbj-pdp-modelsize { font-size: 10px; padding: 6px 10px; }
+}
+
+/* ====== PDP INFO TABS (accordion) → SKIMS Details / Fit & Fabric / Shipping ===== */
+[data-template^="product"] .product-details .accordion { margin-top: 8px; }
+[data-template^="product"] .product-details .accordion .details__header {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.4px !important;
+  text-transform: uppercase !important;
+  color: #2D2A26 !important;
+  padding-block: 16px !important;
+}
+[data-template^="product"] .product-details .accordion .details-content,
+[data-template^="product"] .product-details .accordion .details-content * {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+  color: #4A4742 !important;
 }
 
 /* ====== "WE THINK YOU'D LIKE" carousel → SKIMS "New Arrivals" match ======

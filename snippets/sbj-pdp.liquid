@@ -1,0 +1,156 @@
+{%- comment -%}
+  SBJ PDP enhancements — SKIMS match. Pure client-side, idempotent, safe to run
+  on every product page. Handles:
+    #7  selected colour name shown in the colour legend (no "Color" label)
+    #9  "Size Guide" link added to the size legend (opens Fit & Fabric)
+    #10 no pre-selected size on load
+    #11 gated "Select a size" CTA that releases once a size is chosen
+    #3  decorative image overlays (wishlist heart + model sizing)
+{%- endcomment -%}
+<script>
+(function () {
+  if (!document.querySelector('[data-template^="product"]')) return;
+
+  var SIZE_SEL  = 'fieldset[data-option-id$="size"]';
+  var COLOR_SEL = 'fieldset[data-option-id$="color"]';
+  var sizeChosen = false; // closure flag — survives Horizon section re-renders
+
+  function ctaButton() {
+    return document.querySelector('[data-template^="product"] add-to-cart-component .add-to-cart-button')
+        || document.querySelector('[data-template^="product"] .add-to-cart-button');
+  }
+
+  function setCtaText(btn, text) {
+    var el = btn && btn.querySelector('.add-to-cart-text__content');
+    if (el && el.textContent.trim() !== text) el.textContent = text;
+  }
+
+  /* #7 — replace the colour legend text with the selected colour value */
+  function colorName() {
+    document.querySelectorAll(COLOR_SEL).forEach(function (fs) {
+      var legend = fs.querySelector('legend');
+      if (!legend) return;
+      var checked = fs.querySelector('input:checked');
+      var val = checked ? (checked.value || '') : '';
+      if (!val) return;
+      var span = legend.querySelector('.sbj-color-name');
+      if (!span) {
+        legend.textContent = '';
+        span = document.createElement('span');
+        span.className = 'sbj-color-name';
+        legend.appendChild(span);
+      }
+      if (span.textContent !== val) span.textContent = val;
+    });
+  }
+
+  /* open + scroll to the "Fit & Fabric" accordion row */
+  function openFitTab() {
+    var target = null;
+    document.querySelectorAll('[data-template^="product"] .accordion summary, [data-template^="product"] .accordion .details__header').forEach(function (h) {
+      if (/fit\s*&?\s*fabric/i.test(h.textContent)) target = h;
+    });
+    if (!target) return;
+    var det = target.closest('details');
+    if (det && !det.open) det.open = true;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  /* #9 — append a "Size Guide" link to the size legend */
+  function sizeGuide() {
+    document.querySelectorAll(SIZE_SEL).forEach(function (fs) {
+      var legend = fs.querySelector('legend');
+      if (!legend || legend.querySelector('.sbj-size-guide')) return;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'sbj-size-guide';
+      b.textContent = 'Size Guide';
+      b.addEventListener('click', function (e) { e.preventDefault(); openFitTab(); });
+      legend.appendChild(b);
+    });
+  }
+
+  /* #10 / #11 — no pre-selected size + gated CTA */
+  function gate() {
+    if (sizeChosen) return;
+    var sizeFs = document.querySelector(SIZE_SEL);
+    var btn = ctaButton();
+    if (!sizeFs || !btn) return;
+    sizeFs.querySelectorAll('input[type="radio"]').forEach(function (r) { if (r.checked) r.checked = false; });
+    btn.classList.add('sbj-cta--pending');
+    btn.setAttribute('disabled', 'disabled');
+    setCtaText(btn, 'Select a size');
+  }
+
+  function onChange(e) {
+    var t = e.target;
+    if (!t || !t.matches) return;
+    if (t.matches(COLOR_SEL + ' input')) { setTimeout(colorName, 0); }
+    if (t.matches(SIZE_SEL + ' input[type="radio"]')) {
+      /* only a real user click counts — Horizon fires synthetic change events
+         while hydrating the variant picker (isTrusted === false). */
+      if (!e.isTrusted) { setTimeout(gate, 0); return; }
+      sizeChosen = true;
+      var btn = ctaButton();
+      if (btn) { btn.classList.remove('sbj-cta--pending'); btn.removeAttribute('disabled'); }
+    }
+  }
+
+  /* trigger Horizon's native image zoom on the active slide */
+  function triggerZoom() {
+    var img = document.querySelector('.media-gallery--carousel .slideshow-slide[aria-hidden="false"] img, .media-gallery--carousel .is-active img, .media-gallery--carousel img');
+    if (img) { try { img.click(); } catch (e) {} }
+  }
+
+  /* #3 — overlay controls over the gallery (zoom, wishlist heart, model sizing) */
+  function overlays() {
+    var gallery = document.querySelector('.media-gallery--carousel') || document.querySelector('[class*="media-gallery--carousel"]');
+    if (!gallery || gallery.querySelector('.sbj-media-overlay')) return;
+    if (getComputedStyle(gallery).position === 'static') gallery.style.position = 'relative';
+    var ov = document.createElement('div');
+    ov.className = 'sbj-media-overlay';
+    ov.innerHTML =
+      '<button type="button" class="sbj-pdp-zoom" aria-label="Zoom image">' +
+        '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg>' +
+      '</button>' +
+      '<button type="button" class="sbj-pdp-heart" aria-label="Add to wishlist">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z"/></svg>' +
+      '</button>' +
+      '<button type="button" class="sbj-pdp-modelsize" aria-label="Model sizing">' +
+        '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/></svg>' +
+        'Model Sizing' +
+      '</button>';
+    ov.querySelector('.sbj-pdp-zoom').addEventListener('click', triggerZoom);
+    ov.querySelector('.sbj-pdp-heart').addEventListener('click', function () { this.classList.toggle('is-on'); });
+    ov.querySelector('.sbj-pdp-modelsize').addEventListener('click', openFitTab);
+    gallery.appendChild(ov);
+  }
+
+  function enhance() {
+    try { colorName(); } catch (e) {}
+    try { sizeGuide(); } catch (e) {}
+    try { gate(); } catch (e) {}
+    try { overlays(); } catch (e) {}
+  }
+
+  document.addEventListener('change', onChange, true);
+
+  function boot() {
+    enhance();
+    var host = document.querySelector('[data-template^="product"] .shopify-section') || document.body;
+    try {
+      var mo = new MutationObserver(function () {
+        clearTimeout(window.__sbjPdpT);
+        window.__sbjPdpT = setTimeout(enhance, 60);
+      });
+      mo.observe(host, { childList: true, subtree: true });
+    } catch (e) {}
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>

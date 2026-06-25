@@ -150,5 +150,8 @@
     {%- comment -%} Carousel counter/arrows JS drives both the homepage trending and the
       collection/product "we_think" carousel, so it loads site-wide (no-ops if absent). {%- endcomment -%}
     {%- render 'sbj-trending' -%}
+    {%- if template.name == 'product' -%}
+      {%- render 'sbj-pdp' -%}
+    {%- endif -%}
   </body>
 </html>
