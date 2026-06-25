@@ -480,6 +480,17 @@
   width: 100% !important;
   height: 100% !important;
 }
+/* Cap the image to the viewport height (SKIMS shows the whole model, no over-tall
+   scroll). Width still fills the column; cover keeps the model centred. */
+[data-template^="product"] .media-gallery--carousel .product-media-container {
+  aspect-ratio: auto !important;
+  height: calc(100vh - 96px) !important;
+}
+[data-template^="product"] .media-gallery--carousel .product-media,
+[data-template^="product"] .media-gallery--carousel .product-media__image {
+  aspect-ratio: auto !important;
+  height: 100% !important;
+}
 /* Side arrows — large bold arrows on the image edges (SKIMS) */
 [data-template^="product"] .media-gallery--carousel .slideshow-control,
 [data-template^="product"] .media-gallery--carousel [ref="previous"],
