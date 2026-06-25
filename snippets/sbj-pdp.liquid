@@ -81,6 +81,24 @@
     });
   }
 
+  /* show the selected size value beside the "Size" legend (SKIMS "Size  M") */
+  function sizeName() {
+    document.querySelectorAll(SIZE_SEL).forEach(function (fs) {
+      var legend = fs.querySelector('legend');
+      if (!legend) return;
+      var checked = fs.querySelector('input:checked');
+      var val = checked ? (checked.value || '') : '';
+      var span = legend.querySelector('.sbj-size-name');
+      if (!span) {
+        span = document.createElement('span');
+        span.className = 'sbj-size-name';
+        var guide = legend.querySelector('.sbj-size-guide');
+        if (guide) { legend.insertBefore(span, guide); } else { legend.appendChild(span); }
+      }
+      if (span.textContent !== val) span.textContent = val;
+    });
+  }
+
   /* #10 / #11 — no pre-selected size + gated CTA */
   function gate() {
     if (sizeChosen) return;
@@ -104,6 +122,7 @@
       sizeChosen = true;
       var btn = ctaButton();
       if (btn) { btn.classList.remove('sbj-cta--pending'); btn.removeAttribute('disabled'); }
+      setTimeout(sizeName, 0);
     }
   }
 
@@ -140,6 +159,7 @@
   function enhance() {
     try { colorName(); } catch (e) {}
     try { sizeGuide(); } catch (e) {}
+    try { sizeName(); } catch (e) {}
     try { gate(); } catch (e) {}
     try { overlays(); } catch (e) {}
     try { tabsInit(); } catch (e) {}
