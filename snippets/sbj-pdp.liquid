@@ -99,6 +99,18 @@
     });
   }
 
+  /* active CTA label → "Add to bag" (SKIMS); leave pending + sold-out states alone */
+  function ctaLabel() {
+    var btn = ctaButton();
+    if (!btn || btn.classList.contains('sbj-cta--pending')) return;
+    var el = btn.querySelector('.add-to-cart-text__content');
+    if (!el) return;
+    var t = el.textContent.trim().toLowerCase();
+    if ((t === 'add to cart' || t === 'add to bag') && el.textContent.trim() !== 'Add to bag') {
+      el.textContent = 'Add to bag';
+    }
+  }
+
   /* #10 / #11 — no pre-selected size + gated CTA */
   function gate() {
     if (sizeChosen) return;
@@ -125,6 +137,7 @@
       var btn = ctaButton();
       if (btn) { btn.classList.remove('sbj-cta--pending'); btn.removeAttribute('disabled'); }
       setTimeout(sizeName, 0);
+      setTimeout(ctaLabel, 0);
     }
   }
 
@@ -163,6 +176,7 @@
     try { sizeGuide(); } catch (e) {}
     try { gate(); } catch (e) {}
     try { sizeName(); } catch (e) {}
+    try { ctaLabel(); } catch (e) {}
     try { overlays(); } catch (e) {}
     try { tabsInit(); } catch (e) {}
   }
