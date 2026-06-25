@@ -261,6 +261,12 @@
   letter-spacing: 0.2px !important;
   color: #2D2A26 !important;
 }
+/* Details column inset — push the info right (SKIMS gutter ~48px vs our 20px)
+   and lower it vertically so the block sits like SKIMS (content starts lower). */
+[data-template^="product"] .product-details {
+  padding-left: 40px !important;
+  padding-top: 40px !important;
+}
 /* Tight stacked header (eyebrow/name/price) */
 [data-template^="product"] .product-details .group-block-content { gap: 6px !important; }
 
