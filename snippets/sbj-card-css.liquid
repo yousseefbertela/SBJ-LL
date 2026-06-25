@@ -491,9 +491,12 @@
 [data-template^="product"] .media-gallery--carousel .slideshow-slide {
   background: #f4f2ef;
 }
-/* Force the photo to fill the portrait frame (model large + tall, SKIMS) */
+/* Show the WHOLE photo (full model, head + feet, uncropped) inside the SAME frame.
+   contain (not cover) so nothing is cropped; the frame size is unchanged and any
+   spare space falls back to the gallery background (#f4f2ef), like the collection card. */
 [data-template^="product"] .media-gallery--carousel img {
-  object-fit: cover !important;
+  object-fit: contain !important;
+  object-position: center !important;
   width: 100% !important;
   height: 100% !important;
 }
