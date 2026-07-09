@@ -30,7 +30,10 @@
   })();
 
   var SIZE_SEL  = 'fieldset[data-option-id$="size"]';
-  var COLOR_SEL = 'fieldset[data-option-id$="color"]';
+  /* swatch mode (native color swatches linked) renders no data-option-id, so
+     match the swatches fieldset class too */
+  var COLOR_SEL = 'fieldset.variant-option--swatches, fieldset[data-option-id$="color"]';
+  var COLOR_INPUT_SEL = COLOR_SEL.split(',').map(function (s) { return s.trim() + ' input'; }).join(', ');
   var sizeChosen = false; // closure flag — survives Horizon section re-renders
 
   function ctaButton() {
@@ -146,7 +149,7 @@
   function onChange(e) {
     var t = e.target;
     if (!t || !t.matches) return;
-    if (t.matches(COLOR_SEL + ' input')) { setTimeout(colorName, 0); }
+    if (t.matches(COLOR_INPUT_SEL)) { setTimeout(colorName, 0); }
     if (t.matches(SIZE_SEL + ' input[type="radio"]')) {
       /* only a real user click counts — Horizon fires synthetic change events
          while hydrating the variant picker (isTrusted === false). */

@@ -336,6 +336,7 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   padding: 0;
 }
 /* Color legend → shows the selected color name (SKIMS "Cherry Blossom"), semibold dark */
+[data-template^="product"] .product-details .variant-option--swatches legend,
 [data-template^="product"] fieldset[data-option-id$="color"] legend {
   font-size: 14px !important;
   font-weight: 600 !important;
@@ -343,10 +344,16 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   color: #1A1A1A !important;
   margin-bottom: 12px !important;
 }
+[data-template^="product"] .product-details .variant-option--swatches legend .sbj-color-name,
 [data-template^="product"] fieldset[data-option-id$="color"] legend .sbj-color-name {
   font-weight: 600 !important;
 }
+/* Native swatch mode puts "Color <value>" in the legend; the JS rewrites the
+   legend to just the value (SKIMS style), so hide the native value span to
+   avoid a flash of "Color Chalk Chalk" before the rewrite. */
+[data-template^="product"] .product-details .variant-option--swatches legend .variant-option__swatch-value { display: none !important; }
 /* Color swatch row → wider gaps like SKIMS + breathing room above (price→color) and below (before "Size") */
+[data-template^="product"] .product-details .variant-option--swatches,
 [data-template^="product"] .product-details fieldset[data-option-id$="color"] { gap: 12px !important; margin-top: 22px !important; margin-bottom: 46px !important; }
 /* Tight flex row of option buttons (override Horizon's equal-width grid) */
 [data-template^="product"] .product-details .variant-option {
@@ -398,9 +405,10 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   border-color: rgba(0,0,0,0.10) !important;
 }
 
-/* COLOR → square color swatches (the LABEL itself is the swatch; Horizon's
-   pill + ::before are neutralized so nothing overlays the color). */
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label {
+/* COLOR → square color swatches (SKIMS). Colors come from Shopify's native
+   swatch system: the label wraps a .swatch element whose background is the
+   linked color-pattern metaobject's hex (--swatch-background). */
+[data-template^="product"] .product-details .variant-option--swatches .variant-option__button-label {
   position: relative !important;
   padding: 0 !important;
   margin: 0 !important;
@@ -411,18 +419,25 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   min-height: 30px !important;
   max-height: 30px !important;
   border-radius: 6px !important;
-  border: 1px solid rgba(0,0,0,0.12) !important;
-  background: #ccc;
+  border: 0 !important;
+  background: none !important;
   overflow: hidden !important;
   display: inline-block !important;
   box-sizing: border-box !important;
   line-height: 0 !important;
   cursor: pointer;
 }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label::before,
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label::after { content: none !important; display: none !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label__pill,
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label__text { display: none !important; }
+[data-template^="product"] .product-details .variant-option--swatches .variant-option__button-label::before,
+[data-template^="product"] .product-details .variant-option--swatches .variant-option__button-label::after { content: none !important; display: none !important; }
+/* the native swatch chip fills the square label */
+[data-template^="product"] .product-details .variant-option--swatches .swatch {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
+  box-sizing: border-box !important;
+}
 /* Suppress default focus ring (selection shown by the checked ring/fill) */
 [data-template^="product"] .product-details .variant-option__button-label,
 [data-template^="product"] .product-details .variant-option__button-label:focus,
@@ -432,53 +447,11 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   box-shadow: none !important;
 }
 /* Checked swatch → SKIMS selection ring */
+[data-template^="product"] .product-details .variant-option--swatches .variant-option__button-label:has(input:checked),
 [data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input:checked) {
   outline: 1px solid #2D2A26 !important;
   outline-offset: 2px !important;
 }
-/* Color name → hex on the label (matches card palette; case-insensitive) */
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="black" i]) { background:#1a1a1a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="onyx" i]) { background:#2a2a2a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="white" i]) { background:#fff !important; border-color:rgba(0,0,0,0.3) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="snow" i]) { background:#f6f4f0 !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="chalk" i]) { background:#ece7df !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="paper" i]) { background:#e9e3d6 !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="oyster" i]) { background:#d7cfc2 !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="bone" i]) { background:#ece5d8 !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="sand" i]) { background:#c2a98a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="beige" i]) { background:#e0cdb8 !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="oatmeal" i]) { background:#ddd4c4 !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="marble" i]) { background:#d0c8c0 !important; border-color:rgba(0,0,0,0.2) !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="pink" i]) { background:#f5a8be !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="peony" i]) { background:#e7a3b3 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="bubble gum" i]) { background:#f4a6c0 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cherry blossom" i]) { background:#f1cdd8 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="lilac" i]) { background:#c7b6d9 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="mauve" i]) { background:#c4a0b0 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="navy" i]) { background:#1a2a5a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="kyanite" i]) { background:#38597a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="mineral blue" i]) { background:#5a7a8a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="mineral" i]) { background:#6c8893 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="slate" i]) { background:#607a8a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="grey" i]) { background:#9a9a9a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="gray" i]) { background:#9a9a9a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="heather grey" i]) { background:#b4b4b4 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="clay" i]) { background:#cdab92 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="clay heather" i]) { background:#c2a994 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="sienna" i]) { background:#9e6b52 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="sienna heather" i]) { background:#ab7d68 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="bronze" i]) { background:#8a6a3f !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cumin" i]) { background:#b08842 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cocoa" i]) { background:#5c3a28 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="cocoa heather" i]) { background:#6f4d3c !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="brown" i]) { background:#5c3d2e !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="dark brown" i]) { background:#3d1f0f !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="espresso" i]) { background:#3a2a22 !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="umber leopard" i]) { background:#7c5c3c !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="poppy" i]) { background:#d6492f !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="phoenix" i]) { background:#c0473a !important; }
-[data-template^="product"] fieldset[data-option-id$="color"] .variant-option__button-label:has(input[value="ivy" i]) { background:#495a39 !important; }
-
 /* CTA — dark add button, capped to SKIMS width (atc-wrapper max-w-xs = 320px), left-aligned */
 [data-template^="product"] .product-details add-to-cart-component { width: 100% !important; max-width: 320px !important; display: block !important; }
 [data-template^="product"] .product-details .add-to-cart-button {
