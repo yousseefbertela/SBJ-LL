@@ -95,6 +95,22 @@
 .cart-drawer__content {
   background: transparent !important;
 }
+/* Mobile: the dialog is full-viewport-width, so the desktop right-anchor
+   (left:auto) pushes it past the left screen edge. Inset it on ALL sides so
+   it floats like the mobile menu card (same 10px/28px geometry). */
+@media screen and (max-width: 749px) {
+  .cart-drawer__dialog {
+    top: 10px !important;
+    right: 10px !important;
+    bottom: 10px !important;
+    left: 10px !important;
+    width: calc(100vw - 20px) !important;
+    max-width: none !important;
+    height: calc(100dvh - 20px) !important;
+    max-height: calc(100dvh - 20px) !important;
+    border-radius: 28px !important;
+  }
+}
 
 /* Heading — "Cart" + small grey count chip */
 .cart-drawer__heading {
