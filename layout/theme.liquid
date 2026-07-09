@@ -32,6 +32,23 @@
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-schemes' -%}
 
+    {%- comment -%}
+      SBJ card/PDP CSS must load IN THE HEAD (not body end) or the first paint
+      of a product/collection page shows native Horizon styling for a frame
+      (the "twitch"). sbj-pdp.liquid's JS states (gated CTA, colour name) are
+      covered by the html.sbj-boot guard below: variant picker + CTA stay
+      invisible until the PDP script's first enhance() removes the class
+      (2.5s fallback so the page can never get stuck hidden).
+    {%- endcomment -%}
+    {%- render 'sbj-card-css' -%}
+    {%- render 'sbj-cart-css' -%}
+    <script>
+      if (location.pathname.indexOf('/products/') !== -1) {
+        document.documentElement.classList.add('sbj-boot');
+        setTimeout(function () { document.documentElement.classList.remove('sbj-boot'); }, 2500);
+      }
+    </script>
+
     {% if request.design_mode %}
       {%- render 'theme-editor' -%}
     {% endif %}
@@ -142,7 +159,7 @@
     {%- endcomment -%}
     {%- render 'sbj-header-css' -%}
     {%- render 'sbj-menu-css' -%}
-    {%- render 'sbj-card-css' -%}
+    {%- render 'sbj-wishlist' -%}
     {%- render 'sbj-footer-css' -%}
     {%- if template.name == 'index' -%}
       {%- render 'sbj-home-css' -%}

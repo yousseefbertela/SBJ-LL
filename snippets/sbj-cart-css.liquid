@@ -1,0 +1,275 @@
+{%- comment -%}
+  SBJ cart — Juvenile-match (juvenileeg.com) cart drawer + header cart badge.
+  Reference: floating rounded translucent white panel inset from the screen
+  edges; "Cart" + grey count chip; item rows image/title/variant/unit price
+  with line total top-right; compact bordered − qty + stepper + trash icon;
+  Discount accordion; Estimated total + duties note; black rounded CHECK OUT.
+  Header badge = small black circle with white count on the bag icon.
+  Loaded in <head> from layout/theme.liquid so it's styled on first paint.
+{%- endcomment -%}
+<style>
+/* ===== Header cart/wishlist count — solid black circle overlapping the
+   icon's top-right corner (reference: filled dark circle, white bold number,
+   centred ON the corner, not floating above it). =====
+
+   Exact geometry, not eyeballed: Horizon's own CSS centres a 22px icon
+   (--icon-size-md) inside a 44px flex box (--button-size / .svg-wrapper), so
+   the icon's true corner sits exactly (44-22)/2 = 11px in from the box's top
+   and right edges. Anchoring the badge at top:11px/right:11px then
+   translating it back by 50% of its own size centres the badge exactly ON
+   that corner point, regardless of the badge's own size — no guessing.
+   Both trigger buttons also carry Horizon's .button-unstyled
+   (overflow:hidden), which clips anything sitting outside the box — opened
+   up below. */
+[data-testid="cart-drawer-trigger"],
+#sbj-wishlist-trigger {
+  overflow: visible !important;
+}
+.header-actions__cart-icon {
+  position: relative;
+  display: inline-flex !important;
+}
+.header-actions__cart-icon .cart-bubble,
+.sbj-wishlist-count {
+  position: absolute !important;
+  top: 11px !important;
+  right: 11px !important;
+  left: auto !important;
+  bottom: auto !important;
+  /* push mostly OUTSIDE the icon's corner (only a sliver overlaps) instead of
+     centring dead-on-top of it, which was covering the heart/bag shape */
+  transform: translate(72%, -72%) !important;
+  width: auto !important;
+  height: 16px !important;
+  aspect-ratio: auto !important;
+  min-width: 16px !important;
+  padding: 0 !important;
+  padding-inline: 4px !important; /* cart-bubble's own component CSS sets --cart-padding; override the longhand directly */
+  box-sizing: border-box !important;
+  border-radius: 999px !important;
+  background: #121212 !important;
+  box-shadow: 0 0 0 2px #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+/* Tighten icon spacing: adjacent 44px buttons leave a 22px visual gap — pull
+   them together so icons read closer together like SKIMS (desktop only). */
+@media screen and (min-width: 750px) {
+  header-actions > *:not(:first-child) { margin-inline-start: -12px; }
+}
+/* Horizon cuts a donut hole in the bag icon under the bubble — remove it */
+.header-actions__cart-icon.header-actions__cart-icon--has-cart svg {
+  mask: none !important;
+}
+.header-actions__cart-icon .cart-bubble__background {
+  display: none !important; /* our own circle above replaces Horizon's */
+}
+.header-actions__cart-icon .cart-bubble__text,
+.sbj-wishlist-count {
+  color: #fff !important;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+}
+
+/* ===== Drawer = floating rounded, slightly translucent panel (Juvenile) ===== */
+.cart-drawer__dialog {
+  top: 12px !important;
+  right: 12px !important;
+  bottom: 12px !important;
+  left: auto !important;
+  height: calc(100dvh - 24px) !important;
+  max-height: calc(100dvh - 24px) !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 22px !important;
+  background: rgba(255, 255, 255, 0.7) !important;
+  -webkit-backdrop-filter: blur(26px);
+  backdrop-filter: blur(26px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22) !important;
+  color: #121212 !important;
+}
+.cart-drawer__inner,
+.cart-drawer__content {
+  background: transparent !important;
+}
+
+/* Heading — "Cart" + small grey count chip */
+.cart-drawer__heading {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.2px !important;
+  text-transform: none !important;
+  color: #121212 !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.cart-drawer__heading .cart-bubble,
+.cart-drawer__heading .cart-bubble[data-maintain-ratio] {
+  width: 20px !important;
+  height: 20px !important;
+}
+.cart-drawer__heading .cart-bubble .cart-bubble__background {
+  background: #EEEEEE !important;
+  border-radius: 999px !important;
+  box-shadow: none;
+}
+.cart-drawer__heading .cart-bubble__text {
+  color: #121212 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+}
+.cart-drawer__close-button { color: #121212 !important; }
+
+/* ===== Item rows — no dividers, square rounded thumbs (Juvenile) ===== */
+.cart-drawer__items .cart-items__table-row {
+  border-bottom: 0 !important;
+  padding-bottom: 6px !important;
+  margin-bottom: 18px !important;
+}
+.cart-drawer__items .cart-items__media-container {
+  width: 60px !important;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #F4F4F4;
+}
+.cart-drawer__items .cart-items__media-container img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+.cart-drawer__items .cart-items__title,
+.cart-drawer__items .cart-items__title a {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1.35 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #121212 !important;
+}
+.cart-drawer__items .cart-items__variants,
+.cart-drawer__items .cart-items__variants dd,
+.cart-drawer__items .cart-items__properties {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  color: #6b6b6b !important;
+}
+.cart-drawer__items .cart-items__price,
+.cart-drawer__items .cart-items__details .price {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+  color: #121212 !important;
+}
+
+/* Quantity stepper — compact bordered box: − 1 + (Juvenile) */
+.cart-drawer__items .quantity-selector {
+  border: 1px solid #E2E2E2 !important;
+  border-radius: 8px !important;
+  background: #fff !important;
+  height: 32px !important;
+  min-height: 32px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  overflow: hidden;
+}
+.cart-drawer__items .quantity-selector .quantity-minus,
+.cart-drawer__items .quantity-selector .quantity-plus {
+  width: 30px !important;
+  height: 100% !important;
+  color: #121212 !important;
+  background: none !important;
+  border: 0 !important;
+}
+.cart-drawer__items .quantity-selector .quantity-minus svg,
+.cart-drawer__items .quantity-selector .quantity-plus svg {
+  width: 10px !important;
+  height: 10px !important;
+}
+.cart-drawer__items .quantity-selector input {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: #121212 !important;
+  background: none !important;
+  border: 0 !important;
+  width: 26px !important;
+}
+
+/* Trash button beside the stepper */
+.cart-drawer__items .cart-items__remove {
+  background: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  color: #121212 !important;
+  padding: 6px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+}
+.cart-drawer__items .cart-items__remove svg { width: 16px !important; height: 16px !important; }
+.cart-drawer__items .cart-items__remove:hover { color: #E0182B !important; }
+
+/* ===== Summary — same frosted glass as the panel ===== */
+.cart-drawer__summary {
+  background: rgba(255, 255, 255, 0.45) !important;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-top: 0 !important;
+}
+
+/* Discount / note accordion rows */
+.cart-drawer__summary .cart-discount__label,
+.cart-drawer__summary .cart-note__label {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #121212 !important;
+  text-transform: none !important;
+}
+.cart-drawer__summary .cart-actions__divider { background: #EBEBEB !important; }
+
+/* Estimated total row + duties note */
+.cart-drawer__summary .cart-totals__total-label {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #121212 !important;
+  text-transform: none !important;
+}
+.cart-drawer__summary .cart-totals { font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important; }
+.cart-drawer__summary .cart-totals__total-value {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #121212 !important;
+}
+.cart-drawer__summary .cart-totals__tax-note,
+.cart-drawer__summary .cart-totals__tax-note small {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 12px !important;
+  color: #6b6b6b !important;
+}
+
+/* CHECK OUT — full-width black rounded button (Juvenile) */
+.cart-drawer__summary .cart__checkout-button {
+  background: #121212 !important;
+  color: #fff !important;
+  border: 0 !important;
+  border-radius: 14px !important;
+  min-height: 48px !important;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  font-size: 12.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 1.4px !important;
+  text-transform: uppercase !important;
+  width: 100% !important;
+}
+.cart-drawer__summary .cart__checkout-button:hover { background: #2b2b2b !important; }
+
+/* Reference shows a single CHECK OUT button — hide accelerated wallets in the drawer */
+.cart-drawer__summary additional-checkout-buttons { display: none !important; }
+</style>

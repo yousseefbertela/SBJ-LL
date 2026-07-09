@@ -7,9 +7,27 @@
     #11 gated "Select a size" CTA that releases once a size is chosen
     #3  decorative image overlays (wishlist heart + model sizing)
 {%- endcomment -%}
+{%- if product -%}
+<script type="application/json" id="sbj-pdp-product-data">
+  {
+    "id": {{ product.id | json }},
+    "handle": {{ product.handle | json }},
+    "title": {{ product.title | json }},
+    "price": {{ product.price | money | json }},
+    "image": {{ product.featured_image | image_url: width: 600 | json }},
+    "url": {{ product.url | json }}
+  }
+</script>
+{%- endif -%}
 <script>
 (function () {
   if (!document.querySelector('[data-template^="product"]')) return;
+
+  var PRODUCT_DATA = (function () {
+    var el = document.getElementById('sbj-pdp-product-data');
+    if (!el) return null;
+    try { return JSON.parse(el.textContent); } catch (e) { return null; }
+  })();
 
   var SIZE_SEL  = 'fieldset[data-option-id$="size"]';
   var COLOR_SEL = 'fieldset[data-option-id$="color"]';
@@ -165,8 +183,21 @@
         '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/></svg>' +
         'Model Sizing' +
       '</button>';
+    var heartBtn = ov.querySelector('.sbj-pdp-heart');
+    if (PRODUCT_DATA && PRODUCT_DATA.id) {
+      heartBtn.setAttribute('data-product-id', PRODUCT_DATA.id);
+      heartBtn.setAttribute('data-handle', PRODUCT_DATA.handle || '');
+      heartBtn.setAttribute('data-title', PRODUCT_DATA.title || '');
+      heartBtn.setAttribute('data-price', PRODUCT_DATA.price || '');
+      heartBtn.setAttribute('data-image', PRODUCT_DATA.image || '');
+      heartBtn.setAttribute('data-url', PRODUCT_DATA.url || '');
+      if (window.SBJWishlist && window.SBJWishlist.has(PRODUCT_DATA.id)) {
+        heartBtn.classList.add('is-on');
+      }
+    }
     ov.querySelector('.sbj-pdp-zoom').addEventListener('click', triggerZoom);
-    ov.querySelector('.sbj-pdp-heart').addEventListener('click', function () { this.classList.toggle('is-on'); });
+    /* click handling (toggle + persistence) is delegated site-wide by
+       sbj-wishlist.liquid via [data-product-id] — no listener needed here. */
     ov.querySelector('.sbj-pdp-modelsize').addEventListener('click', openFitTab);
     gallery.appendChild(ov);
   }
@@ -185,6 +216,9 @@
 
   function boot() {
     enhance();
+    /* first enhance done — reveal the variant picker/CTA (see html.sbj-boot
+       guard in sbj-card-css.liquid; theme.liquid sets the class pre-paint) */
+    document.documentElement.classList.remove('sbj-boot');
     var host = document.querySelector('[data-template^="product"] .shopify-section') || document.body;
     try {
       var mo = new MutationObserver(function () {

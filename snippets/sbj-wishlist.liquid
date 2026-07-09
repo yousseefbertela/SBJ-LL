@@ -1,0 +1,360 @@
+{%- comment -%}
+  SBJ wishlist — site-wide. Makes the collection-card heart (.sbj-heart,
+  injected via custom_liquid in templates/collection*.json) and the PDP heart
+  (.sbj-pdp-heart, injected by sbj-pdp.liquid) actually save/unsave products,
+  persisted in localStorage (no wishlist app/page needed), plus a header-icon
+  drawer to view/remove saved items. Loaded once, site-wide, from theme.liquid.
+{%- endcomment -%}
+<style>
+.header-actions__wishlist {
+  position: relative;
+  overflow: visible; /* .button-unstyled sets overflow:hidden, which clips the badge below */
+}
+.sbj-wishlist-count {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #E0182B;
+  color: #fff;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 16px;
+  text-align: center;
+  box-shadow: 0 0 0 2px #fff;
+}
+
+.sbj-wishlist-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 998;
+}
+.sbj-wishlist-backdrop.is-open { opacity: 1; pointer-events: auto; }
+
+/* Floating rounded frosted panel — matches the SBJ cart drawer (Juvenile look) */
+.sbj-wishlist-drawer {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  width: min(400px, calc(100vw - 24px));
+  max-height: calc(100dvh - 24px);
+  border-radius: 22px !important; /* all four corners stay round */
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(26px);
+  backdrop-filter: blur(26px);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.22);
+  transform: translateX(calc(100% + 12px));
+  transition: transform 0.25s ease;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #121212;
+}
+.sbj-wishlist-drawer.is-open { transform: translateX(0); }
+
+.sbj-wishlist-drawer__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 22px 24px 14px;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  text-transform: none;
+  color: #121212;
+}
+/* grey count chip beside the title — like the cart's */
+.sbj-wishlist-drawer__chip {
+  width: 20px;
+  height: 20px;
+  border-radius: 999px;
+  background: #EEEEEE;
+  color: #121212;
+  font-size: 11px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.sbj-wishlist-drawer__close {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #121212;
+  display: flex;
+  margin-left: auto;
+}
+
+.sbj-wishlist-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 24px 24px;
+}
+
+.sbj-wishlist-empty {
+  margin-top: 40px;
+  text-align: center;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  color: #6b6b6b;
+}
+
+.sbj-wishlist-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  text-decoration: none;
+  color: inherit;
+}
+.sbj-wishlist-item__image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #F4F4F4;
+  flex-shrink: 0;
+}
+.sbj-wishlist-item__image--placeholder { display: block; }
+.sbj-wishlist-item__info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.sbj-wishlist-item__title {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  color: #121212;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sbj-wishlist-item__price {
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12.5px;
+  color: #6b6b6b;
+}
+.sbj-wishlist-item__remove {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: #121212;
+  flex-shrink: 0;
+}
+.sbj-wishlist-item__remove:hover { color: #E0182B; }
+
+body.sbj-wishlist-open { overflow: hidden; }
+</style>
+<script>
+(function () {
+  // Belt-and-suspenders kill of the native cross-document view-transition
+  // crossfade (the CSS `@view-transition{navigation:none}` override in
+  // sbj-card-css.liquid can lose the cascade to base.css depending on parse
+  // timing) — skip it outright at the JS level on every navigation.
+  window.addEventListener('pageswap', function (e) {
+    if (e.viewTransition) e.viewTransition.skipTransition();
+  });
+
+  var STORAGE_KEY = 'sbj_wishlist_v1';
+
+  function readAll() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); } catch (e) { return []; }
+  }
+  function writeAll(items) {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); } catch (e) {}
+  }
+  function has(id) {
+    return readAll().some(function (i) { return String(i.id) === String(id); });
+  }
+  function toggle(data) {
+    if (!data || !data.id) return false;
+    var items = readAll();
+    var idx = items.findIndex(function (i) { return String(i.id) === String(data.id); });
+    var nowOn;
+    if (idx > -1) { items.splice(idx, 1); nowOn = false; }
+    else { items.unshift(data); nowOn = true; }
+    writeAll(items);
+    refreshUI();
+    return nowOn;
+  }
+  function remove(id) {
+    writeAll(readAll().filter(function (i) { return String(i.id) !== String(id); }));
+    refreshUI();
+  }
+
+  window.SBJWishlist = { all: readAll, has: has, toggle: toggle, remove: remove };
+
+  function heartData(el) {
+    return {
+      id: el.getAttribute('data-product-id'),
+      handle: el.getAttribute('data-handle') || '',
+      title: el.getAttribute('data-title') || '',
+      price: el.getAttribute('data-price') || '',
+      image: el.getAttribute('data-image') || '',
+      url: el.getAttribute('data-url') || ''
+    };
+  }
+
+  function hydrateHearts() {
+    var ids = readAll().map(function (i) { return String(i.id); });
+    document.querySelectorAll('.sbj-heart[data-product-id], .sbj-pdp-heart[data-product-id]').forEach(function (el) {
+      el.classList.toggle('is-on', ids.indexOf(String(el.getAttribute('data-product-id'))) > -1);
+    });
+  }
+
+  function updateBadge() {
+    var count = readAll().length;
+    document.querySelectorAll('.sbj-wishlist-count').forEach(function (b) {
+      if (count > 0) { b.textContent = count > 99 ? '99+' : String(count); b.hidden = false; }
+      else { b.hidden = true; b.textContent = ''; }
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  var drawerEl, backdropEl;
+  function ensureDrawer() {
+    if (drawerEl) return;
+    backdropEl = document.createElement('div');
+    backdropEl.className = 'sbj-wishlist-backdrop';
+    drawerEl = document.createElement('aside');
+    drawerEl.className = 'sbj-wishlist-drawer';
+    drawerEl.setAttribute('role', 'dialog');
+    drawerEl.setAttribute('aria-label', 'Wishlist');
+    drawerEl.innerHTML =
+      '<div class="sbj-wishlist-drawer__header">' +
+        '<span>Wishlist</span>' +
+        '<span class="sbj-wishlist-drawer__chip" hidden></span>' +
+        '<button type="button" class="sbj-wishlist-drawer__close" aria-label="Close wishlist">' +
+          '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 5l14 14M19 5L5 19"/></svg>' +
+        '</button>' +
+      '</div>' +
+      '<div class="sbj-wishlist-drawer__body"></div>';
+    document.body.appendChild(backdropEl);
+    document.body.appendChild(drawerEl);
+  }
+
+  function renderDrawer() {
+    ensureDrawer();
+    var body = drawerEl.querySelector('.sbj-wishlist-drawer__body');
+    var items = readAll();
+    var chip = drawerEl.querySelector('.sbj-wishlist-drawer__chip');
+    if (chip) {
+      if (items.length) { chip.textContent = items.length > 99 ? '99+' : String(items.length); chip.hidden = false; }
+      else { chip.hidden = true; }
+    }
+    if (!items.length) {
+      body.innerHTML = '<p class="sbj-wishlist-empty">Your wishlist is empty.</p>';
+      return;
+    }
+    body.innerHTML = items.map(function (i) {
+      return '' +
+        '<a class="sbj-wishlist-item" href="' + escapeHtml(i.url || '#') + '">' +
+          (i.image
+            ? '<img class="sbj-wishlist-item__image" src="' + escapeHtml(i.image) + '" alt="" loading="lazy">'
+            : '<span class="sbj-wishlist-item__image sbj-wishlist-item__image--placeholder"></span>') +
+          '<span class="sbj-wishlist-item__info">' +
+            '<span class="sbj-wishlist-item__title">' + escapeHtml(i.title) + '</span>' +
+            '<span class="sbj-wishlist-item__price">' + escapeHtml(i.price) + '</span>' +
+          '</span>' +
+          '<button type="button" class="sbj-wishlist-item__remove" data-id="' + escapeHtml(i.id) + '" aria-label="Remove from wishlist">' +
+            /* Horizon's own icon-delete.svg — identical to the cart drawer trash */
+            '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M11.5 9v4.25M8.5 9v4.25M5.75 12.2V6h8.5c0 2.421 0 3.779 0 6.2 0 .853 0 1.447-.038 1.91-.037.453-.106.714-.207.911a2.498 2.498 0 0 1-.983 1.017c-.197.1-.458.17-.911.207-.463.037-1.057.038-1.91.038h-.4c-.853 0-1.447 0-1.91-.038-.453-.037-.714-.106-.911-.207a2.498 2.498 0 0 1-.984-1.017c-.1-.197-.17-.458-.207-.911C5.75 13.647 5.75 13.053 5.75 12.2z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M4.25 6h11.5M8 5.25a2 2 0 1 1 4 0" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+          '</button>' +
+        '</a>';
+    }).join('');
+  }
+
+  function refreshUI() {
+    hydrateHearts();
+    updateBadge();
+    if (drawerEl && drawerEl.classList.contains('is-open')) renderDrawer();
+  }
+
+  function openDrawer() {
+    ensureDrawer();
+    renderDrawer();
+    drawerEl.classList.add('is-open');
+    backdropEl.classList.add('is-open');
+    document.body.classList.add('sbj-wishlist-open');
+  }
+  function closeDrawer() {
+    if (!drawerEl) return;
+    drawerEl.classList.remove('is-open');
+    backdropEl.classList.remove('is-open');
+    document.body.classList.remove('sbj-wishlist-open');
+  }
+
+  // Delegated on document (capture) — works for cards rendered later
+  // (carousels, infinite scroll, Horizon section re-renders) with no rebinding,
+  // and stops the click before it reaches the card's full-bleed <a> link.
+  document.addEventListener('click', function (e) {
+    var heart = e.target.closest && e.target.closest('.sbj-heart[data-product-id], .sbj-pdp-heart[data-product-id]');
+    if (heart) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggle(heartData(heart));
+      return;
+    }
+    var trigger = e.target.closest && e.target.closest('#sbj-wishlist-trigger');
+    if (trigger) {
+      e.preventDefault();
+      openDrawer();
+      return;
+    }
+    var removeBtn = e.target.closest && e.target.closest('.sbj-wishlist-item__remove');
+    if (removeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      remove(removeBtn.getAttribute('data-id'));
+      return;
+    }
+    var closeHit = e.target.closest && e.target.closest('.sbj-wishlist-drawer__close, .sbj-wishlist-backdrop');
+    if (closeHit) closeDrawer();
+  }, true);
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeDrawer();
+  });
+
+  function boot() {
+    hydrateHearts();
+    updateBadge();
+    try {
+      var mo = new MutationObserver(function () {
+        clearTimeout(window.__sbjWishT);
+        window.__sbjWishT = setTimeout(hydrateHearts, 80);
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+    } catch (e) {}
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+})();
+</script>

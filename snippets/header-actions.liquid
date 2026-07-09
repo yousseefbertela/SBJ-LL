@@ -113,10 +113,11 @@
     </div>
   {% endif %}
 
-  {%- comment -%} Wishlist heart — visual to match SKIMS; needs a wishlist app/page to be functional {%- endcomment -%}
-  <a
-    href="#"
-    class="header-actions__action header-actions__wishlist"
+  {%- comment -%} Wishlist heart — opens the SBJ wishlist drawer (snippets/sbj-wishlist.liquid) {%- endcomment -%}
+  <button
+    type="button"
+    id="sbj-wishlist-trigger"
+    class="header-actions__action button-unstyled header-actions__wishlist"
     aria-label="Wishlist"
   >
     <span class="svg-wrapper" aria-hidden="true">
@@ -129,7 +130,8 @@
         />
       </svg>
     </span>
-  </a>
+    <span class="sbj-wishlist-count" hidden></span>
+  </button>
 
   {% if settings.cart_type == 'drawer' and template.name != 'cart' %}
     <script

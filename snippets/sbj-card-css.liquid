@@ -13,6 +13,31 @@
   --font-heading--family: "Space Grotesk", "Archivo", system-ui, sans-serif !important;
 }
 
+/* Kill Horizon's native cross-document view-transition crossfade on full page
+   navigation (e.g. clicking a product card → PDP). base.css unconditionally
+   opts every navigation into `@view-transition { navigation: auto }`, and
+   view-transitions.js always tags it type "page-navigation" regardless of the
+   page_transition_enabled theme setting — so the browser snapshots the OLD
+   page and the NEW page and cross-fades them, exposing a flash of the
+   destination page mid-transition before it settles. This later `@view-transition`
+   rule overrides that descriptor and disables the browser-native transition
+   entirely, so navigations are an instant swap — only the final styled page
+   is ever visible. Same-document transitions (drawers, dialogs) are untouched;
+   this only controls cross-document (full navigation) transitions. */
+@view-transition {
+  navigation: none;
+}
+
+/* PDP boot guard — theme.liquid adds html.sbj-boot on /products/ pages before
+   first paint; sbj-pdp.liquid removes it after its first enhance() pass (gated
+   CTA, cleared size, colour-name legend). Until then the variant picker + CTA
+   are invisible, so the native un-enhanced state never flashes. */
+html.sbj-boot [data-template^="product"] variant-picker,
+html.sbj-boot [data-template^="product"] add-to-cart-component,
+html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-button {
+  opacity: 0 !important;
+}
+
 /* SKIMS product cards have no quick-add button — just the wishlist heart.
    Hide Horizon's quick-add overlay on every product card (all pages). */
 .product-card .quick-add,
@@ -169,11 +194,18 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
+  position: relative;
+  z-index: 2; /* sit above .product-card__link's absolute full-card overlay */
 }
 :is([data-template^="collection"]) .sbj-heart svg {
   width: 18px;
   height: 18px;
   display: block;
+}
+/* Saved state — solid red heart (SKIMS-style wishlist red) */
+:is([data-template^="collection"]) .sbj-heart.is-on svg {
+  fill: #E0182B;
+  stroke: #E0182B;
 }
 
 /* Force exactly 4 product columns on collection pages (SKIMS is 4-col) */
@@ -591,7 +623,7 @@
   cursor: pointer;
 }
 [data-template^="product"] .sbj-pdp-heart svg { width: 22px; height: 22px; }
-[data-template^="product"] .sbj-pdp-heart.is-on svg { fill: #2D2A26; }
+[data-template^="product"] .sbj-pdp-heart.is-on svg { fill: #E0182B; stroke: #E0182B; }
 [data-template^="product"] .sbj-pdp-modelsize {
   position: absolute;
   left: 16px;
