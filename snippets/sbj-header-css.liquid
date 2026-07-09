@@ -159,5 +159,16 @@
   .header-logo .header-logo__image-container--inverse {
     display: none !important;
   }
+
+  /* While the header is transparent over the hero, render the circled logo
+     WHITE: invert flips the black mark to white (and any white/light box to
+     black), then screen-blending drops everything dark, leaving only the
+     white mark over the photo. The instant the header sticks
+     (data-sticky-state='active') the rule stops matching → black logo on
+     the solid white bar. Same zero-JS state gate as the desktop skin. */
+  #header-component[transparent]:not([data-sticky-state='active']) .header-logo__image-container--original .header-logo__image {
+    filter: invert(1);
+    mix-blend-mode: screen;
+  }
 }
 </style>
