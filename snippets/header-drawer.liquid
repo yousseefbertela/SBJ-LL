@@ -132,14 +132,15 @@
                         </span>
                       </summary>
                       {% liquid
+                        # SBJ: drawer child links always carry their collection thumbnail
+                        # (juvenileeg-style small photos), not only in collection_images mode.
+                        # This snippet renders the MOBILE drawer only, so desktop is unaffected.
                         assign render_link_image = false
-                        if block_settings.menu_style == 'collection_images'
-                          assign catalog_links = link.links | where: 'type', 'catalog_link'
-                          assign collection_list_links = link.links | where: 'type', 'collections_link'
-                          assign collection_links = link.links | where: 'type', 'collection_link'
-                          if catalog_links.size > 0 or collection_list_links.size > 0 or collection_links.size > 0
-                            assign render_link_image = true
-                          endif
+                        assign catalog_links = link.links | where: 'type', 'catalog_link'
+                        assign collection_list_links = link.links | where: 'type', 'collections_link'
+                        assign collection_links = link.links | where: 'type', 'collection_link'
+                        if catalog_links.size > 0 or collection_list_links.size > 0 or collection_links.size > 0
+                          assign render_link_image = true
                         endif
                       %}
                       <ul

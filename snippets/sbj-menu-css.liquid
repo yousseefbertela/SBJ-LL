@@ -211,7 +211,8 @@
     color: #111 !important;
   }
 
-  /* The "+" expander: thin, right-aligned, rotates to × when open */
+  /* The "+" expander: thin, right-aligned. Open/close morph (+ → −) is
+     Horizon-native (base.css rotates the bars) — don't add transforms on top. */
   .header-drawer .menu-drawer__menu-item--mainlist > .svg-wrapper.icon-plus {
     padding-block: 0;
     padding-inline-start: var(--padding-xl);
@@ -219,10 +220,6 @@
   .header-drawer .menu-drawer__menu-item--mainlist .icon-plus svg {
     width: 20px;
     height: 20px;
-    transition: transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
-  }
-  .header-drawer details[open] > .menu-drawer__menu-item--mainlist .icon-plus svg {
-    transform: rotate(45deg);
   }
 
   /* ---- Child links: small + regular, indent-free like pic 2 ---- */
@@ -238,6 +235,48 @@
     text-transform: none !important;
     color: #333 !important;
     padding-block: 0 !important;
+  }
+
+  /* ---- Child links WITH photos: small rounded thumb + label rows.
+     header-drawer.liquid now always renders link-featured-image for collection
+     links, which also adds the --grid class (2-col, 16/9 tiles). Reshape both
+     into single-column rows with a 48px square thumbnail. ---- */
+  .header-drawer .menu-drawer__menu--childlist.menu-drawer__menu--grid {
+    display: flex !important;
+    flex-direction: column;
+    gap: 2px !important;
+    padding-inline-end: 0 !important;
+  }
+  .header-drawer .menu-drawer__menu--childlist .menu-drawer__menu-item:has(> .menu-drawer__link-image) {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px;
+    padding-block: 5px !important;
+  }
+  .header-drawer .menu-drawer__menu--childlist .menu-drawer__link-image {
+    width: 48px !important;
+    flex: 0 0 48px;
+    aspect-ratio: 1 !important;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 14px;
+  }
+  /* Items in a photo list that have no image: swap the 16/9 ghost for a 48px square */
+  .header-drawer .menu-drawer__menu--grid:has(.menu-drawer__link-image)
+    .menu-drawer__menu-item:not(:has(> .menu-drawer__link-image)) {
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 12px;
+    padding-block: 5px !important;
+  }
+  .header-drawer .menu-drawer__menu--grid:has(.menu-drawer__link-image)
+    .menu-drawer__menu-item:not(:has(> .menu-drawer__link-image))::before {
+    width: 48px !important;
+    flex: 0 0 48px;
+    aspect-ratio: 1 !important;
+    border-radius: 14px !important;
   }
 
   /* ---- Featured products strip → small pill chips ---- */
