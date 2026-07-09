@@ -133,4 +133,156 @@
 #header-component .mega-menu__content-list--products .mega-menu__content-list-item:nth-child(n+3) {
   display: none !important;
 }
+
+/* ==========================================================================
+   5. MOBILE MENU DRAWER — juvenileeg.com look (mobile ONLY, <750px).
+   Floating rounded glass card, "× Close" label, big bold top-level rows with
+   native "+" accordions (drawer_accordion:true in header-group.json), and the
+   featured-product strip restyled as pill chips. Desktop mega menu untouched.
+   ========================================================================== */
+@media screen and (max-width: 749px) {
+  /* ---- The card itself: inset, rounded, frosted ---- */
+  .header-drawer .menu-drawer {
+    top: 10px !important;
+    left: 10px !important;
+    width: calc(100vw - 20px) !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: calc(100dvh - 80px) !important;
+    border: none !important;
+    border-radius: 28px !important;
+    background: rgba(255, 255, 255, 0.86) !important;
+    backdrop-filter: blur(28px) saturate(1.4);
+    -webkit-backdrop-filter: blur(28px) saturate(1.4);
+    box-shadow: 0 24px 60px rgb(0 0 0 / 0.22) !important;
+    padding-bottom: 20px;
+  }
+  /* Slide down-from-top feel instead of the full-height side sheet. */
+  .header-drawer .menu-drawer {
+    transform: translateY(-16px) translateX(0);
+    opacity: 0;
+  }
+  .header-drawer .menu-open > .menu-drawer {
+    transform: translateY(0) translateX(0);
+    opacity: 1;
+  }
+
+  /* Blur the page behind the card (juvenile does). */
+  .header-drawer .menu-drawer__backdrop {
+    backdrop-filter: brightness(0.8) blur(6px);
+    -webkit-backdrop-filter: brightness(0.8) blur(6px);
+  }
+
+  /* ---- "× Close" row ---- */
+  .header-drawer .menu-drawer__close-button {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 22px 24px 6px !important;
+    color: #111 !important;
+  }
+  .header-drawer .menu-drawer__close-button::after {
+    content: 'Close';
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1;
+  }
+  .header-drawer .menu-drawer__close-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  /* ---- Menu list geometry ---- */
+  .header-drawer .menu-drawer__menu {
+    padding-inline: 24px;
+  }
+
+  /* ---- Top-level rows: BIG + bold (pic-2 headline links) ---- */
+  .header-drawer .menu-drawer__menu-item--mainlist {
+    min-height: 0 !important;
+    padding-block: 9px !important;
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-size: 31px !important;
+    font-weight: 700 !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.02em !important;
+    text-transform: none !important;
+    color: #111 !important;
+  }
+
+  /* The "+" expander: thin, right-aligned, rotates to × when open */
+  .header-drawer .menu-drawer__menu-item--mainlist > .svg-wrapper.icon-plus {
+    padding-block: 0;
+    padding-inline-start: var(--padding-xl);
+  }
+  .header-drawer .menu-drawer__menu-item--mainlist .icon-plus svg {
+    width: 20px;
+    height: 20px;
+    transition: transform 200ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .header-drawer details[open] > .menu-drawer__menu-item--mainlist .icon-plus svg {
+    transform: rotate(45deg);
+  }
+
+  /* ---- Child links: small + regular, indent-free like pic 2 ---- */
+  .header-drawer .menu-drawer__menu--childlist {
+    padding-block: 2px 10px !important;
+  }
+  .header-drawer .menu-drawer__menu-item--child {
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    line-height: 2.1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    color: #333 !important;
+    padding-block: 0 !important;
+  }
+
+  /* ---- Featured products strip → small pill chips ---- */
+  .header-drawer .menu-drawer__featured-content-list {
+    gap: 10px;
+    padding-block: 14px 4px;
+  }
+  .header-drawer .menu-drawer__featured-content-list-item--product {
+    width: auto !important;
+  }
+  .header-drawer .menu-drawer__featured-content-list-item--product .resource-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    border-radius: 999px;
+    padding: 6px 18px 6px 6px;
+    box-shadow: 0 1px 4px rgb(0 0 0 / 0.06);
+  }
+  .header-drawer .menu-drawer__featured-content-list-item--product .resource-card__media {
+    width: 44px !important;
+    flex: 0 0 44px;
+    aspect-ratio: 1 !important;
+    --resource-card-aspect-ratio: 1 !important;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .header-drawer .menu-drawer__featured-content-list-item--product .resource-card__content {
+    padding: 0 !important;
+  }
+  .header-drawer .menu-drawer__featured-content-list-item--product .resource-card__title {
+    font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  /* Chips are title+image only */
+  .header-drawer .menu-drawer__featured-content-list-item--product .resource-card .price,
+  .header-drawer .menu-drawer__featured-content-list-item--product .resource-card [class*='price'] {
+    display: none !important;
+  }
+}
 </style>
