@@ -131,24 +131,37 @@
                           {{- 'icon-plus.svg' | inline_asset_content -}}
                         </span>
                       </summary>
-                      {% liquid
-                        # SBJ: drawer child links always carry their collection thumbnail
-                        # (juvenileeg-style small photos), not only in collection_images mode.
-                        # This snippet renders the MOBILE drawer only, so desktop is unaffected.
-                        assign render_link_image = false
-                        assign catalog_links = link.links | where: 'type', 'catalog_link'
-                        assign collection_list_links = link.links | where: 'type', 'collections_link'
-                        assign collection_links = link.links | where: 'type', 'collection_link'
-                        if catalog_links.size > 0 or collection_list_links.size > 0 or collection_links.size > 0
-                          assign render_link_image = true
-                        endif
-                      %}
+                      {%- comment -%}
+                        SBJ: drawer child links always carry a small collection thumbnail
+                        (juvenileeg-style photo rows), whatever the menu_style setting.
+                        Menu items are often added as plain URL links rather than
+                        collection links, so resolve the collection from the /collections/
+                        handle in the URL too. Drawer-only snippet; desktop unaffected.
+                      {%- endcomment -%}
                       <ul
-                        class="menu-drawer__menu menu-drawer__menu--childlist menu-drawer__animated-element details-content{% if render_link_image %} menu-drawer__menu--grid{% endif %}"
+                        class="menu-drawer__menu menu-drawer__menu--childlist menu-drawer__animated-element details-content menu-drawer__menu--grid"
                         role="list"
                         tabindex="-1"
                       >
                         {%- for childlink in link.links -%}
+                          {% liquid
+                            assign child_img = blank
+                            if childlink.type == 'collection_link'
+                              assign child_collection = childlink.object
+                            elsif childlink.url contains '/collections/'
+                              assign child_handle = childlink.url | split: '/collections/' | last | split: '/' | first | split: '?' | first
+                              assign child_collection = collections[child_handle]
+                            else
+                              assign child_collection = blank
+                            endif
+                            if child_collection != blank
+                              assign child_img = child_collection.featured_image
+                              if child_img == blank
+                                assign first_product_with_image = child_collection.products | where: 'featured_image' | first
+                                assign child_img = first_product_with_image.featured_image
+                              endif
+                            endif
+                          %}
                           <li
                             class="menu-drawer__list-item"
                             style="--menu-drawer-animation-index: {{ forloop.index }};"
@@ -161,12 +174,12 @@
                                 aria-current="page"
                               {% endif %}
                             >
-                              {% if render_link_image %}
-                                {% render 'link-featured-image',
-                                  link: childlink,
-                                  class: 'menu-drawer__link-image',
-                                  sizes: 'auto, 400px'
-                                %}
+                              {% if child_img != blank %}
+                                {{
+                                  child_img
+                                  | image_url: width: 96
+                                  | image_tag: loading: 'lazy', class: 'menu-drawer__link-image', sizes: '48px'
+                                }}
                               {% endif %}
                               <span class="menu-drawer__menu-item-text wrap-text">{{ childlink.title | escape }}</span>
                             </a>

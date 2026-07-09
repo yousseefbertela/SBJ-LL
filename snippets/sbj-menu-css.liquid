@@ -221,6 +221,23 @@
     width: 20px;
     height: 20px;
   }
+  /* Slow the + → − bar morph so it reads as a morph, not a blink. */
+  .header-drawer .menu-drawer summary .icon-plus :is(.horizontal, .vertical) {
+    transition: transform 300ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      opacity 300ms cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+  }
+
+  /* Smooth expand/collapse. Horizon's accordion component disables its
+     height transition whenever the <details> isn't :focus-within — which is
+     exactly what happens on an iOS tap — so sections snapped open. Force the
+     transition in every state. */
+  .header-drawer .menu-drawer accordion-custom details::details-content,
+  .header-drawer .menu-drawer accordion-custom details .details-content {
+    transition: content-visibility 340ms allow-discrete,
+      block-size 340ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      padding-block 340ms cubic-bezier(0.22, 0.61, 0.36, 1),
+      opacity 240ms cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+  }
 
   /* ---- Child links: small + regular, indent-free like pic 2 ---- */
   .header-drawer .menu-drawer__menu--childlist {
