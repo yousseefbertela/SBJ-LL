@@ -145,30 +145,7 @@
      ============================================================ */
 }
 
-/* ============================================================
-   MOBILE (<750px): always show the MAIN circled logo in the nav row.
-   Horizon swaps to settings.logo_inverse while the home header is
-   transparent at the top (blocks/_header-logo.liquid renders both and
-   toggles via --header-logo-display vars) — the user wants one logo,
-   the circled mark, in every state.
-   ============================================================ */
-@media screen and (max-width: 749px) {
-  .header-logo .header-logo__image-container--original {
-    display: block !important;
-  }
-  .header-logo .header-logo__image-container--inverse {
-    display: none !important;
-  }
-
-  /* While the header is transparent over the hero, render the circled logo
-     WHITE: invert flips the black mark to white (and any white/light box to
-     black), then screen-blending drops everything dark, leaving only the
-     white mark over the photo. The instant the header sticks
-     (data-sticky-state='active') the rule stops matching → black logo on
-     the solid white bar. Same zero-JS state gate as the desktop skin. */
-  #header-component[transparent]:not([data-sticky-state='active']) .header-logo__image-container--original .header-logo__image {
-    filter: invert(1);
-    mix-blend-mode: screen;
-  }
-}
+/* Mobile logo: native Horizon swap — settings.logo_inverse (white circled
+   mark) over the transparent hero, settings.logo (black) once the header
+   sticks. Both images are theme settings; no CSS override needed. */
 </style>
