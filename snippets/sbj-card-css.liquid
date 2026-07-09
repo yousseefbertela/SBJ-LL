@@ -124,36 +124,35 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   padding: 6px 8px;
 }
 
-/* Swatches row — color dots left, heart right (SKIMS layout).
-   The dots now come from Shopify's native swatches system (variant-swatches
-   snippet, called directly from the swatches_sbj custom-liquid block so the
-   heart stays on the same row) — colors are admin-editable per product via
-   Options > Color, no CSS class per color name needed anymore. */
-:is([data-template^="collection"]) .sbj-swatches-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* Swatches row — Horizon's NATIVE Swatches block (blocks/swatches.liquid,
+   renders <product-swatches>); colors are admin-editable per product via
+   Options > Color. The wishlist heart is a separate zero-height overlay
+   block (heart_sbj) anchored to the gallery bottom so it sits on the same
+   visual row, dots left / heart right (SKIMS layout). */
+:is([data-template^="collection"]) .product-card product-swatches {
   margin: 8px 0 0;
   min-height: 22px;
-  padding-right: 16px;   /* pull the wishlist heart in from the card edge (SKIMS) */
+  align-items: center;
+  padding-right: 40px;   /* keep dots clear of the overlaid wishlist heart */
+  box-sizing: border-box;
 }
-:is([data-template^="collection"]) .sbj-swatches-row swatches-variant-picker-component {
+:is([data-template^="collection"]) .product-card product-swatches swatches-variant-picker-component {
   width: auto !important;
   flex: 1;
   min-width: 0;
   overflow: hidden;
 }
-:is([data-template^="collection"]) .sbj-swatches-row overflow-list::part(list) {
+:is([data-template^="collection"]) .product-card product-swatches overflow-list::part(list) {
   gap: 4px !important;
 }
-:is([data-template^="collection"]) .sbj-swatches-row .variant-option__swatch {
+:is([data-template^="collection"]) .product-card product-swatches .variant-option__swatch {
   flex-shrink: 0;
 }
-:is([data-template^="collection"]) .sbj-swatches-row .variant-option__button-label {
+:is([data-template^="collection"]) .product-card product-swatches .variant-option__button-label {
   padding: 0;
   display: block;
 }
-:is([data-template^="collection"]) .sbj-swatches-row .swatch {
+:is([data-template^="collection"]) .product-card product-swatches .swatch {
   width: 14px !important;
   height: 14px !important;
   border-radius: 2px !important;
@@ -162,16 +161,36 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
 }
 /* First swatch gets the SKIMS selection ring (purely visual, matches the old
    behaviour — collection cards don't have a real "selected" variant state) */
-:is([data-template^="collection"]) .sbj-swatches-row .variant-option__swatch:first-child .swatch {
+:is([data-template^="collection"]) .product-card product-swatches .variant-option__swatch:first-child .swatch {
   outline: 1px solid #2D2A26;
   outline-offset: 1px;
 }
 /* Hide the native "+N" overflow count bubble — the row already truncates via
    overflow:hidden above, matching the old behaviour of just clipping. */
-:is([data-template^="collection"]) .sbj-swatches-row .hidden-swatches__count {
+:is([data-template^="collection"]) .product-card product-swatches .hidden-swatches__count {
   display: none;
 }
-/* Heart button in swatches row */
+/* Wishlist heart — zero-height wrapper right after the gallery (like the
+   badge), heart absolutely positioned to line up with the swatch row:
+   row = 8px margin + 22px tall, icon is 18px → top 8 + (22-18)/2 = 10px. */
+:is([data-template^="collection"]) .sbj-heart-pos {
+  position: relative;
+  height: 0;
+  overflow: visible;
+  z-index: 2;
+}
+:is([data-template^="collection"]) .sbj-heart-pos .sbj-heart {
+  position: absolute;
+  top: 10px;
+  right: 16px;
+}
+/* Products with no colour swatches render no <product-swatches> at all — keep
+   the row's 30px of space (8px margin + 22px row) so the heart never overlaps
+   the eyebrow/title. The heart block's plain custom-liquid wrapper div is the
+   element sized here. */
+:is([data-template^="collection"]) .product-card div:has(> .sbj-heart-pos):not(:has(+ product-swatches)) {
+  height: 30px;
+}
 :is([data-template^="collection"]) .sbj-heart {
   background: none;
   border: none;
