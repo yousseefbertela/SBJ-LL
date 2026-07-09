@@ -47,8 +47,19 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   display: none !important;
 }
 
-/* Eyebrow — product type / fabric family, muted grey uppercase (SKIMS) */
-:is([data-template^="collection"], [data-template^="product"]) .sbj-eyebrow {
+/* Eyebrow — vendor label, muted grey uppercase (SKIMS).
+   eyebrow_sbj (card) and eyebrow_pdp were converted from custom-liquid to a
+   native "text" block bound to Product > Vendor via dynamic source
+   (<p>{{ closest.product.vendor }}</p> in the block's own settings.text) —
+   Product > Type is NOT a supported dynamic-source field (Shopify rejects it
+   at push validation), Vendor is. Horizon renders the block as a
+   <p>-wrapped div carrying `text-block--{block id}`, so these selectors key
+   off the block's JSON id directly instead of a hand-added class
+   (.sbj-eyebrow kept too, for we_think and anywhere else still using the
+   old custom-liquid span). The <p> also needs its default margin killed. */
+:is([data-template^="collection"], [data-template^="product"]) .sbj-eyebrow,
+:is([data-template^="collection"], [data-template^="product"]) .text-block--eyebrow_sbj,
+:is([data-template^="collection"], [data-template^="product"]) .text-block--eyebrow_pdp {
   display: block;
   font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 10px;
@@ -58,6 +69,10 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   text-transform: uppercase;
   color: #6F6C69;
   margin: 10px 0 0;
+}
+:is([data-template^="collection"], [data-template^="product"]) .text-block--eyebrow_sbj p,
+:is([data-template^="collection"], [data-template^="product"]) .text-block--eyebrow_pdp p {
+  margin: 0;
 }
 
 /* Product name — clean regular-weight uppercase (SKIMS card name line is 14px/400).
@@ -258,8 +273,11 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
 
 /* ----- Product page (PDP) — SKIMS match ------------------------------------ */
 /* Eyebrow (fabric) — bold dark uppercase, sits above the name (SKIMS).
-   Scoped with [data-template] so it beats the general .sbj-eyebrow rule. */
-[data-template^="product"] .sbj-eyebrow--pdp {
+   Scoped with [data-template] so it beats the general .sbj-eyebrow rule.
+   eyebrow_pdp is now a native text block (dynamic-source bound to Vendor) —
+   it renders as .text-block--eyebrow_pdp, not .sbj-eyebrow--pdp. */
+[data-template^="product"] .sbj-eyebrow--pdp,
+[data-template^="product"] .text-block--eyebrow_pdp {
   display: inline-block;
   font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
   font-size: 12px !important;

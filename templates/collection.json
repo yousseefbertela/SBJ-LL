@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "section": {
       "type": "section",
@@ -172,9 +173,11 @@
               }
             },
             "eyebrow_sbj": {
-              "type": "custom-liquid",
+              "type": "text",
               "settings": {
-                "custom_liquid": "<span class=\"sbj-eyebrow\">{{ closest.product.type | default: closest.product.vendor }}</span>"
+                "width": "fit-content",
+                "type_preset": "custom",
+                "text": "<p>{{ closest.product.vendor }}</p>"
               }
             },
             "product_title_4nY4eT": {
@@ -284,7 +287,11 @@
           }
         }
       },
-      "block_order": ["p_solutions", "p_bundle", "p_bras"],
+      "block_order": [
+        "p_solutions",
+        "p_bundle",
+        "p_bras"
+      ],
       "name": "SBJ Promo tiles",
       "settings": {
         "heading": "Looking for more?"

@@ -56,7 +56,10 @@
           "blocks": {}
         }
       },
-      "block_order": ["text_tqQTNE", "text_twGGkJ"],
+      "block_order": [
+        "text_tqQTNE",
+        "text_twGGkJ"
+      ],
       "name": "Collection heading",
       "settings": {
         "content_direction": "column",
@@ -138,7 +141,14 @@
           }
         }
       },
-      "block_order": ["t_tees", "t_tops", "t_dresses", "t_hoodies", "t_pants", "t_shorts"],
+      "block_order": [
+        "t_tees",
+        "t_tops",
+        "t_dresses",
+        "t_hoodies",
+        "t_pants",
+        "t_shorts"
+      ],
       "name": "SBJ Subcategory tiles",
       "settings": {}
     },
@@ -213,9 +223,11 @@
               }
             },
             "eyebrow_sbj": {
-              "type": "custom-liquid",
+              "type": "text",
               "settings": {
-                "custom_liquid": "<span class=\"sbj-eyebrow\">{{ closest.product.type | default: closest.product.vendor }}</span>"
+                "width": "fit-content",
+                "type_preset": "custom",
+                "text": "<p>{{ closest.product.vendor }}</p>"
               }
             },
             "product_title_4nY4eT": {
@@ -266,7 +278,14 @@
               "blocks": {}
             }
           },
-          "block_order": ["card-gallery", "badge_sbj", "swatches_sbj", "eyebrow_sbj", "product_title_4nY4eT", "price_EzJzMm"]
+          "block_order": [
+            "card-gallery",
+            "badge_sbj",
+            "swatches_sbj",
+            "eyebrow_sbj",
+            "product_title_4nY4eT",
+            "price_EzJzMm"
+          ]
         }
       },
       "settings": {
@@ -318,7 +337,11 @@
           }
         }
       },
-      "block_order": ["p_solutions", "p_bundle", "p_bras"],
+      "block_order": [
+        "p_solutions",
+        "p_bundle",
+        "p_bras"
+      ],
       "name": "SBJ Promo tiles",
       "settings": {
         "heading": "Looking for more?"
@@ -334,5 +357,12 @@
       }
     }
   },
-  "order": ["section", "subcats", "main", "we_think", "promo", "essentials"]
+  "order": [
+    "section",
+    "subcats",
+    "main",
+    "we_think",
+    "promo",
+    "essentials"
+  ]
 }

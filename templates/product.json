@@ -6,7 +6,8 @@
  * or related systems. Please exercise caution as any changes
  * made to this file may be overwritten.
  * ------------------------------------------------------------
- */{
+ */
+{
   "sections": {
     "main": {
       "type": "product-information",
@@ -105,9 +106,11 @@
               },
               "blocks": {
                 "eyebrow_pdp": {
-                  "type": "custom-liquid",
+                  "type": "text",
                   "settings": {
-                    "custom_liquid": "<span class=\"sbj-eyebrow sbj-eyebrow--pdp\">{{ closest.product.type | default: closest.product.vendor }}</span>"
+                    "width": "fit-content",
+                    "type_preset": "custom",
+                    "text": "<p>{{ closest.product.vendor }}</p>"
                   }
                 },
                 "text_xrnftG": {
