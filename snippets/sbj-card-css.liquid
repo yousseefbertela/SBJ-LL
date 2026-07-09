@@ -124,7 +124,11 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   padding: 6px 8px;
 }
 
-/* Swatches row — color circles left, heart right (SKIMS layout) */
+/* Swatches row — color dots left, heart right (SKIMS layout).
+   The dots now come from Shopify's native swatches system (variant-swatches
+   snippet, called directly from the swatches_sbj custom-liquid block so the
+   heart stays on the same row) — colors are admin-editable per product via
+   Options > Color, no CSS class per color name needed anymore. */
 :is([data-template^="collection"]) .sbj-swatches-row {
   display: flex;
   align-items: center;
@@ -133,71 +137,40 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   min-height: 22px;
   padding-right: 16px;   /* pull the wishlist heart in from the card edge (SKIMS) */
 }
-:is([data-template^="collection"]) .sbj-swatches {
-  display: flex;
-  gap: 4px;
-  flex-wrap: nowrap;
+:is([data-template^="collection"]) .sbj-swatches-row swatches-variant-picker-component {
+  width: auto !important;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
-  max-width: calc(100% - 28px);
 }
-:is([data-template^="collection"]) .sbj-swatch {
-  width: 14px;
-  height: 14px;
-  border-radius: 2px;
-  border: 1px solid rgba(0,0,0,0.12);
-  display: inline-block;
+:is([data-template^="collection"]) .sbj-swatches-row overflow-list::part(list) {
+  gap: 4px !important;
+}
+:is([data-template^="collection"]) .sbj-swatches-row .variant-option__swatch {
   flex-shrink: 0;
-  background: #ccc;
+}
+:is([data-template^="collection"]) .sbj-swatches-row .variant-option__button-label {
+  padding: 0;
+  display: block;
+}
+:is([data-template^="collection"]) .sbj-swatches-row .swatch {
+  width: 14px !important;
+  height: 14px !important;
+  border-radius: 2px !important;
+  border: 1px solid rgba(0,0,0,0.12) !important;
   box-sizing: border-box;
 }
-/* First (active) swatch gets the SKIMS selection ring */
-:is([data-template^="collection"]) .sbj-swatch:first-child {
+/* First swatch gets the SKIMS selection ring (purely visual, matches the old
+   behaviour — collection cards don't have a real "selected" variant state) */
+:is([data-template^="collection"]) .sbj-swatches-row .variant-option__swatch:first-child .swatch {
   outline: 1px solid #2D2A26;
   outline-offset: 1px;
 }
-:is([data-template^="collection"]) .sbj-swatch--black { background: #1a1a1a; }
-:is([data-template^="collection"]) .sbj-swatch--white { background: #fff; border-color: rgba(0,0,0,0.3); }
-:is([data-template^="collection"]) .sbj-swatch--sand { background: #c2a98a; }
-:is([data-template^="collection"]) .sbj-swatch--pink { background: #f5a8be; }
-:is([data-template^="collection"]) .sbj-swatch--beige { background: #e0cdb8; border-color: rgba(0,0,0,0.2); }
-:is([data-template^="collection"]) .sbj-swatch--grey,
-:is([data-template^="collection"]) .sbj-swatch--gray { background: #9a9a9a; }
-:is([data-template^="collection"]) .sbj-swatch--heather-grey { background: #b4b4b4; }
-:is([data-template^="collection"]) .sbj-swatch--navy { background: #1a2a5a; }
-:is([data-template^="collection"]) .sbj-swatch--brown { background: #5c3d2e; }
-:is([data-template^="collection"]) .sbj-swatch--dark-brown { background: #3d1f0f; }
-:is([data-template^="collection"]) .sbj-swatch--oatmeal { background: #ddd4c4; border-color: rgba(0,0,0,0.2); }
-:is([data-template^="collection"]) .sbj-swatch--mauve { background: #c4a0b0; }
-:is([data-template^="collection"]) .sbj-swatch--cocoa { background: #5c3a28; }
-:is([data-template^="collection"]) .sbj-swatch--onyx { background: #2a2a2a; }
-:is([data-template^="collection"]) .sbj-swatch--marble { background: #d0c8c0; border-color: rgba(0,0,0,0.2); }
-:is([data-template^="collection"]) .sbj-swatch--mineral-blue { background: #5a7a8a; }
-:is([data-template^="collection"]) .sbj-swatch--slate { background: #607a8a; }
-/* Extended SKIMS palette (catalog colors) */
-:is([data-template^="collection"]) .sbj-swatch--clay { background: #cdab92; }
-:is([data-template^="collection"]) .sbj-swatch--clay-heather { background: #c2a994; }
-:is([data-template^="collection"]) .sbj-swatch--sienna { background: #9e6b52; }
-:is([data-template^="collection"]) .sbj-swatch--sienna-heather { background: #ab7d68; }
-:is([data-template^="collection"]) .sbj-swatch--cocoa-heather { background: #6f4d3c; }
-:is([data-template^="collection"]) .sbj-swatch--mineral { background: #6c8893; }
-:is([data-template^="collection"]) .sbj-swatch--bronze { background: #8a6a3f; }
-:is([data-template^="collection"]) .sbj-swatch--snow { background: #f6f4f0; border-color: rgba(0,0,0,0.2); }
-:is([data-template^="collection"]) .sbj-swatch--chalk { background: #ece7df; border-color: rgba(0,0,0,0.2); }
-:is([data-template^="collection"]) .sbj-swatch--paper { background: #e9e3d6; border-color: rgba(0,0,0,0.2); }
-:is([data-template^="collection"]) .sbj-swatch--oyster { background: #d7cfc2; border-color: rgba(0,0,0,0.2); }
-:is([data-template^="collection"]) .sbj-swatch--peony { background: #e7a3b3; }
-:is([data-template^="collection"]) .sbj-swatch--bubble-gum { background: #f4a6c0; }
-:is([data-template^="collection"]) .sbj-swatch--cherry-blossom { background: #f1cdd8; }
-:is([data-template^="collection"]) .sbj-swatch--lilac { background: #c7b6d9; }
-:is([data-template^="collection"]) .sbj-swatch--poppy { background: #d6492f; }
-:is([data-template^="collection"]) .sbj-swatch--phoenix { background: #c0473a; }
-:is([data-template^="collection"]) .sbj-swatch--espresso { background: #3a2a22; }
-:is([data-template^="collection"]) .sbj-swatch--umber-leopard { background: #7c5c3c; }
-:is([data-template^="collection"]) .sbj-swatch--kyanite { background: #38597a; }
-:is([data-template^="collection"]) .sbj-swatch--ivy { background: #495a39; }
-:is([data-template^="collection"]) .sbj-swatch--cumin { background: #b08842; }
-:is([data-template^="collection"]) .sbj-swatch--poppy { background: #d6492f; }
-:is([data-template^="collection"]) .sbj-swatch--chalk { background: #ece7df; border-color: rgba(0,0,0,0.2); }
+/* Hide the native "+N" overflow count bubble — the row already truncates via
+   overflow:hidden above, matching the old behaviour of just clipping. */
+:is([data-template^="collection"]) .sbj-swatches-row .hidden-swatches__count {
+  display: none;
+}
 /* Heart button in swatches row */
 :is([data-template^="collection"]) .sbj-heart {
   background: none;
