@@ -144,4 +144,20 @@
      renders its native solid header. White is never emitted there.
      ============================================================ */
 }
+
+/* ============================================================
+   MOBILE (<750px): always show the MAIN circled logo in the nav row.
+   Horizon swaps to settings.logo_inverse while the home header is
+   transparent at the top (blocks/_header-logo.liquid renders both and
+   toggles via --header-logo-display vars) — the user wants one logo,
+   the circled mark, in every state.
+   ============================================================ */
+@media screen and (max-width: 749px) {
+  .header-logo .header-logo__image-container--original {
+    display: block !important;
+  }
+  .header-logo .header-logo__image-container--inverse {
+    display: none !important;
+  }
+}
 </style>
