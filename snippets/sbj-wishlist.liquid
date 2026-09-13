@@ -213,10 +213,16 @@ body.sbj-wishlist-open { overflow: hidden; }
     };
   }
 
+  // Card hearts are keyed per colour ("<productId>-<variantId>"); the PDP heart is
+  // keyed by product and reads as saved when the product or any of its colours is.
   function hydrateHearts() {
     var ids = readAll().map(function (i) { return String(i.id); });
-    document.querySelectorAll('.sbj-heart[data-product-id], .sbj-pdp-heart[data-product-id]').forEach(function (el) {
+    document.querySelectorAll('.sbj-heart[data-product-id]').forEach(function (el) {
       el.classList.toggle('is-on', ids.indexOf(String(el.getAttribute('data-product-id'))) > -1);
+    });
+    document.querySelectorAll('.sbj-pdp-heart[data-product-id]').forEach(function (el) {
+      var pid = String(el.getAttribute('data-product-id'));
+      el.classList.toggle('is-on', ids.some(function (id) { return id === pid || id.indexOf(pid + '-') === 0; }));
     });
   }
 

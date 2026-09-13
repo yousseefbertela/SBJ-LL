@@ -30,7 +30,7 @@
     type="button"
     class="sbj-heart sbj-rec__heart"
     aria-label="Add {{ product.title | escape }}{% if color %} ({{ color | escape }}){% endif %} to wishlist"
-    data-product-id="{{ product.id }}"
+    data-product-id="{{ product.id }}{% if variant_id %}-{{ variant_id }}{% endif %}"
     data-handle="{{ product.handle | escape }}"
     data-title="{{ product.title | escape }}{% if color %} – {{ color | escape }}{% endif %}"
     data-price="{{ price | money }}"

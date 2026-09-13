@@ -158,6 +158,34 @@
       assign swatch_attr = 'data-option-value-id="' | append: color_value.id | append: '"'
       assign swatch_attr_checked = swatch_attr | append: ' checked'
       assign html = html | replace_first: swatch_attr, swatch_attr_checked
+
+      # 4. Wishlist heart → saves THIS colour (id "product-variant", colour in the
+      #    title, this colour's image, link to this variant). Without this every
+      #    colour card of a product shares one heart and they all light up together.
+      assign heart_id = 'class="sbj-heart" aria-label="Add to wishlist" data-product-id="' | append: product.id | append: '"'
+      assign heart_id_color = 'class="sbj-heart" aria-label="Add to wishlist" data-product-id="' | append: product.id | append: '-' | append: color_variant.id | append: '"'
+      assign html = html | replace_first: heart_id, heart_id_color
+      assign title_esc = product.title | escape
+      assign color_esc = color_value.name | escape
+      assign heart_title = 'data-title="' | append: title_esc | append: '"'
+      assign heart_title_color = 'data-title="' | append: title_esc | append: ' – ' | append: color_esc | append: '"'
+      assign html = html | replace_first: heart_title, heart_title_color
+      if color_media_id != blank
+        assign default_img_esc = product.featured_image | image_url: width: 400 | escape
+        assign heart_img = 'data-image="' | append: default_img_esc | append: '"'
+        for m in product.media
+          if m.id == color_media_id
+            assign color_img_esc = m.preview_image | image_url: width: 400 | escape
+            assign heart_img_color = 'data-image="' | append: color_img_esc | append: '"'
+            assign html = html | replace_first: heart_img, heart_img_color
+            break
+          endif
+        endfor
+      endif
+      assign url_esc = product.url | escape
+      assign heart_url = 'data-url="' | append: url_esc | append: '"'
+      assign heart_url_color = 'data-url="' | append: url_esc | append: '?variant=' | append: color_variant.id | append: '"'
+      assign html = html | replace_first: heart_url, heart_url_color
     -%}
     <li
       id="{{ section.id }}-{{ product.id }}-{{ color_variant.id }}"
