@@ -631,6 +631,64 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
 @media (max-width: 749px) {
   [data-template^="product"] .sbj-pdp-modelsize { font-size: 10px; padding: 6px 10px; }
 }
+/* Model Sizing text bubble (metafield levlocal.model_sizing), sits above the button */
+[data-template^="product"] .sbj-pdp-modelsize__text {
+  position: absolute;
+  left: 16px;
+  bottom: 56px;
+  max-width: min(320px, calc(100% - 32px));
+  padding: 10px 12px;
+  background: rgba(255,255,255,0.96);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 2px;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  color: #2D2A26;
+  display: none;
+}
+[data-template^="product"] .sbj-pdp-modelsize__text.is-open { display: block; }
+
+/* Size Guide popup (metafield levlocal.size_chart image) */
+.sbj-size-chart {
+  border: none;
+  padding: 0;
+  background: transparent;
+  max-width: min(960px, 92vw);
+  width: auto;
+}
+.sbj-size-chart::backdrop { background: rgba(0,0,0,0.45); }
+.sbj-size-chart__box {
+  background: #fff;
+  border-radius: 2px;
+  overflow: hidden;
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #2D2A26;
+}
+.sbj-size-chart__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid #E5E2DE;
+}
+.sbj-size-chart__title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+.sbj-size-chart__close {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  color: #2D2A26;
+  display: inline-flex;
+}
+.sbj-size-chart__body { padding: 16px; max-height: 80vh; overflow: auto; }
+.sbj-size-chart__img { display: block; width: 100%; height: auto; max-height: calc(80vh - 32px); object-fit: contain; }
+
 
 /* ====== PDP INFO TABS → SKIMS horizontal tabs (Details / Fit & Fabric / Shipping) ===== */
 [data-template^="product"] .sbj-tabs { margin-top: 16px; width: 100%; }

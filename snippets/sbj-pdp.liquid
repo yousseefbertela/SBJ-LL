@@ -2,10 +2,14 @@
   SBJ PDP enhancements — SKIMS match. Pure client-side, idempotent, safe to run
   on every product page. Handles:
     #7  selected colour name shown in the colour legend (no "Color" label)
-    #9  "Size Guide" link added to the size legend (opens Fit & Fabric)
+    #9  "Size Guide" link added to the size legend -> opens the product's size
+        chart image (metafield levlocal.size_chart) in a popup; falls back to
+        the Fit & Fabric tab when the product has no chart
     #10 no pre-selected size on load
     #11 gated "Select a size" CTA that releases once a size is chosen
-    #3  decorative image overlays (wishlist heart + model sizing)
+    #3  image overlays (zoom, wishlist heart, model sizing). Model Sizing shows
+        metafield levlocal.model_sizing (e.g. "Model is 175cm, wearing S") in a
+        bubble; the button is not rendered when the product has no value
 {%- endcomment -%}
 {%- if product -%}
 <script type="application/json" id="sbj-pdp-product-data">
@@ -15,7 +19,17 @@
     "title": {{ product.title | json }},
     "price": {{ product.price | money | json }},
     "image": {{ product.featured_image | image_url: width: 600 | json }},
-    "url": {{ product.url | json }}
+    "url": {{ product.url | json }},
+    {%- liquid
+      assign size_chart = product.metafields.levlocal.size_chart
+      assign size_chart_url = blank
+      if size_chart != blank
+        assign size_chart_url = size_chart | image_url: width: 1800
+      endif
+    -%}
+    "sizeChart": {{ size_chart_url | json }},
+    "sizeChartAlt": {{ size_chart.alt | default: product.title | json }},
+    "modelSizing": {{ product.metafields.levlocal.model_sizing.value | json }}
   }
 </script>
 {%- endif -%}
@@ -81,11 +95,59 @@
       t.addEventListener('click', function () { switchTab(t.getAttribute('data-sbj-tab')); });
     });
   }
-  /* open the Fit & Fabric tab (used by Size Guide + Model Sizing) */
+  /* fallback when a product has no size chart: open the Fit & Fabric tab */
   function openFitTab() {
     switchTab('fit');
     var tabs = document.querySelector('[data-template^="product"] .sbj-tabs');
     if (tabs) tabs.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  /* Size chart popup (native <dialog>) showing metafield levlocal.size_chart */
+  function sizeChartDialog() {
+    var dlg = document.getElementById('sbj-size-chart');
+    if (dlg) return dlg;
+    dlg = document.createElement('dialog');
+    dlg.id = 'sbj-size-chart';
+    dlg.className = 'sbj-size-chart';
+    dlg.setAttribute('aria-label', 'Size guide');
+    dlg.innerHTML =
+      '<div class="sbj-size-chart__box">' +
+        '<div class="sbj-size-chart__head"><span class="sbj-size-chart__title">Size Guide</span>' +
+        '<button type="button" class="sbj-size-chart__close" aria-label="Close">' +
+          '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+        '</button></div>' +
+        '<div class="sbj-size-chart__body"><img class="sbj-size-chart__img" alt="" loading="lazy"></div>' +
+      '</div>';
+    dlg.querySelector('.sbj-size-chart__close').addEventListener('click', function () { dlg.close(); });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); });
+    document.body.appendChild(dlg);
+    return dlg;
+  }
+  function openSizeGuide() {
+    if (!PRODUCT_DATA || !PRODUCT_DATA.sizeChart) { openFitTab(); return; }
+    var dlg = sizeChartDialog();
+    var img = dlg.querySelector('.sbj-size-chart__img');
+    if (img.getAttribute('src') !== PRODUCT_DATA.sizeChart) {
+      img.setAttribute('src', PRODUCT_DATA.sizeChart);
+      img.setAttribute('alt', PRODUCT_DATA.sizeChartAlt || 'Size chart');
+    }
+    if (typeof dlg.showModal === 'function') { dlg.showModal(); } else { dlg.setAttribute('open', ''); }
+  }
+
+  /* Model Sizing bubble: toggles the metafield text next to the button */
+  function toggleModelSizing(btn) {
+    var text = PRODUCT_DATA && PRODUCT_DATA.modelSizing;
+    if (!text) return;
+    var bubble = btn.parentElement.querySelector('.sbj-pdp-modelsize__text');
+    if (!bubble) {
+      bubble = document.createElement('div');
+      bubble.className = 'sbj-pdp-modelsize__text';
+      bubble.setAttribute('role', 'status');
+      bubble.textContent = text;
+      btn.parentElement.appendChild(bubble);
+    }
+    var open = bubble.classList.toggle('is-open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
   /* #9 — append a "Size Guide" link to the size legend */
@@ -97,7 +159,7 @@
       b.type = 'button';
       b.className = 'sbj-size-guide';
       b.textContent = 'Size Guide';
-      b.addEventListener('click', function (e) { e.preventDefault(); openFitTab(); });
+      b.addEventListener('click', function (e) { e.preventDefault(); openSizeGuide(); });
       legend.appendChild(b);
     });
   }
@@ -182,10 +244,11 @@
       '<button type="button" class="sbj-pdp-heart" aria-label="Add to wishlist">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z"/></svg>' +
       '</button>' +
-      '<button type="button" class="sbj-pdp-modelsize" aria-label="Model sizing">' +
+      ((PRODUCT_DATA && PRODUCT_DATA.modelSizing) ?
+      '<button type="button" class="sbj-pdp-modelsize" aria-label="Model sizing" aria-expanded="false">' +
         '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/></svg>' +
         'Model Sizing' +
-      '</button>';
+      '</button>' : '');
     var heartBtn = ov.querySelector('.sbj-pdp-heart');
     if (PRODUCT_DATA && PRODUCT_DATA.id) {
       heartBtn.setAttribute('data-product-id', PRODUCT_DATA.id);
@@ -201,7 +264,8 @@
     ov.querySelector('.sbj-pdp-zoom').addEventListener('click', triggerZoom);
     /* click handling (toggle + persistence) is delegated site-wide by
        sbj-wishlist.liquid via [data-product-id] — no listener needed here. */
-    ov.querySelector('.sbj-pdp-modelsize').addEventListener('click', openFitTab);
+    var msBtn = ov.querySelector('.sbj-pdp-modelsize');
+    if (msBtn) msBtn.addEventListener('click', function () { toggleModelSizing(msBtn); });
     gallery.appendChild(ov);
   }
 
