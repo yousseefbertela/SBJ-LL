@@ -70,12 +70,13 @@
             assign products = products | split: ','
           endfor
         elsif recommendations.performed and recommendations.products_count == 0
-          # No recommendations found, pull from catalog
-          if section.settings.recommendation_type == 'related'
-            assign products = collections.all.products | reject: 'id', section.settings.product.id
-          elsif section.settings.recommendation_type == 'complementary'
-            # Do not recommend the All collection as complementary products
-            assign products = null
+          # No recommendations set in Search & Discovery yet → fall back to the
+          # catalog so the row is never empty. "Complementary" takes the NEXT slice
+          # of the catalog so the two rows never show the same products.
+          # (SBJ change — Horizon hid the complementary row when empty.)
+          assign products = collections.all.products | reject: 'id', section.settings.product.id
+          if section.settings.recommendation_type == 'complementary'
+            assign fallback_offset = section.settings.max_products
           endif
 
         else
@@ -83,7 +84,7 @@
         endif
       %}
       {% capture list_items %}
-        {% for product in products limit: section.settings.max_products %}
+        {% for product in products limit: section.settings.max_products offset: fallback_offset %}
           <div class="resource-list__item">
             {% content_for 'block', type: '_product-card', id: 'static-product-card', closest.product: product %}
           </div>
