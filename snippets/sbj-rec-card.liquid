@@ -1,5 +1,8 @@
 {%- doc -%}
   One card of the SBJ recommend carousel (sections/sbj-recommend-carousel.liquid).
+  The heart is a real wishlist toggle (.sbj-heart, handled site-wide by
+  snippets/sbj-wishlist.liquid) and sits outside the card link so a click
+  saves the product instead of navigating.
 
   @param {object} product - the product
   @param {string} url - card link (product url, with ?variant= for color cards)
@@ -10,16 +13,28 @@
   @param {number} [variant_id] - variant this card represents
   @param {string} [color] - color this card represents
 {%- enddoc -%}
-<a class="sbj-rec__card" href="{{ url }}"{% if variant_id %} data-variant-id="{{ variant_id }}"{% endif %}{% if color %} data-variant-color="{{ color | escape }}"{% endif %}>
-  <div class="sbj-rec__media">
-    {%- if image -%}
-      <img src="{{ image | image_url: width: 600 }}" alt="{{ product.title | escape }}{% if color %} – {{ color | escape }}{% endif %}" loading="lazy" width="300" height="300">
-    {%- endif -%}
-  </div>
-  <div class="sbj-rec__info">
-    <span class="sbj-rec__eyebrow">{{ eyebrow }}</span>
-    <span class="sbj-rec__name">{{ product.title }}</span>
-    <span class="sbj-rec__price">{{ price | money }}</span>
-    <span class="sbj-rec__heart" aria-hidden="true">{{ heart_svg }}</span>
-  </div>
-</a>
+<div class="sbj-rec__card"{% if variant_id %} data-variant-id="{{ variant_id }}"{% endif %}{% if color %} data-variant-color="{{ color | escape }}"{% endif %}>
+  <a class="sbj-rec__link" href="{{ url }}">
+    <div class="sbj-rec__media">
+      {%- if image -%}
+        <img src="{{ image | image_url: width: 600 }}" alt="{{ product.title | escape }}{% if color %} – {{ color | escape }}{% endif %}" loading="lazy" width="300" height="300">
+      {%- endif -%}
+    </div>
+    <div class="sbj-rec__info">
+      <span class="sbj-rec__eyebrow">{{ eyebrow }}</span>
+      <span class="sbj-rec__name">{{ product.title }}</span>
+      <span class="sbj-rec__price">{{ price | money }}</span>
+    </div>
+  </a>
+  <button
+    type="button"
+    class="sbj-heart sbj-rec__heart"
+    aria-label="Add {{ product.title | escape }}{% if color %} ({{ color | escape }}){% endif %} to wishlist"
+    data-product-id="{{ product.id }}"
+    data-handle="{{ product.handle | escape }}"
+    data-title="{{ product.title | escape }}{% if color %} – {{ color | escape }}{% endif %}"
+    data-price="{{ price | money }}"
+    data-image="{% if image %}{{ image | image_url: width: 400 | escape }}{% endif %}"
+    data-url="{{ url | escape }}"
+  >{{ heart_svg }}</button>
+</div>

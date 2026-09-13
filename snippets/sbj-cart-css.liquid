@@ -54,6 +54,11 @@
   justify-content: center !important;
   line-height: 1 !important;
 }
+/* Empty wishlist → no badge at all (the display:flex above would otherwise
+   paint an empty black circle over the [hidden] attribute) */
+.sbj-wishlist-count[hidden] {
+  display: none !important;
+}
 /* Horizon cuts a donut hole in the bag icon under the bubble — remove it */
 .header-actions__cart-icon.header-actions__cart-icon--has-cart svg {
   mask: none !important;

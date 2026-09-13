@@ -135,6 +135,7 @@
     border-left: 1px solid #E8E5DF; border-top: 1px solid #E8E5DF; border-bottom: 1px solid #E8E5DF;
   }
   #sbj-rec-{{ section.id }} .sbj-rec__card:first-child { border-left: none; }
+  #sbj-rec-{{ section.id }} .sbj-rec__link { display: block; text-decoration: none; color: inherit; }
   #sbj-rec-{{ section.id }} .sbj-rec__media { aspect-ratio: 8 / 5; background: #fff; display: block; }
   #sbj-rec-{{ section.id }} .sbj-rec__media img {
     width: 100%; height: 100%; object-fit: contain; padding: 11%; box-sizing: border-box; display: block;
@@ -155,8 +156,13 @@
     font-family: "Inter","Helvetica Neue",Helvetica,Arial,sans-serif; font-size: 10px; line-height: 14px;
     letter-spacing: .25px; color: #2D2A26; margin-top: 2px;
   }
-  #sbj-rec-{{ section.id }} .sbj-rec__heart { position: absolute; right: 24px; top: 14px; width: 18px; height: 18px; color: #2D2A26; }
+  /* Heart = wishlist toggle button, pinned to the text area's top-right, inside the card */
+  #sbj-rec-{{ section.id }} .sbj-rec__heart {
+    position: absolute; right: 24px; bottom: 44px; width: 18px; height: 18px; color: #2D2A26;
+    background: none; border: 0; padding: 0; margin: 0; cursor: pointer; display: block; line-height: 0;
+  }
   #sbj-rec-{{ section.id }} .sbj-rec__heart svg { width: 18px; height: 18px; display: block; }
+  #sbj-rec-{{ section.id }} .sbj-rec__heart.is-on svg { fill: currentColor; }
   @media (max-width: 990px) {
     #sbj-rec-{{ section.id }} .sbj-rec__card { flex-basis: calc(100% / 3); max-width: calc(100% / 3); }
   }
