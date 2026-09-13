@@ -482,10 +482,22 @@
         "padding-block-start": 80,
         "padding-block-end": 80
       }
+    },
+    "sbj_colstrip": {
+      "type": "sbj-collection-strip",
+      "settings": {
+        "menu": "main-menu",
+        "background_color": "#EDEDED",
+        "text_color": "#1A1A1A",
+        "font_size": 12,
+        "item_gap": 24,
+        "padding_block": 14
+      }
     }
   },
   "order": [
     "sbj_css",
+    "sbj_colstrip",
     "sbj_hero",
     "sbj_split",
     "sbj_mens",

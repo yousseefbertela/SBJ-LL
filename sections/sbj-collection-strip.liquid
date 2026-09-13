@@ -1,0 +1,190 @@
+{%- comment -%}
+  SBJ Collection strip — MOBILE ONLY horizontal, swipeable row of collection
+  links in a solid band directly under the header (reference: Murenzo mobile
+  nav strip). Items come from a menu (default: main menu) so the strip stays in
+  sync with the navigation. Hidden on desktop (>= 750px).
+
+  Homepage note: Horizon overlays the transparent header on the hero by pulling
+  the first section up under it. On mobile, when this strip is on the page, that
+  pull-up is cancelled and the header is forced to its solid look (original
+  logo, dark icons) so the strip sits below the header and the hero starts
+  below the strip.
+{%- endcomment -%}
+
+{%- liquid
+  assign menu = section.settings.menu
+  assign bg = section.settings.background_color
+  assign fg = section.settings.text_color
+-%}
+
+{%- if menu != blank and menu.links.size > 0 -%}
+  <nav
+    class="sbj-colstrip"
+    aria-label="Collections"
+    style="--sbj-colstrip-bg: {{ bg }}; --sbj-colstrip-fg: {{ fg }}; --sbj-colstrip-size: {{ section.settings.font_size }}px; --sbj-colstrip-gap: {{ section.settings.item_gap }}px; --sbj-colstrip-pad: {{ section.settings.padding_block }}px;"
+  >
+    <ul class="sbj-colstrip__list" role="list">
+      {%- for link in menu.links -%}
+        <li class="sbj-colstrip__item">
+          <a
+            class="sbj-colstrip__link{% if link.current %} sbj-colstrip__link--current{% endif %}"
+            href="{{ link.url }}"
+            {% if link.current %}aria-current="page"{% endif %}
+          >
+            {{- link.title -}}
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </nav>
+{%- endif -%}
+
+{% stylesheet %}
+  .sbj-colstrip {
+    display: none;
+    background: var(--sbj-colstrip-bg, #ededed);
+    color: var(--sbj-colstrip-fg, #1a1a1a);
+    position: relative;
+    z-index: 1;
+  }
+
+  .sbj-colstrip__list {
+    display: flex;
+    gap: var(--sbj-colstrip-gap, 24px);
+    margin: 0;
+    padding: var(--sbj-colstrip-pad, 14px) 20px;
+    list-style: none;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: 20px;
+    scrollbar-width: none;
+  }
+
+  .sbj-colstrip__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .sbj-colstrip__item {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .sbj-colstrip__link {
+    display: block;
+    font-family: var(--sbj-font-ui, var(--font-body--family));
+    font-size: var(--sbj-colstrip-size, 12px);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    color: inherit;
+  }
+
+  .sbj-colstrip__link--current {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  @media screen and (max-width: 749px) {
+    .sbj-colstrip {
+      display: block;
+    }
+
+    /* Strip present → no hero-under-header overlay on mobile. Cancel the pull-up
+       (snippets/sbj-header-css.liquid + base.css) and let Horizon's own
+       --section-top-offset (= header height, applied to the first section) push
+       the content below the absolute-positioned header. */
+    body:has(#header-component[transparent]):has(.sbj-colstrip) main > .shopify-section:first-child {
+      margin-top: 0 !important;
+    }
+
+    /* Header reads as solid over the white page: original (dark) logo, dark icons */
+    body:has(.sbj-colstrip) .header[transparent] {
+      --header-logo-display: unset;
+      --header-logo-inverse-display: unset;
+    }
+
+    body:has(.sbj-colstrip) .header[transparent] .header__row {
+      /* !important: Horizon's :not(...):not(:has(...)) .header__row rule outranks us */
+      --color-foreground: #1a1a1a !important;
+      --color-foreground-rgb: 26, 26, 26 !important;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection strip (mobile)",
+  "tag": "section",
+  "class": "sbj-colstrip-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Mobile-only swipeable row of links in a band under the header. Hidden on desktop."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menu",
+      "default": "main-menu",
+      "info": "Top-level links of this menu become the strip items."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#EDEDED"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text",
+      "default": "#1A1A1A"
+    },
+    {
+      "type": "range",
+      "id": "font_size",
+      "label": "Text size",
+      "min": 10,
+      "max": 16,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "item_gap",
+      "label": "Space between items",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_block",
+      "label": "Vertical padding",
+      "min": 8,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    }
+  ],
+  "enabled_on": {
+    "templates": ["*"],
+    "groups": ["header"]
+  },
+  "presets": [
+    {
+      "name": "Collection strip (mobile)"
+    }
+  ]
+}
+{% endschema %}
