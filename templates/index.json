@@ -487,11 +487,8 @@
       "type": "sbj-collection-strip",
       "settings": {
         "menu": "main-menu",
-        "transparent_background": true,
         "background_color": "#EDEDED",
         "text_color": "#FFFFFF",
-        "background_color_stuck": "#FFFFFF",
-        "text_color_stuck": "#1A1A1A",
         "font_size": 12,
         "item_gap": 24,
         "padding_block": 14
