@@ -1,0 +1,174 @@
+{%- doc -%}
+  Renders one product-grid <li> per colour of a product ("variant-split" cards),
+  or a single <li> when the product has no colour option / only one colour.
+
+  The native `_product-card` block is rendered ONCE by the caller via
+  `content_for 'block'` and passed in as `product_card_html`. For every colour
+  this snippet re-uses that exact HTML and applies three deterministic rewrites
+  so the card looks like Horizon's own card after that colour's swatch was
+  clicked (same DOM state `product-card.js` produces client-side):
+
+    1. Links  — every `?variant=<default id>"` becomes the colour's variant id.
+    2. Gallery — the colour's variant image slide (Horizon keeps every variant
+                 image in the card-gallery as a hidden slide) is un-hidden and
+                 moved to the front so it is slide 0; the default slide is hidden
+                 only if it is another colour's variant image.
+    3. Swatch  — the colour's swatch radio gets `checked`.
+
+  Nothing else in the card is touched, so badges, wishlist heart, swatch hover,
+  quick-add and infinite scroll keep their native behaviour.
+
+  @param {object} product - The product object
+  @param {string} product_card_html - Captured output of the `_product-card` block
+  @param {object} section - The section object (for the <li> id)
+  @param {number} current_page - paginate.current_page (infinite scroll needs data-page)
+  @param {number} grid_index - forloop.index0 of the product in the grid
+{%- enddoc -%}
+
+{%- liquid
+  assign color_option = blank
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name contains 'color' or option_name contains 'colour'
+      assign color_option = option
+      break
+    endif
+  endfor
+-%}
+
+{%- if color_option == blank or color_option.values.size < 2 -%}
+  <li
+    id="{{ section.id }}-{{ product.id }}"
+    class="product-grid__item product-grid__item--{{ grid_index }}"
+    data-page="{{ current_page }}"
+    data-product-id="{{ product.id }}"
+    ref="cards[]"
+  >
+    {{ product_card_html }}
+  </li>
+{%- else -%}
+  {%- liquid
+    assign color_key = 'option' | append: color_option.position
+    assign default_variant = product.selected_or_first_available_variant
+    assign default_media_id = product.featured_media.id
+    assign default_link = 'variant=' | append: default_variant.id | append: '"'
+  -%}
+
+  {%- for color_value in color_option.values -%}
+    {%- liquid
+      # Representative variant for this colour: first available, else first with the colour
+      assign color_variant = blank
+      for variant in product.variants
+        if variant[color_key] == color_value.name and variant.available
+          assign color_variant = variant
+          break
+        endif
+      endfor
+      if color_variant == blank
+        for variant in product.variants
+          if variant[color_key] == color_value.name
+            assign color_variant = variant
+            break
+          endif
+        endfor
+      endif
+      if color_variant == blank
+        continue
+      endif
+
+      # Image for this colour: the variant's own media, else any sibling variant of the same colour that has one
+      assign color_media_id = color_variant.featured_media.id
+      if color_media_id == blank
+        for variant in product.variants
+          if variant[color_key] == color_value.name and variant.featured_media != blank
+            assign color_media_id = variant.featured_media.id
+            break
+          endif
+        endfor
+      endif
+
+      assign html = product_card_html
+
+      # 1. Links → this colour's variant
+      if color_variant.id != default_variant.id
+        assign color_link = 'variant=' | append: color_variant.id | append: '"'
+        assign html = html | replace: default_link, color_link
+      endif
+
+      # 2. Gallery → this colour's image becomes slide 0.
+      #    Horizon renders every variant image as a slide (non-first ones `hidden`), so we
+      #    un-hide the colour's slide, move it to the front of <slideshow-slides>, and hide
+      #    the product's default slide only when it is another colour's variant image.
+      if color_media_id != blank and color_media_id != default_media_id
+        assign color_slide = 'slide-id="' | append: color_media_id | append: '"'
+        assign chunks = html | split: '<slideshow-slide'
+        assign moved_slide = blank
+        for chunk in chunks
+          if forloop.first
+            continue
+          endif
+          if chunk contains color_slide
+            assign slide_parts = chunk | split: '</slideshow-slide>'
+            assign moved_slide = '<slideshow-slide' | append: slide_parts[0] | append: '</slideshow-slide>'
+            assign moved_slide = moved_slide | replace_first: ' hidden', '' | replace_first: 'aria-hidden="true"', 'aria-hidden="false"'
+            break
+          endif
+        endfor
+
+        if moved_slide != blank
+          capture html
+            for chunk in chunks
+              if forloop.first
+                echo chunk
+                continue
+              endif
+              if chunk contains color_slide
+                assign slide_parts = chunk | split: '</slideshow-slide>'
+                assign cut = slide_parts[0].size | plus: 18
+                echo chunk | slice: cut, chunk.size
+                continue
+              endif
+              echo '<slideshow-slide'
+              echo chunk
+              if forloop.index == 2
+                # chunk 2 is the <slideshow-slides ...> container opening → our slide goes right after it
+                echo moved_slide
+              endif
+            endfor
+          endcapture
+
+          assign default_is_variant_image = false
+          if default_media_id != blank
+            for variant in product.variants
+              if variant.featured_media.id == default_media_id
+                assign default_is_variant_image = true
+                break
+              endif
+            endfor
+          endif
+          if default_is_variant_image
+            assign default_slide = 'slide-id="' | append: default_media_id | append: '"'
+            assign default_slide_hidden = default_slide | append: ' hidden'
+            assign html = html | replace_first: default_slide, default_slide_hidden
+          endif
+        endif
+      endif
+
+      # 3. Swatch → pre-select this colour
+      assign swatch_attr = 'data-option-value-id="' | append: color_value.id | append: '"'
+      assign swatch_attr_checked = swatch_attr | append: ' checked'
+      assign html = html | replace_first: swatch_attr, swatch_attr_checked
+    -%}
+    <li
+      id="{{ section.id }}-{{ product.id }}-{{ color_variant.id }}"
+      class="product-grid__item product-grid__item--{{ grid_index }}"
+      data-page="{{ current_page }}"
+      data-product-id="{{ product.id }}"
+      data-variant-id="{{ color_variant.id }}"
+      data-variant-color="{{ color_value.name | escape }}"
+      ref="cards[]"
+    >
+      {{ html }}
+    </li>
+  {%- endfor -%}
+{%- endif -%}

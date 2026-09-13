@@ -51,17 +51,33 @@
     {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
-          <li
-            id="{{ section.id }}-{{ product.id }}"
-            class="product-grid__item product-grid__item--{{ forloop.index0 }}"
-            data-page="{{ paginate.current_page }}"
-            data-product-id="{{ product.id }}"
-            ref="cards[]"
-          >
-            {% # theme-check-disable %}
-            {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
-            {% # theme-check-enable %}
-          </li>
+          {% if section.settings.split_color_variants %}
+            {% comment %} One card per colour — see snippets/sbj-variant-split-cards.liquid {% endcomment %}
+            {% capture product_card_html %}
+              {% # theme-check-disable %}
+              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+              {% # theme-check-enable %}
+            {% endcapture %}
+            {% render 'sbj-variant-split-cards',
+              product: product,
+              product_card_html: product_card_html,
+              section: section,
+              current_page: paginate.current_page,
+              grid_index: forloop.index0
+            %}
+          {% else %}
+            <li
+              id="{{ section.id }}-{{ product.id }}"
+              class="product-grid__item product-grid__item--{{ forloop.index0 }}"
+              data-page="{{ paginate.current_page }}"
+              data-product-id="{{ product.id }}"
+              ref="cards[]"
+            >
+              {% # theme-check-disable %}
+              {% content_for 'block', type: '_product-card', id: 'product-card', closest.product: product %}
+              {% # theme-check-enable %}
+            </li>
+          {% endif %}
         {% endfor %}
       {% endcapture %}
 
@@ -144,6 +160,13 @@
       "type": "checkbox",
       "id": "enable_infinite_scroll",
       "label": "t:settings.auto_load_products",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "split_color_variants",
+      "label": "Show each color as its own product card",
+      "info": "Products with a Color option render one card per color, each linking to that color and pre-selecting its swatch.",
       "default": true
     },
     {

@@ -159,9 +159,11 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
   border: 1px solid rgba(0,0,0,0.12) !important;
   box-sizing: border-box;
 }
-/* First swatch gets the SKIMS selection ring (purely visual, matches the old
-   behaviour — collection cards don't have a real "selected" variant state) */
-:is([data-template^="collection"]) .product-card product-swatches .variant-option__swatch:first-child .swatch {
+/* SKIMS selection ring on the selected swatch. Variant-split cards
+   (snippets/sbj-variant-split-cards.liquid) pre-check the card's colour;
+   cards with no checked swatch fall back to ringing the first one. */
+:is([data-template^="collection"]) .product-card product-swatches .variant-option__swatch:has(input:checked) .swatch,
+:is([data-template^="collection"]) .product-card product-swatches:not(:has(input:checked)) .variant-option__swatch:first-child .swatch {
   outline: 1px solid #2D2A26;
   outline-offset: 1px;
 }
