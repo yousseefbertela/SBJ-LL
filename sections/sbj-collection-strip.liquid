@@ -4,24 +4,29 @@
   nav strip). Items come from a menu (default: main menu) so the strip stays in
   sync with the navigation. Hidden on desktop (>= 750px).
 
-  Homepage note: Horizon overlays the transparent header on the hero by pulling
-  the first section up under it. On mobile, when this strip is on the page, that
-  pull-up is cancelled and the header is forced to its solid look (original
-  logo, dark icons) so the strip sits below the header and the hero starts
-  below the strip.
+  Layout: the section wrapper takes ZERO flow height (margin-top = header
+  height, margin-bottom = -header height) and is position:sticky right under
+  the header, so the strip overlays the hero (transparent, white text) and
+  rides along with the sticky header. When the header sticks and goes solid
+  (data-sticky-state=active) the strip switches to its "scrolled" colours.
 {%- endcomment -%}
 
 {%- liquid
   assign menu = section.settings.menu
   assign bg = section.settings.background_color
+  if section.settings.transparent_background
+    assign bg = "transparent"
+  endif
   assign fg = section.settings.text_color
+  assign bg_stuck = section.settings.background_color_stuck
+  assign fg_stuck = section.settings.text_color_stuck
 -%}
 
 {%- if menu != blank and menu.links.size > 0 -%}
   <nav
     class="sbj-colstrip"
     aria-label="Collections"
-    style="--sbj-colstrip-bg: {{ bg }}; --sbj-colstrip-fg: {{ fg }}; --sbj-colstrip-size: {{ section.settings.font_size }}px; --sbj-colstrip-gap: {{ section.settings.item_gap }}px; --sbj-colstrip-pad: {{ section.settings.padding_block }}px;"
+    style="--sbj-colstrip-bg: {{ bg }}; --sbj-colstrip-fg: {{ fg }}; --sbj-colstrip-bg-stuck: {{ bg_stuck }}; --sbj-colstrip-fg-stuck: {{ fg_stuck }}; --sbj-colstrip-size: {{ section.settings.font_size }}px; --sbj-colstrip-gap: {{ section.settings.item_gap }}px; --sbj-colstrip-pad: {{ section.settings.padding_block }}px;"
   >
     <ul class="sbj-colstrip__list" role="list">
       {%- for link in menu.links -%}
@@ -40,12 +45,15 @@
 {%- endif -%}
 
 {% stylesheet %}
-  .sbj-colstrip {
+  /* Desktop: nothing rendered, nothing in flow */
+  .sbj-colstrip-section {
     display: none;
-    background: var(--sbj-colstrip-bg, #ededed);
-    color: var(--sbj-colstrip-fg, #1a1a1a);
-    position: relative;
-    z-index: 1;
+  }
+
+  .sbj-colstrip {
+    background: var(--sbj-colstrip-bg, transparent);
+    color: var(--sbj-colstrip-fg, #fff);
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   .sbj-colstrip__list {
@@ -91,28 +99,33 @@
   }
 
   @media screen and (max-width: 749px) {
-    .sbj-colstrip {
+    /* Zero-height sticky rail directly under the header. margin-top puts it
+       below the (absolute, transparent) header; the negative margin-bottom
+       gives that space back so the hero still starts under the header. */
+    .sbj-colstrip-section {
       display: block;
+      position: sticky;
+      top: calc(var(--header-height, 0px) - 1px);
+      height: 0;
+      margin-top: var(--header-height, 0px);
+      margin-bottom: calc(var(--header-height, 0px) * -1);
+      z-index: calc(var(--layer-sticky, 10) - 1);
+      overflow: visible;
     }
 
-    /* Strip present → no hero-under-header overlay on mobile. Cancel the pull-up
-       (snippets/sbj-header-css.liquid + base.css) and let Horizon's own
-       --section-top-offset (= header height, applied to the first section) push
-       the content below the absolute-positioned header. */
-    body:has(#header-component[transparent]):has(.sbj-colstrip) main > .shopify-section:first-child {
-      margin-top: 0 !important;
+    /* Over the hero: legibility halo for white text (same idea as the header) */
+    .sbj-colstrip__link {
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.3);
     }
 
-    /* Header reads as solid over the white page: original (dark) logo, dark icons */
-    body:has(.sbj-colstrip) .header[transparent] {
-      --header-logo-display: unset;
-      --header-logo-inverse-display: unset;
+    /* Header stuck and solid → strip goes solid too, no halo */
+    body:has(#header-component[data-sticky-state=active]) .sbj-colstrip {
+      background: var(--sbj-colstrip-bg-stuck, #fff);
+      color: var(--sbj-colstrip-fg-stuck, #1a1a1a);
     }
 
-    body:has(.sbj-colstrip) .header[transparent] .header__row {
-      /* !important: Horizon's :not(...):not(:has(...)) .header__row rule outranks us */
-      --color-foreground: #1a1a1a !important;
-      --color-foreground-rgb: 26, 26, 26 !important;
+    body:has(#header-component[data-sticky-state=active]) .sbj-colstrip__link {
+      text-shadow: none;
     }
   }
 {% endstylesheet %}
@@ -125,7 +138,7 @@
   "settings": [
     {
       "type": "paragraph",
-      "content": "Mobile-only swipeable row of links in a band under the header. Hidden on desktop."
+      "content": "Mobile-only swipeable row of links overlaying the top of the page under the header; sticks with the header while scrolling. Hidden on desktop."
     },
     {
       "type": "link_list",
@@ -135,14 +148,41 @@
       "info": "Top-level links of this menu become the strip items."
     },
     {
+      "type": "header",
+      "content": "Over the hero (top of page)"
+    },
+    {
+      "type": "checkbox",
+      "id": "transparent_background",
+      "label": "Transparent background",
+      "default": true
+    },
+    {
       "type": "color",
       "id": "background_color",
       "label": "Background",
-      "default": "#EDEDED"
+      "default": "#EDEDED",
+      "visible_if": "{{ section.settings.transparent_background == false }}"
     },
     {
       "type": "color",
       "id": "text_color",
+      "label": "Text",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "header",
+      "content": "When scrolled (header solid)"
+    },
+    {
+      "type": "color",
+      "id": "background_color_stuck",
+      "label": "Background",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "text_color_stuck",
       "label": "Text",
       "default": "#1A1A1A"
     },
