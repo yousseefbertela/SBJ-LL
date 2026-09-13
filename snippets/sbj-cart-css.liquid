@@ -54,11 +54,6 @@
   justify-content: center !important;
   line-height: 1 !important;
 }
-/* Tighten icon spacing: adjacent 44px buttons leave a 22px visual gap — pull
-   them together so icons read closer together like SKIMS (desktop only). */
-@media screen and (min-width: 750px) {
-  header-actions > *:not(:first-child) { margin-inline-start: -12px; }
-}
 /* Horizon cuts a donut hole in the bag icon under the bubble — remove it */
 .header-actions__cart-icon.header-actions__cart-icon--has-cart svg {
   mask: none !important;
