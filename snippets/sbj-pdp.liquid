@@ -9,7 +9,8 @@
     #11 gated "Select a size" CTA that releases once a size is chosen
     #3  image overlays (zoom, wishlist heart, model sizing). Model Sizing shows
         metafield levlocal.model_sizing (e.g. "Model is 175cm, wearing S") in a
-        bubble; the button is not rendered when the product has no value
+        bubble; the button always shows but is disabled (non-interactive)
+        until the product has a value
 {%- endcomment -%}
 {%- if product -%}
 <script type="application/json" id="sbj-pdp-product-data">
@@ -244,11 +245,10 @@
       '<button type="button" class="sbj-pdp-heart" aria-label="Add to wishlist">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z"/></svg>' +
       '</button>' +
-      ((PRODUCT_DATA && PRODUCT_DATA.modelSizing) ?
-      '<button type="button" class="sbj-pdp-modelsize" aria-label="Model sizing" aria-expanded="false">' +
+      '<button type="button" class="sbj-pdp-modelsize' + ((PRODUCT_DATA && PRODUCT_DATA.modelSizing) ? '' : ' sbj-pdp-modelsize--empty') + '" aria-label="Model sizing" aria-expanded="false"' + ((PRODUCT_DATA && PRODUCT_DATA.modelSizing) ? '' : ' disabled title="No model sizing set for this product"') + '>' +
         '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 9V5h4M20 9V5h-4M4 15v4h4M20 15v4h-4"/></svg>' +
         'Model Sizing' +
-      '</button>' : '');
+      '</button>';
     var heartBtn = ov.querySelector('.sbj-pdp-heart');
     if (PRODUCT_DATA && PRODUCT_DATA.id) {
       heartBtn.setAttribute('data-product-id', PRODUCT_DATA.id);

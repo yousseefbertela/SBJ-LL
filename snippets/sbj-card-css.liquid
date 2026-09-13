@@ -631,6 +631,11 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
 @media (max-width: 749px) {
   [data-template^="product"] .sbj-pdp-modelsize { font-size: 10px; padding: 6px 10px; }
 }
+/* Model Sizing with no metafield value: visible but inert */
+[data-template^="product"] .sbj-pdp-modelsize--empty {
+  cursor: default;
+  opacity: 0.85;
+}
 /* Model Sizing text bubble (metafield levlocal.model_sizing), sits above the button */
 [data-template^="product"] .sbj-pdp-modelsize__text {
   position: absolute;
