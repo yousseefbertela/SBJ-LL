@@ -418,7 +418,9 @@
     "sbj_trending": {
       "type": "sbj-recommend-carousel",
       "settings": {
-        "heading": "Trending"
+        "heading": "Trending",
+        "collection": "",
+        "products_to_show": 12
       }
     },
     "sbj_brand": {
@@ -427,7 +429,7 @@
         "statement": {
           "type": "text",
           "settings": {
-            "text": "<p>SBJ is a solutions oriented brand creating the next generation of underwear, clothing and shapewear.</p>",
+            "text": "<p>SBJ is a solutions oriented brand creating the next generation of<br/> Sportswear.</p>",
             "width": "100%",
             "max_width": "normal",
             "alignment": "center",

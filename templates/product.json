@@ -25,6 +25,7 @@
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "right",
             "thumbnail_width": 44,
+            "thumbnail_radius": 0,
             "aspect_ratio": "1/1.25",
             "constrain_to_viewport": false,
             "media_fit": "cover",
@@ -71,7 +72,6 @@
               "type": "group",
               "name": "Header",
               "settings": {
-                "open_in_new_tab": false,
                 "content_direction": "column",
                 "vertical_on_mobile": true,
                 "horizontal_alignment": "flex-start",
@@ -99,6 +99,9 @@
                 "overlay_color": "#00000026",
                 "overlay_style": "solid",
                 "gradient_direction": "to top",
+                "link": "",
+                "open_in_new_tab": false,
+                "placeholder": "",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -108,17 +111,35 @@
                 "eyebrow_pdp": {
                   "type": "text",
                   "settings": {
+                    "text": "<p>{{ closest.product.vendor }}</p>",
                     "width": "fit-content",
+                    "max_width": "normal",
+                    "alignment": "left",
                     "type_preset": "custom",
-                    "text": "<p>{{ closest.product.vendor }}</p>"
-                  }
+                    "font": "var(--font-body--family)",
+                    "font_size": "1rem",
+                    "line_height": "normal",
+                    "letter_spacing": "normal",
+                    "case": "none",
+                    "wrap": "pretty",
+                    "color": "var(--color-foreground)",
+                    "background": false,
+                    "background_color": "#00000026",
+                    "corner_radius": 0,
+                    "padding-block-start": 0,
+                    "padding-block-end": 0,
+                    "padding-inline-start": 0,
+                    "padding-inline-end": 0
+                  },
+                  "blocks": {}
                 },
                 "text_xrnftG": {
                   "type": "custom-liquid",
                   "name": "Product title",
                   "settings": {
                     "custom_liquid": "{%- assign fab = closest.product.type | default: closest.product.vendor -%}{%- assign t = closest.product.title | remove_first: fab | strip -%}{%- if t == blank -%}{%- assign t = closest.product.title -%}{%- endif -%}<h1>{{ t }}</h1>"
-                  }
+                  },
+                  "blocks": {}
                 },
                 "price_tVjtKg": {
                   "type": "price",
@@ -153,7 +174,7 @@
               "type": "variant-picker",
               "settings": {
                 "variant_style": "buttons",
-                "show_swatches": false,
+                "show_swatches": true,
                 "alignment": "left",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
@@ -167,6 +188,7 @@
               "settings": {
                 "stacking": true,
                 "show_pickup_availability": false,
+                "gift_card_form": true,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -201,7 +223,8 @@
               "name": "Product tabs",
               "settings": {
                 "custom_liquid": "<div class=\"sbj-tabs\"><div class=\"sbj-tabs__nav\" role=\"tablist\"><button type=\"button\" class=\"sbj-tab is-active\" data-sbj-tab=\"details\">Details</button><button type=\"button\" class=\"sbj-tab\" data-sbj-tab=\"fit\">Fit &amp; Fabric</button><button type=\"button\" class=\"sbj-tab\" data-sbj-tab=\"shipping\">Shipping &amp; Returns</button></div><div class=\"sbj-tabs__panels\"><div class=\"sbj-tab-panel is-active\" data-sbj-panel=\"details\">{{ closest.product.description }}</div><div class=\"sbj-tab-panel\" data-sbj-panel=\"fit\"><p>Designed for a smooth, second-skin fit with a soft, breathable hand-feel. True to size; if you are between sizes, size down for a snugger fit.</p></div><div class=\"sbj-tab-panel\" data-sbj-panel=\"shipping\"><p>Free standard shipping on orders over LE 3,000. Orders ship within 1-2 business days. Enjoy easy returns within 14 days of delivery.</p></div></div></div>"
-              }
+              },
+              "blocks": {}
             }
           },
           "block_order": [
@@ -218,40 +241,10 @@
         "equal_columns": true,
         "limit_details_width": false,
         "gap": 20,
+        "enable_sticky_add_to_cart": true,
         "color_scheme": "",
         "padding-block-start": 0,
         "padding-block-end": 0
-      }
-    },
-    "rec_similar": {
-      "type": "sbj-recommend-carousel",
-      "settings": {
-        "heading": "Similar Styles",
-        "collection": "best-sellers",
-        "products_to_show": 18
-      }
-    },
-    "rec_color": {
-      "type": "sbj-recommend-carousel",
-      "settings": {
-        "heading": "More in This Color",
-        "collection": "clothing",
-        "products_to_show": 18
-      }
-    },
-    "rec_explore": {
-      "type": "sbj-recommend-carousel",
-      "settings": {
-        "heading": "Explore Collection",
-        "collection": "new",
-        "products_to_show": 18
-      }
-    },
-    "rec_wethink": {
-      "type": "sbj-recommend-carousel",
-      "settings": {
-        "heading": "We think you'd like",
-        "products_to_show": 12
       }
     },
     "product_recommendations_qggXJq": {
@@ -393,6 +386,38 @@
         "color_scheme": "scheme-1",
         "padding-block-start": 48,
         "padding-block-end": 48
+      }
+    },
+    "rec_similar": {
+      "type": "sbj-recommend-carousel",
+      "settings": {
+        "heading": "Similar Styles",
+        "collection": "best-sellers",
+        "products_to_show": 18
+      }
+    },
+    "rec_color": {
+      "type": "sbj-recommend-carousel",
+      "settings": {
+        "heading": "More in This Color",
+        "collection": "clothing",
+        "products_to_show": 18
+      }
+    },
+    "rec_explore": {
+      "type": "sbj-recommend-carousel",
+      "settings": {
+        "heading": "Explore Collection",
+        "collection": "new",
+        "products_to_show": 18
+      }
+    },
+    "rec_wethink": {
+      "type": "sbj-recommend-carousel",
+      "settings": {
+        "heading": "We think you'd like",
+        "collection": "",
+        "products_to_show": 12
       }
     }
   },
