@@ -506,11 +506,11 @@ html.sbj-boot [data-template^="product"] product-form-component .add-to-cart-but
 /* Tall image area, constrained to the viewport like SKIMS */
 [data-template^="product"] .media-gallery--carousel .product-media-container,
 [data-template^="product"] .media-gallery--carousel .slideshow-slide {
-  background: #f4f2ef;
+  background: #fff;
 }
 /* Show the WHOLE photo (full model, head + feet, uncropped) inside the SAME frame.
    contain (not cover) so nothing is cropped; the frame size is unchanged and any
-   spare space falls back to the gallery background (#f4f2ef), like the collection card. */
+   spare space falls back to the gallery background (white — merchant request 2026-09-13). */
 [data-template^="product"] .media-gallery--carousel img {
   object-fit: contain !important;
   object-position: center !important;
