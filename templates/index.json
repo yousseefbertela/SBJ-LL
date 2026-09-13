@@ -20,6 +20,20 @@
         "padding-block-end": 0
       }
     },
+    "sbj_colstrip": {
+      "type": "sbj-collection-strip",
+      "settings": {
+        "menu": "main-menu",
+        "transparent_background": true,
+        "background_color": "#ededed",
+        "text_color": "#ffffff",
+        "background_color_stuck": "#ffffff",
+        "text_color_stuck": "#1a1a1a",
+        "font_size": 12,
+        "item_gap": 24,
+        "padding_block": 14
+      }
+    },
     "sbj_hero": {
       "type": "hero",
       "blocks": {
@@ -232,7 +246,7 @@
       ],
       "settings": {
         "media_type_1": "video",
-        "video_1": "shopify://files/videos/5233469-uhd_3840_2160_25fps.mp4",
+        "video_1": "shopify://files/videos/copy_C49F4CB8-3B67-47CA-8DFD-5614F92ECEF1 2.mov",
         "media_type_2": "image",
         "stack_media_on_mobile": false,
         "custom_mobile_media": false,
@@ -268,33 +282,37 @@
         "bras": {
           "type": "cat",
           "settings": {
+            "image": "shopify://shop_images/Untitled_Session6841_c092b930-5e98-4717-8306-5fa276f53dbe.jpg",
             "image_asset": "cat-bras.jpg",
-            "label": "BRAS",
+            "label": "SPORTS BRAS",
             "link": "shopify://collections/bras"
           }
         },
         "sleep": {
           "type": "cat",
           "settings": {
+            "image": "shopify://shop_images/Untitled_Session6959_1011f01b-370d-45b7-8cdf-f3c37af3d561.jpg",
             "image_asset": "cat-sleep.jpg",
-            "label": "SLEEP",
-            "link": "shopify://collections/sleep"
+            "label": "TOPS",
+            "link": "shopify://collections/tops"
           }
         },
         "shapewear": {
           "type": "cat",
           "settings": {
+            "image": "shopify://shop_images/Untitled_Session7139_c3138a61-c9be-4797-80a4-ea88c50f1c60.jpg",
             "image_asset": "cat-shapewear.jpg",
-            "label": "SHAPEWEAR",
-            "link": "shopify://collections/shapewear"
+            "label": "BOTTOMS",
+            "link": "shopify://collections/bottoms"
           }
         },
         "best": {
           "type": "cat",
           "settings": {
+            "image": "shopify://shop_images/UntitledSession7333.jpg",
             "image_asset": "cat-best.jpg",
-            "label": "BEST SELLERS",
-            "link": "shopify://collections/best-sellers"
+            "label": "Accessories",
+            "link": "shopify://collections/accessories"
           }
         }
       },
@@ -481,17 +499,6 @@
         "gradient_direction": "to top",
         "padding-block-start": 80,
         "padding-block-end": 80
-      }
-    },
-    "sbj_colstrip": {
-      "type": "sbj-collection-strip",
-      "settings": {
-        "menu": "main-menu",
-        "background_color": "#EDEDED",
-        "text_color": "#FFFFFF",
-        "font_size": 12,
-        "item_gap": 24,
-        "padding_block": 14
       }
     }
   },

@@ -1,0 +1,25 @@
+{%- doc -%}
+  One card of the SBJ recommend carousel (sections/sbj-recommend-carousel.liquid).
+
+  @param {object} product - the product
+  @param {string} url - card link (product url, with ?variant= for color cards)
+  @param {object} image - image to show (variant mockup metafield, variant image, or product image)
+  @param {string} eyebrow - small grey line above the name (color name, or vendor)
+  @param {number} price - price in cents
+  @param {string} heart_svg - inline heart icon markup
+  @param {number} [variant_id] - variant this card represents
+  @param {string} [color] - color this card represents
+{%- enddoc -%}
+<a class="sbj-rec__card" href="{{ url }}"{% if variant_id %} data-variant-id="{{ variant_id }}"{% endif %}{% if color %} data-variant-color="{{ color | escape }}"{% endif %}>
+  <div class="sbj-rec__media">
+    {%- if image -%}
+      <img src="{{ image | image_url: width: 600 }}" alt="{{ product.title | escape }}{% if color %} – {{ color | escape }}{% endif %}" loading="lazy" width="300" height="300">
+    {%- endif -%}
+  </div>
+  <div class="sbj-rec__info">
+    <span class="sbj-rec__eyebrow">{{ eyebrow }}</span>
+    <span class="sbj-rec__name">{{ product.title }}</span>
+    <span class="sbj-rec__price">{{ price | money }}</span>
+    <span class="sbj-rec__heart" aria-hidden="true">{{ heart_svg }}</span>
+  </div>
+</a>
