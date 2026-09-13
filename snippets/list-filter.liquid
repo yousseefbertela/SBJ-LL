@@ -8,6 +8,7 @@
   @param {boolean} [should_render_clear] - Whether to render the clear button
   @param {boolean} [show_swatch_label] - Whether to show the swatch label
   @param {boolean} [in_drawer] - Whether the filter is in a drawer
+  @param {string} [color_order] - Comma-separated colour names; order of the Color filter swatches
 {%- enddoc -%}
 
 {% liquid
@@ -21,6 +22,45 @@
   assign is_image = false
   if filter.presentation == 'image'
     assign is_image = true
+  endif
+
+  # SBJ: the "Color" filter is rendered as swatches only (no names), in the
+  # order given by the filters block setting "color_order". Search & Discovery
+  # gives us plain labels here, so each swatch is looked up from the matching
+  # product option value (Shopify's colour taxonomy swatch, same as the cards).
+  assign sbj_color_filter = false
+  assign filter_label_down = filter.label | downcase
+  if is_image == false and filter.type == 'list' and filter_label_down contains 'colo'
+    assign sbj_color_filter = true
+    assign is_swatch = true
+    assign show_swatch_label = false
+  endif
+
+  assign render_values = filter.values
+  if sbj_color_filter and color_order != blank
+    assign sorted_values = '' | split: ''
+    assign picked = '|'
+    assign order_labels = color_order | split: ','
+    for order_label in order_labels
+      assign wanted = order_label | strip | downcase
+      for value in filter.values
+        assign have = value.label | strip | downcase
+        if have == wanted
+          assign one = filter.values | where: 'label', value.label
+          assign sorted_values = sorted_values | concat: one
+          assign picked = picked | append: have | append: '|'
+          break
+        endif
+      endfor
+    endfor
+    for value in filter.values
+      assign have = value.label | strip | downcase | prepend: '|' | append: '|'
+      unless picked contains have
+        assign one = filter.values | where: 'label', value.label
+        assign sorted_values = sorted_values | concat: one
+      endunless
+    endfor
+    assign render_values = sorted_values
   endif
 %}
 
@@ -63,7 +103,25 @@
                   echo active_value_count
                 elsif active_value_count > 0 and active_value_count <= 3
                   for value in filter.active_values
-                    render 'swatch', swatch: value.swatch, mode: 'filter', label: value.label
+                    assign sbj_swatch = value.swatch
+                    if sbj_color_filter
+                      assign sbj_want = value.label | strip | downcase
+                      for sbj_product in collections.all.products
+                        for sbj_option in sbj_product.options_with_values
+                          assign sbj_opt_name = sbj_option.name | downcase
+                          if sbj_opt_name contains 'colo'
+                            for sbj_val in sbj_option.values
+                              assign sbj_have = sbj_val.name | strip | downcase
+                              if sbj_have == sbj_want and sbj_val.swatch
+                                assign sbj_swatch = sbj_val.swatch
+                                break
+                              endif
+                            endfor
+                          endif
+                        endfor
+                      endfor
+                    endif
+                    render 'swatch', swatch: sbj_swatch, mode: 'filter', label: value.label
                   endfor
                 endif
               -%}
@@ -165,7 +223,7 @@
             if is_swatch
               assign swatch_columns = filter.values.size
 
-              if swatch_columns > 4
+              if swatch_columns > 4 and sbj_color_filter == false
                 assign swatch_columns = 4
 
                 # Balance the number of columns based on the number of values, i.e. try to avoid one or two items in
@@ -189,7 +247,7 @@
           %}
           <ul
             id="filters-list-{{ sectionId }}-{{ filter.param_name | escape | replace: '.', '-' }}"
-            class="facets__inputs-list{% if should_use_pills %} facets__inputs-list--grid{% endif %} list-unstyled{% if is_swatch %} facets__inputs-list--swatches{% if show_swatch_label %} facets__inputs-list--swatches-grid{% endif %}{% endif %}{% if is_image %} facets__inputs-list--images{% endif %}"
+            class="facets__inputs-list{% if should_use_pills %} facets__inputs-list--grid{% endif %} list-unstyled{% if sbj_color_filter %} sbj-color-facet{% endif %}{% if is_swatch %} facets__inputs-list--swatches{% if show_swatch_label %} facets__inputs-list--swatches-grid{% endif %}{% endif %}{% if is_image %} facets__inputs-list--images{% endif %}"
             {% if is_swatch %}
               style="--swatch-columns: {{ swatch_columns }};"
             {% endif %}
@@ -198,7 +256,7 @@
             {% endif %}
             name="{{ filter.label }}"
           >
-            {%- for value in filter.values -%}
+            {%- for value in render_values -%}
               {% liquid
                 assign input_id = 'Filter-' | append: filter.param_name | escape | append: '-' | append: forloop.index | replace: '.', '-' | append: '-' | append: filter_style | append: '-' | append: in_drawer
                 assign is_disabled = false
@@ -301,7 +359,27 @@
                           {% endif %}
                           ref="facetInputs[]"
                         >
-                        {% render 'swatch', swatch: value.swatch, mode: 'filter' %}
+                        {%- liquid
+                          assign sbj_swatch = value.swatch
+                          if sbj_color_filter
+                            assign sbj_want = value.label | strip | downcase
+                            for sbj_product in collections.all.products
+                              for sbj_option in sbj_product.options_with_values
+                                assign sbj_opt_name = sbj_option.name | downcase
+                                if sbj_opt_name contains 'colo'
+                                  for sbj_val in sbj_option.values
+                                    assign sbj_have = sbj_val.name | strip | downcase
+                                    if sbj_have == sbj_want and sbj_val.swatch
+                                      assign sbj_swatch = sbj_val.swatch
+                                      break
+                                    endif
+                                  endfor
+                                endif
+                              endfor
+                            endfor
+                          endif
+                        -%}
+                        {% render 'swatch', swatch: sbj_swatch, mode: 'filter', label: value.label %}
                         {% if is_disabled %}
                           <svg
                             aria-hidden="true"
@@ -435,6 +513,23 @@
 %}
 
 {% stylesheet %}
+  /* SBJ colour facet: swatches only, one row, a touch bigger than Horizon's default */
+  .facets__inputs-wrapper .sbj-color-facet {
+    display: flex !important;
+    flex-wrap: wrap;
+    gap: var(--gap-sm);
+  }
+
+  .sbj-color-facet .swatch--filter {
+    --max-filter-size: 36px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .sbj-color-facet .swatch--filter {
+      --max-filter-size: 34px;
+    }
+  }
+
   .facets input:checked + label {
     font-weight: 500;
   }

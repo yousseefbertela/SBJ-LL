@@ -195,7 +195,7 @@
                         else
                           assign should_render_clear = false
                         endif
-                        render 'list-filter', filter: filter, filter_style: block_settings.filter_style, active_value_count: active_value_count, should_render_clear: should_render_clear, show_swatch_label: block_settings.show_swatch_label, sectionId: section.id
+                        render 'list-filter', filter: filter, filter_style: block_settings.filter_style, active_value_count: active_value_count, should_render_clear: should_render_clear, show_swatch_label: block_settings.show_swatch_label, color_order: block_settings.color_order, sectionId: section.id
                       %}
                   {% endcase %}
                 {%- endfor -%}
@@ -453,7 +453,7 @@
 
                         assign active_value_count = filter.active_values | size
                         assign total_active_values = total_active_values | plus: active_value_count
-                        render 'list-filter', filter: filter, filter_style: 'vertical', active_value_count: active_value_count, should_render_clear: false, in_drawer: true, sectionId: section.id
+                        render 'list-filter', filter: filter, filter_style: 'vertical', active_value_count: active_value_count, should_render_clear: false, in_drawer: true, color_order: block_settings.color_order, sectionId: section.id
                       %}
                   {% endcase %}
                 {%- endfor -%}
@@ -1137,6 +1137,11 @@
     color: var(--color-foreground);
     cursor: pointer;
     white-space: nowrap;
+    /* SBJ: match the collection title (TOPS) — heading family, heavy, uppercase */
+    font-family: var(--font-heading--family);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.75px;
 
     @media screen and (min-width: 750px) {
       margin-inline-end: var(--margin-2xs);
@@ -1378,6 +1383,14 @@
       "id": "show_swatch_label",
       "label": "t:settings.show_swatch_label",
       "default": false,
+      "visible_if": "{{ block.settings.enable_filtering == true }}"
+    },
+    {
+      "type": "text",
+      "id": "color_order",
+      "label": "Color filter order",
+      "default": "Black, Navy, Espresso, Mulberry Red, Soft Matcha",
+      "info": "Comma-separated colour names. Colours not listed follow after, in their default order.",
       "visible_if": "{{ block.settings.enable_filtering == true }}"
     },
     {
