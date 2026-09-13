@@ -1,107 +1,123 @@
 <style>
-{%- comment -%} SKIMS' bold type is Tstar Pro Headline @400 (a medium look). Our heading
-   font ships only Archivo 900, so load a medium Archivo weight to match (global = footer
-   renders on every page, so the home category labels + brand statement can use it too). {%- endcomment -%}
+{%- comment -%} Medium Archivo weight for footer copy (heading font ships only 900). Global =
+   the footer renders on every page, so the home category labels + brand statement use it too. {%- endcomment -%}
 {{ settings.type_heading_font | font_modify: 'weight', '600' | font_face: font_display: 'swap' }}
 
-/* === SBJ Footer — SKIMS-match styles, all pages === */
+/* === SBJ Footer — Juvenile layout, SBJ type. All pages. ===
+   Structure (sections/footer-group.json, all native blocks):
+     footer-decoration  faded frosted logo behind + corner logo (sbj-footer-decoration.liquid)
+     footer             group(Newsletter heading, text, email pill) | menu "Quick Links"
+     footer-utilities   copyright | social icons                                        */
 
-/* 1. Three-column layout: narrow | wide | narrow (HELP | Newsletter | MORE)
-   4 total blocks in the grid (3 groups + social). The 4th item wraps to its own row. */
+/* 1. Wrapper: positioning context for the decoration; white ground so the
+   watermark shows through the (now transparent) section backgrounds. */
+.sbj-site-footer {
+  position: relative;
+  overflow: hidden;
+  background: var(--color-background, #fff);
+}
+.sbj-site-footer .shopify-section:not(.sbj-footer-decoration) {
+  position: relative;
+  z-index: 1;
+}
+.sbj-site-footer .shopify-section .section-background {
+  background: transparent !important;
+}
+.sbj-site-footer .shopify-section :is(.section, .footer-content, .utilities) {
+  background: transparent;
+}
+
+/* 2. Two columns: newsletter (wide) | quick links, links start at the page midline */
 @media screen and (min-width: 990px) {
-  .footer-content {
-    grid-template-columns: 1fr 2fr 1fr !important;
+  .sbj-site-footer .footer-content {
+    grid-template-columns: 1.2fr 1fr !important;
     align-items: start;
   }
-  /* Social block (4th child) wraps to second row and spans all 3 columns, centered */
-  .footer-content > *:nth-child(4) {
-    grid-column: 1 / -1;
-    display: flex !important;
-    justify-content: center !important;
-    padding-top: 36px;
+  .sbj-site-footer .footer-content > .menu {
+    padding-inline-start: clamp(24px, 6vw, 96px);
   }
 }
 
-/* 2. HELP / MORE column headings (h3 inside group text blocks).
-   SKIMS: 16px / heavy / lh20 / ls0.4 / uppercase / centered. !important so the
-   editor block's inline text settings can't override the SKIMS match. */
-.footer-content h3 {
-  margin: 0 0 18px;
+/* 3. Newsletter heading — SBJ type: heading family, heavy, uppercase */
+.sbj-site-footer .footer-content h2 {
+  margin: 0 0 4px !important;
   font-family: var(--font-heading--family) !important;
-  font-weight: 600 !important; /* SKIMS Tstar Pro Headline — semibold to read a touch bolder */
-  font-size: 16px !important;
-  line-height: 20px !important;
-  letter-spacing: 0.4px !important;
+  font-weight: 800 !important;
+  font-size: 22px !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.75px !important;
   text-transform: uppercase !important;
-  text-align: center !important;
   color: var(--color-foreground) !important;
 }
 
-/* 3. Footer link lists — target ul/li inside footer groups (no class allowed by Shopify) */
-.footer-content ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  text-align: center;
-}
-.footer-content ul li { margin: 0; }
-.footer-content ul li a {
-  display: inline-block;
-  font-family: "Inter", sans-serif !important;
-  font-size: 12px !important;
-  font-weight: 400 !important;
-  line-height: 28px !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
-  color: var(--color-foreground) !important;
-  text-decoration: none;
-}
-.footer-content ul li a:hover { text-decoration: underline; }
-
-/* 4. Newsletter heading (h2) "STAY IN THE KNOW" — SKIMS: 24px / lh30 / ls0.6 /
-   heavy / uppercase / centered. !important because the editor text block sets an
-   inline font-size (was rendering 32px) that otherwise wins over this rule. */
-.footer-content h2 {
-  margin: 0 0 12px !important;
-  font-family: var(--font-heading--family) !important;
-  font-weight: 600 !important; /* SKIMS "STAY IN THE KNOW" — semibold */
-  font-size: 24px !important;
-  line-height: 30px !important;
-  letter-spacing: 0.6px !important;
-  text-transform: uppercase !important;
-  text-align: center !important;
-  color: var(--color-foreground) !important;
-}
-
-/* 5. Newsletter subtext paragraph */
-.footer-content .group-block-content p {
+/* 4. Newsletter copy */
+.sbj-site-footer .footer-content .group-block-content p {
+  margin: 0 0 8px;
   font-size: 13px;
   line-height: 1.6;
-  text-align: center;
-  margin: 0 auto 4px;
-  max-width: 360px;
   color: var(--color-foreground);
 }
 
-/* 6. Email signup: sharp rectangular border (match SKIMS, no pill) */
-.footer-content .email-signup {
-  width: 100%;
-  max-width: 400px;
-  margin-inline: auto;
+/* 5. Email pill — black hairline, arrow button, full width of the column */
+.sbj-site-footer .email-signup-block {
+  max-width: 640px;
+}
+.sbj-site-footer .email-signup__input-group--integrated,
+.sbj-site-footer .email-signup__input {
+  border-color: #000;
+}
+.sbj-site-footer .email-signup__input-group--integrated {
+  min-height: 56px;
+}
+.sbj-site-footer .email-signup__input {
+  padding-inline-start: 24px;
+}
+.sbj-site-footer .email-signup__button--arrow,
+.sbj-site-footer .email-signup__button--arrow .email-signup__button-icon {
+  color: #000;
 }
 
-/* 7. Mobile: center everything */
-@media screen and (max-width: 989px) {
-  .footer-content { text-align: center; }
-  .footer-content > *:nth-child(4) {
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
-  }
+/* 6. Quick Links — heading matches the newsletter heading, links in body face */
+.sbj-site-footer .menu__heading {
+  margin-bottom: 14px;
+}
+.sbj-site-footer .menu__heading__default {
+  font-family: var(--font-heading--family) !important;
+  font-weight: 800 !important;
+  font-size: 22px !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.75px !important;
+  text-transform: uppercase !important;
+}
+.sbj-site-footer .menu__item {
+  font-size: 13px;
+  line-height: 1.4;
+}
+.sbj-site-footer .menu__item a {
+  color: var(--color-foreground);
+  text-decoration: none;
+}
+.sbj-site-footer .menu__item a:hover {
+  text-decoration: underline;
 }
 
-/* 8. Utilities bottom bar */
-[data-testid="footer-utilities"] {
+/* 7. Utilities bar: © left, socials right, small type. Socials step in from the
+   edge so the corner logo (decoration section) never sits on top of them. */
+.sbj-site-footer [data-testid="footer-utilities"] {
   font-size: 0.75rem !important;
+}
+.sbj-site-footer .utilities .social-icons__wrapper {
+  margin-inline-end: clamp(80px, 9vw, 140px);
+}
+
+/* 8. Mobile: stack, keep left alignment like the reference */
+@media screen and (max-width: 989px) {
+  .sbj-site-footer .footer-content {
+    gap: 32px;
+  }
+  .sbj-site-footer .footer-content h2,
+  .sbj-site-footer .menu__heading__default {
+    font-size: 18px !important;
+  }
 }
 </style>

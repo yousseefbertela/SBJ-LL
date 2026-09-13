@@ -1,0 +1,213 @@
+{%- comment -%}
+  SBJ Footer decoration — the faded, frosted brand logo that sits behind the
+  footer content plus a small logo accent in the bottom-right corner
+  (reference: Juvenile footer). Purely decorative: no flow height, no pointer
+  events. Positioned against the <footer class="sbj-site-footer"> wrapper in
+  layout/theme.liquid. Both images default to the store logo (theme settings).
+{%- endcomment -%}
+
+{%- liquid
+  assign watermark = section.settings.watermark_image | default: settings.logo
+  assign accent = section.settings.accent_image | default: settings.logo
+-%}
+
+{%- if section.settings.show_watermark and watermark != blank -%}
+  <div
+    class="sbj-footer-watermark"
+    aria-hidden="true"
+    style="--sbj-fw-opacity: {{ section.settings.watermark_opacity | divided_by: 100.0 }}; --sbj-fw-max-height: {{ section.settings.watermark_height }}vh; --sbj-fw-blur: {{ section.settings.watermark_blur }}px;"
+  >
+    <div class="sbj-footer-watermark__media">
+      {{
+        watermark
+        | image_url: width: 3840
+        | image_tag: loading: 'lazy', alt: '', class: 'sbj-footer-watermark__image', sizes: '100vw', widths: '832, 1200, 1600, 1920, 2560, 3840'
+      }}
+      <div class="sbj-footer-watermark__frost"></div>
+    </div>
+  </div>
+{%- endif -%}
+
+{%- if section.settings.show_accent and accent != blank -%}
+  <div
+    class="sbj-footer-accent"
+    aria-hidden="true"
+    style="--sbj-fa-size: {{ section.settings.accent_size }}vw; --sbj-fa-opacity: {{ section.settings.accent_opacity | divided_by: 100.0 }};"
+  >
+    {{
+      accent
+      | image_url: width: 1200
+      | image_tag: loading: 'lazy', alt: '', class: 'sbj-footer-accent__image', sizes: '12vw', widths: '200, 400, 600, 800, 1200'
+    }}
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  /* The section itself covers the whole footer but never takes space or clicks */
+  .sbj-footer-decoration {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .sbj-footer-watermark {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .sbj-footer-watermark__media {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    max-height: min(var(--sbj-fw-max-height, 52vh), 36rem);
+    transform: translateY(18%);
+  }
+
+  .sbj-footer-watermark__image {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: min(var(--sbj-fw-max-height, 52vh), 36rem);
+    object-fit: contain;
+    object-position: center bottom;
+    opacity: var(--sbj-fw-opacity, 0.19);
+  }
+
+  /* Frosted glass over the logo so it reads as a soft watermark */
+  .sbj-footer-watermark__frost {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.18);
+    -webkit-backdrop-filter: blur(var(--sbj-fw-blur, 16px)) saturate(180%);
+    backdrop-filter: blur(var(--sbj-fw-blur, 16px)) saturate(180%);
+  }
+
+  .sbj-footer-accent {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: max(var(--sbj-fa-size, 10vw), 72px);
+    aspect-ratio: 1;
+    opacity: var(--sbj-fa-opacity, 0.5);
+  }
+
+  .sbj-footer-accent__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Footer decoration",
+  "tag": "div",
+  "class": "sbj-footer-decoration",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Faded brand logo behind the footer and a small logo in the bottom-right corner. Both fall back to the store logo from theme settings."
+    },
+    {
+      "type": "header",
+      "content": "Watermark"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_watermark",
+      "label": "Show watermark",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "watermark_image",
+      "label": "Watermark image"
+    },
+    {
+      "type": "range",
+      "id": "watermark_opacity",
+      "label": "Opacity",
+      "min": 5,
+      "max": 60,
+      "step": 1,
+      "unit": "%",
+      "default": 19
+    },
+    {
+      "type": "range",
+      "id": "watermark_height",
+      "label": "Max height",
+      "min": 20,
+      "max": 80,
+      "step": 2,
+      "unit": "vh",
+      "default": 52
+    },
+    {
+      "type": "range",
+      "id": "watermark_blur",
+      "label": "Frost blur",
+      "min": 0,
+      "max": 30,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Corner accent"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_accent",
+      "label": "Show corner logo",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "accent_image",
+      "label": "Corner image"
+    },
+    {
+      "type": "range",
+      "id": "accent_size",
+      "label": "Size",
+      "min": 4,
+      "max": 20,
+      "step": 1,
+      "unit": "vw",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "accent_opacity",
+      "label": "Opacity",
+      "min": 10,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 50
+    }
+  ],
+  "enabled_on": {
+    "groups": ["footer"]
+  },
+  "presets": [
+    {
+      "name": "Footer decoration"
+    }
+  ]
+}
+{% endschema %}
