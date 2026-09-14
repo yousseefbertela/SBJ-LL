@@ -23,6 +23,7 @@
   @param {object} section - The section object (for the <li> id)
   @param {number} current_page - paginate.current_page (infinite scroll needs data-page)
   @param {number} grid_index - forloop.index0 of the product in the grid
+  @param {string} [active_colors] - active Color filter values as "|black|navy|" (lowercase); when set, only those colours get a card
 {%- enddoc -%}
 
 {%- liquid
@@ -56,6 +57,15 @@
 
   {%- for color_value in color_option.values -%}
     {%- liquid
+      # Colour filter active → skip colours the shopper did not ask for
+      if active_colors != blank
+        assign cv_name = color_value.name | downcase | strip
+        assign cv_key = '|' | append: cv_name | append: '|'
+        unless active_colors contains cv_key
+          continue
+        endunless
+      endif
+
       # Representative variant for this colour: first available, else first with the colour
       assign color_variant = blank
       for variant in product.variants

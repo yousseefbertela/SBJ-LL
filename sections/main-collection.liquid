@@ -48,6 +48,25 @@
       {% assign products_per_page = section.settings.products_per_page %}
     {% endif %}
 
+    {%- liquid
+      # Active Color filter values, e.g. "|black|navy|". With one card per colour, the
+      # split snippet must only emit the colours the shopper filtered for — Shopify only
+      # filters the products, not which colours of a product we render.
+      assign sbj_active_colors = ''
+      for filter in collection.filters
+        assign sbj_flabel = filter.label | downcase
+        if filter.type == 'list' and sbj_flabel contains 'colo'
+          for sbj_v in filter.active_values
+            assign sbj_vlabel = sbj_v.label | downcase | strip
+            assign sbj_active_colors = sbj_active_colors | append: '|' | append: sbj_vlabel
+          endfor
+          if sbj_active_colors != ''
+            assign sbj_active_colors = sbj_active_colors | append: '|'
+          endif
+          break
+        endif
+      endfor
+    -%}
     {% paginate collection.products by products_per_page %}
       {% capture children %}
         {% for product in collection.products %}
@@ -63,7 +82,8 @@
               product_card_html: product_card_html,
               section: section,
               current_page: paginate.current_page,
-              grid_index: forloop.index0
+              grid_index: forloop.index0,
+              active_colors: sbj_active_colors
             %}
           {% else %}
             <li
