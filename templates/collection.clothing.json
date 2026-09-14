@@ -390,7 +390,8 @@
       "name": "SBJ Promo tiles",
       "settings": {
         "heading": "Looking for more?"
-      }
+      },
+      "disabled": true
     },
     "essentials": {
       "type": "sbj-essentials-split",
