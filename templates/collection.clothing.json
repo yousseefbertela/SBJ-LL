@@ -369,7 +369,7 @@
             "image": "shopify://shop_images/Untitled_Session7139_c3138a61-c9be-4797-80a4-ea88c50f1c60.jpg",
             "image_url": "",
             "label": "SHOP THE full LOOK",
-            "link": "/collections/underwear"
+            "link": "shopify://collections/bottoms"
           }
         },
         "p_bras": {
@@ -390,8 +390,7 @@
       "name": "SBJ Promo tiles",
       "settings": {
         "heading": "Looking for more?"
-      },
-      "disabled": true
+      }
     },
     "essentials": {
       "type": "sbj-essentials-split",
