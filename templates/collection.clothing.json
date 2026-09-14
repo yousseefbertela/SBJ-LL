@@ -69,6 +69,7 @@
         "text_tqQTNE",
         "text_twGGkJ"
       ],
+      "disabled": true,
       "name": "Collection heading",
       "settings": {
         "content_direction": "column",
@@ -158,6 +159,7 @@
         "t_pants",
         "t_shorts"
       ],
+      "disabled": true,
       "name": "SBJ Subcategory tiles",
       "settings": {}
     },
@@ -173,6 +175,7 @@
             "filter_width": "centered",
             "text_label_case": "default",
             "show_swatch_label": false,
+            "color_order": "Black, Navy, Espresso, Mulberry Red, Soft Matcha",
             "show_filter_label": false,
             "enable_sorting": true,
             "enable_grid_density": true,
@@ -223,7 +226,15 @@
               "type": "custom-liquid",
               "settings": {
                 "custom_liquid": "{% if closest.product.tags contains 'best-sellers' %}<div class=\"sbj-badge-pos\"><span class=\"sbj-badge\">Best Seller</span></div>{% elsif closest.product.tags contains 'new' %}<div class=\"sbj-badge-pos\"><span class=\"sbj-badge\">New</span></div>{% endif %}"
-              }
+              },
+              "blocks": {}
+            },
+            "heart_sbj": {
+              "type": "custom-liquid",
+              "settings": {
+                "custom_liquid": "<div class=\"sbj-heart-pos\"><button class=\"sbj-heart\" aria-label=\"Add to wishlist\" data-product-id=\"{{ closest.product.id }}\" data-handle=\"{{ closest.product.handle | escape }}\" data-title=\"{{ closest.product.title | escape }}\" data-price=\"{{ closest.product.price | money }}\" data-image=\"{{ closest.product.featured_image | image_url: width: 400 | escape }}\" data-url=\"{{ closest.product.url | escape }}\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z\"/></svg></button></div>"
+              },
+              "blocks": {}
             },
             "swatches_sbj": {
               "type": "swatches",
@@ -235,15 +246,33 @@
                 "product_swatches_padding_bottom": 0,
                 "product_swatches_padding_left": 0,
                 "product_swatches_padding_right": 0
-              }
+              },
+              "blocks": {}
             },
             "eyebrow_sbj": {
               "type": "text",
               "settings": {
+                "text": "<p>{{ closest.product.vendor }}</p>",
                 "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
                 "type_preset": "custom",
-                "text": "<p>{{ closest.product.vendor }}</p>"
-              }
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
             },
             "product_title_4nY4eT": {
               "type": "product-title",
@@ -291,12 +320,6 @@
                 "padding-inline-end": 0
               },
               "blocks": {}
-            },
-            "heart_sbj": {
-              "type": "custom-liquid",
-              "settings": {
-                "custom_liquid": "<div class=\"sbj-heart-pos\"><button class=\"sbj-heart\" aria-label=\"Add to wishlist\" data-product-id=\"{{ closest.product.id }}\" data-handle=\"{{ closest.product.handle | escape }}\" data-title=\"{{ closest.product.title | escape }}\" data-price=\"{{ closest.product.price | money }}\" data-image=\"{{ closest.product.featured_image | image_url: width: 400 | escape }}\" data-url=\"{{ closest.product.url | escape }}\"><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M12 20.6l-1.32-1.2C6 15.16 3 12.45 3 9.13 3 6.42 5.13 4.3 7.85 4.3c1.54 0 3.02.72 3.99 1.85a5.27 5.27 0 0 1 3.99-1.85C18.54 4.3 20.67 6.42 20.67 9.13c0 3.32-3 6.03-7.68 10.27L12 20.6z\"/></svg></button></div>"
-              }
             }
           },
           "block_order": [
@@ -314,6 +337,9 @@
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
+        "enable_infinite_scroll": true,
+        "split_color_variants": true,
+        "products_per_page": 24,
         "product_grid_width": "full-width",
         "full_width_on_mobile": true,
         "columns_gap_horizontal": 4,
@@ -325,34 +351,31 @@
         "padding-block-end": 32
       }
     },
-    "we_think": {
-      "type": "sbj-recommend-carousel",
-      "settings": {
-        "heading": "We think you'd like"
-      }
-    },
     "promo": {
       "type": "sbj-promo-tiles",
       "blocks": {
         "p_solutions": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/4c55984c5f449b45139a24d020236135e9c311ad-616x540.jpg?auto=format&q=70&w=800",
-            "label": "The Solutions Shop",
-            "link": "/collections/shapewear"
+            "image": "shopify://shop_images/UntitledSession7457.png",
+            "image_url": "",
+            "label": "ACCESSORIES",
+            "link": "shopify://collections/accessories"
           }
         },
         "p_bundle": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/a4ba20163255b64422b089871ec7f92a117d9161-616x540.jpg?auto=format&q=70&w=800",
-            "label": "Bundle and Save",
+            "image": "shopify://shop_images/Untitled_Session7139_c3138a61-c9be-4797-80a4-ea88c50f1c60.jpg",
+            "image_url": "",
+            "label": "SHOP THE full LOOK",
             "link": "/collections/underwear"
           }
         },
         "p_bras": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/Untitled_Session6868_319b8565-44ac-46ce-8d70-c7d5eeba5475.jpg",
             "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/f34302a969659dfaf1749a89396db97ad498d1ff-616x540.jpg?auto=format&q=70&w=800",
             "label": "Bras",
             "link": "/collections/bras"
@@ -371,9 +394,11 @@
     },
     "essentials": {
       "type": "sbj-essentials-split",
+      "disabled": true,
       "settings": {
         "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/cd35d091adc34353f1b47f5dc1ade2cda893703e-800x470.jpg?auto=format&q=70&w=1200",
         "heading": "Clothing Essentials",
+        "body": "<p>Fill your wardrobe with outfits that have both comfort and style with the full line of SBJ clothing. Our collection spans everything from tees, tanks, and bodysuits to leggings, shorts, hoodies, and more, each crafted from innovative fabrics and designed for versatile wear. Build eye-catching outfits with everything from everyday essentials to statement pieces. Each SBJ garment blends functionality and fashion.</p>",
         "button_label": "Shop Essentials",
         "button_link": "/collections/best-sellers"
       }
@@ -383,7 +408,6 @@
     "section",
     "subcats",
     "main",
-    "we_think",
     "promo",
     "essentials"
   ]

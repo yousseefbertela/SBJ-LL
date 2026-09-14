@@ -69,6 +69,7 @@
         "text_tqQTNE",
         "text_twGGkJ"
       ],
+      "disabled": true,
       "name": "Collection heading",
       "settings": {
         "content_direction": "column",
@@ -100,6 +101,7 @@
     },
     "subcats": {
       "type": "sbj-subcat-tiles",
+      "disabled": true,
       "settings": {}
     },
     "main": {
@@ -114,6 +116,7 @@
             "filter_width": "centered",
             "text_label_case": "default",
             "show_swatch_label": false,
+            "color_order": "Black, Navy, Espresso, Mulberry Red, Soft Matcha",
             "show_filter_label": false,
             "enable_sorting": false,
             "enable_grid_density": false,
@@ -276,6 +279,7 @@
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
         "enable_infinite_scroll": true,
+        "split_color_variants": true,
         "products_per_page": 24,
         "product_grid_width": "full-width",
         "full_width_on_mobile": true,
@@ -288,36 +292,31 @@
         "padding-block-end": 32
       }
     },
-    "we_think": {
-      "type": "sbj-recommend-carousel",
-      "settings": {
-        "heading": "We think you'd like",
-        "collection": "",
-        "products_to_show": 12
-      }
-    },
     "promo": {
       "type": "sbj-promo-tiles",
       "blocks": {
         "p_solutions": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/4c55984c5f449b45139a24d020236135e9c311ad-616x540.jpg?auto=format&q=70&w=800",
-            "label": "The Solutions Shop",
-            "link": "/collections/shapewear"
+            "image": "shopify://shop_images/UntitledSession7457.png",
+            "image_url": "",
+            "label": "ACCESSORIES",
+            "link": "shopify://collections/accessories"
           }
         },
         "p_bundle": {
           "type": "tile",
           "settings": {
-            "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/a4ba20163255b64422b089871ec7f92a117d9161-616x540.jpg?auto=format&q=70&w=800",
-            "label": "Bundle and Save",
+            "image": "shopify://shop_images/Untitled_Session7139_c3138a61-c9be-4797-80a4-ea88c50f1c60.jpg",
+            "image_url": "",
+            "label": "SHOP THE full LOOK",
             "link": "/collections/underwear"
           }
         },
         "p_bras": {
           "type": "tile",
           "settings": {
+            "image": "shopify://shop_images/Untitled_Session6868_319b8565-44ac-46ce-8d70-c7d5eeba5475.jpg",
             "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/f34302a969659dfaf1749a89396db97ad498d1ff-616x540.jpg?auto=format&q=70&w=800",
             "label": "Bras",
             "link": "/collections/bras"
@@ -336,6 +335,7 @@
     },
     "essentials": {
       "type": "sbj-essentials-split",
+      "disabled": true,
       "settings": {
         "image_url": "https://skims-sanity.imgix.net/images/hfqi0zm0/production/cd35d091adc34353f1b47f5dc1ade2cda893703e-800x470.jpg?auto=format&q=70&w=1200",
         "heading": "The Essentials",
@@ -349,7 +349,6 @@
     "section",
     "subcats",
     "main",
-    "we_think",
     "promo",
     "essentials"
   ]
